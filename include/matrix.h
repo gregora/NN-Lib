@@ -7,31 +7,38 @@ namespace nnlib {
 
 	public:
 
-		unsigned int width;
-		unsigned int height;
+		uint width;
+		uint height;
 
-		float * table;
+		Matrix(uint width, uint height);
 
-		Matrix(unsigned int height, unsigned int width);
+		Matrix(uint size);
 
-		Matrix(unsigned int size);
+		void print();
+
+		float getValue(uint x, uint y);
+
+		void setValue(uint x, uint y, float value);
 
 		Matrix operator* (float n);
 
-		Marix operator/ (float n);
+		Matrix operator/ (float n);
 
 		Matrix operator+ (Matrix v);
 
 		Matrix operator- (Matrix v);
 
-		Matrix operator* (Matrix v);
+		/*Matrix operator* (Matrix v);
 
 		Matrix fillRandom(float min_value = 0, float max_value = 1);
 
 		Matrix copy();
 
-		~ Matrix();
+		~ Matrix();*/
 
-	}
+	private:
+		float ** table;
+
+	};
 
 }

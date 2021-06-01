@@ -99,11 +99,39 @@ namespace nnlib {
 		return ret;
 	}
 
-	/*Matrix Matrix::operator* (Matrix v);
+	Matrix Matrix::operator* (Matrix v){
+		if(width != v.height)
+			throw std::invalid_argument("Multiplying matrices of invalid sizes");
 
-	Matrix Matrix::fillRandom(float min_value = 0, float max_value = 1);
+		Matrix ret(v.width, height);
 
-	Matrix Matrix::copy();
+		for(int i = 0; i < v.width; i++){
+			for(int j = 0; j < height; j++){
+				float sum = 0;
+
+				for(int k = 0; k < width; k++){
+					sum += getValue(k, j) * v.getValue(i, k);
+				}
+
+				ret.setValue(i, j, sum);
+			}
+		}
+
+		return ret;
+	}
+
+	Matrix Matrix::fillRandom(float min_value, float max_value){
+
+		for(int i = 0; i < width; i++){
+			for(int j = 0; j < height; j++){
+				setValue(i, j, min_value + (max_value - min_value)*random());
+			}
+		}
+
+	}
+
+
+	/*Matrix Matrix::copy();
 
 	~ Matrix();*/
 

@@ -28,11 +28,11 @@ namespace nnlib {
 
 		Matrix operator- (Matrix v);
 
-		/*Matrix operator* (Matrix v);
+		Matrix operator* (Matrix v);
 
 		Matrix fillRandom(float min_value = 0, float max_value = 1);
 
-		Matrix copy();
+		/*Matrix copy();
 
 		~ Matrix();*/
 

@@ -10,6 +10,7 @@ namespace nnlib {
 		unsigned int width;
 		unsigned int height;
 
+		float * table;
 
 		Matrix(unsigned int height, unsigned int width);
 

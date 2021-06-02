@@ -117,6 +117,26 @@ namespace nnlib {
 
 	}
 
+	void Matrix::fillZero() {
+
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				setValue(i, j, 0);
+			}
+		}
+
+	}
+
+	void Matrix::identity() {
+
+		fillZero();
+		int min_dim = width < height? width : height;
+		for (int i = 0; i < min_dim; i++) {
+			setValue(i, i, 1);
+		}
+
+	}
+
 	void Matrix::print(uint float_width, uint float_precision) const {
 		char* buff = this->toBuffer(float_width, float_precision);
 		printf("%s", buff);

@@ -12,7 +12,7 @@ int main() {
 	a.setValue(1, 3, -0.22333);
 	a.setValue(3, 3, 10000);
 	a.setValue(2, 3, 0);
-	b.setValue(1, 1, 1);
+	b.identity();
 
 	a*b;
 

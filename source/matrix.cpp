@@ -128,17 +128,33 @@ namespace nnlib {
 
 	}
 
-	std::string toString() {
-		std::stringstream buffer;
-		sprintf(buffer, "[\n");
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
-				sprintf(buffer, "%f ", table[i][j]);
+	char* Matrix::toString(uint float_width, uint float_precision) {
+		// +2: one for sign and one for the decimal separator
+		const int float_len = float_width + float_precision + 2;
+
+		char* buffer = (char*)malloc((
+				2 // "[\n"
+				+ height*(width*(float_len + 1)) // "%f " for all elements
+				+ height*1 // plus one newline per height
+				+ 3 // "]\n\0"
+			) * sizeof(char)
+		);
+		char* buffer_start = buffer;
+
+		buffer += sprintf(buffer, "[\n");
+		for (int j = 0; j < height; j++) {
+			for (int i = 0; i < width; i++) {
+				buffer += sprintf(buffer,
+					"% *.*f ",
+					float_width,
+					float_precision,
+					table[i][j]
+				);
 			}
-			sprintf(buffer, "\n");
+			buffer += sprintf(buffer, "\n");
 		}
-		sprintf(buffer, "]\n");
-		return buffer.str();
+		buffer += sprintf(buffer, "]\n");
+		return buffer_start;
 	}
 
 	Matrix* Matrix::copy() const{
@@ -154,12 +170,10 @@ namespace nnlib {
 	}
 
 	Matrix::~Matrix(){
-		printf("DESTRUCTING\n");
-		print();
-		printf("%ld\n", table);
-		for(int i = 0; i < width; i++){
-			delete[] table[i];
+		for (int i = 0; i < width; i++) {
+			free(table[i]);
 		}
+		free(table);
 	}
 
 

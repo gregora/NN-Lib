@@ -1,5 +1,4 @@
 #include "misc.h"
-#include <string.h>
 
 namespace nnlib {
 
@@ -33,7 +32,7 @@ namespace nnlib {
 
 		void fillRandom(float min_value = 0, float max_value = 1);
 
-		std::string toString();
+		char* toString(uint float_width = 5, uint float_precision = 2);
 
 		Matrix* copy() const;
 

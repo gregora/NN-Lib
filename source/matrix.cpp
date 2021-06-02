@@ -58,7 +58,7 @@ namespace nnlib {
 
 	Matrix Matrix::operator+ (const Matrix& v) {
 		if(width != v.width || height != v.height)
-			throw std::invalid_argument("Adding up matrices of different sizes");
+			throw std::invalid_argument("Adding matrices of different sizes");
 
 		Matrix ret(width, height);
 
@@ -111,7 +111,7 @@ namespace nnlib {
 
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				setValue(i, j, min_value + (max_value - min_value)*random());
+				setValue(i, j, random(min_value, max_value));
 			}
 		}
 

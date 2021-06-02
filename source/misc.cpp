@@ -2,7 +2,7 @@
 
 namespace nnlib {
 
-	float random(){
+	float random() {
 
 		std::random_device rd{};
 		std::mt19937 engine{rd()};
@@ -12,4 +12,9 @@ namespace nnlib {
 
 	}
 
+	float random(float min, float max) {
+
+		return random()*(max-min) + min;
+
+	}
 }

@@ -7,9 +7,9 @@ namespace nnlib {
 		this -> width = width;
 
 		table = (float**) calloc(width, sizeof(float *));
-	    for (int i = 0; i < width; i++) {
-	        table[i] = (float*) calloc(height, sizeof(float));
-	    }
+		for (int i = 0; i < width; i++) {
+			table[i] = (float*) calloc(height, sizeof(float));
+		}
 	}
 
 	Matrix::Matrix(uint size){
@@ -17,9 +17,9 @@ namespace nnlib {
 		this -> width = size;
 
 		table = (float**) calloc(width, sizeof(float *));
-	    for (int i = 0; i < width; i++) {
-	        table[i] = (float*) calloc(height, sizeof(float));
-	    }
+		for (int i = 0; i < width; i++) {
+			table[i] = (float*) calloc(height, sizeof(float));
+		}
 	}
 
 	void Matrix::print(){

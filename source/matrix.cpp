@@ -180,7 +180,7 @@ namespace nnlib {
 					"% *.*f ",
 					float_width,
 					float_precision,
-					table[i][j]
+					getValue(i, j)
 				);
 			}
 			buffer += sprintf(buffer, "\n");
@@ -195,7 +195,8 @@ namespace nnlib {
 		float m = 0;
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				float val = table[i][j] > 0? table[i][j] : -table[i][j];
+				float val = getValue(i, j);
+				val = val > 0? val : -val;
 				if (val > m)
 					m = val;
 			}

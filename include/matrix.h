@@ -16,11 +16,11 @@ namespace nnlib {
 		float getValue(uint x, uint y) const;
 		void setValue(uint x, uint y, float value);
 
-		Matrix operator* (const float& n);
-		Matrix operator/ (const float& n);
-		Matrix operator+ (const Matrix& v);
-		Matrix operator- (const Matrix& v);
-		Matrix operator* (const Matrix& v);
+		Matrix operator* (const float& n) const;
+		Matrix operator/ (const float& n) const;
+		Matrix operator+ (const Matrix& v) const;
+		Matrix operator- (const Matrix& v) const;
+		Matrix operator* (const Matrix& v) const;
 
 		void fillRandom(float min_value = 0, float max_value = 1);
 		void fillZero();
@@ -31,7 +31,7 @@ namespace nnlib {
 		std::string toString(uint float_width = 5, uint float_precision = 2) const;
 		char*       toBuffer(uint float_width = 5, uint float_precision = 2) const;
 
-		Matrix* copy() const;
+		Matrix* clone() const;
 
 		~ Matrix();
 

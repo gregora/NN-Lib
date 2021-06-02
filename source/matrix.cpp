@@ -32,7 +32,7 @@ namespace nnlib {
 		table[x][y] = value;
 	}
 
-	Matrix Matrix::operator* (const float& n) {
+	Matrix Matrix::operator* (const float& n) const {
 		Matrix ret(width, height);
 
 		for (uint i = 0; i < width; i++) {
@@ -44,7 +44,7 @@ namespace nnlib {
 		return ret;
 	}
 
-	Matrix Matrix::operator/ (const float& n) {
+	Matrix Matrix::operator/ (const float& n) const {
 		Matrix ret(width, height);
 
 		for (uint i = 0; i < width; i++) {
@@ -56,7 +56,7 @@ namespace nnlib {
 		return ret;
 	}
 
-	Matrix Matrix::operator+ (const Matrix& v) {
+	Matrix Matrix::operator+ (const Matrix& v) const {
 		if (width != v.width || height != v.height)
 			throw std::invalid_argument("Adding matrices of different sizes");
 
@@ -71,7 +71,7 @@ namespace nnlib {
 		return ret;
 	}
 
-	Matrix Matrix::operator- (const Matrix& v) {
+	Matrix Matrix::operator- (const Matrix& v) const {
 		if (width != v.width || height != v.height)
 			throw std::invalid_argument("Subtracting matrices of different sizes");
 
@@ -86,7 +86,7 @@ namespace nnlib {
 		return ret;
 	}
 
-	Matrix Matrix::operator* (const Matrix& v) {
+	Matrix Matrix::operator* (const Matrix& v) const {
 		if (width != v.height)
 			throw std::invalid_argument("Multiplying matrices of invalid sizes");
 
@@ -204,7 +204,7 @@ namespace nnlib {
 		return m;
 	}
 
-	Matrix* Matrix::copy() const{
+	Matrix* Matrix::clone() const{
 		Matrix * ret = new Matrix(width, height);
 
 		for (uint i = 0; i < width; i++){

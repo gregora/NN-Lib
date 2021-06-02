@@ -34,9 +34,8 @@ namespace nnlib {
 		void fillRandom(float min_value = 0, float max_value = 1);
 
 		String toString();
-		Matrix* copy() const;
 
-		~ Matrix();
+		Matrix* copy() const;
 
 		~ Matrix();
 

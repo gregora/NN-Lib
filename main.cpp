@@ -1,6 +1,7 @@
 #include "include/matrix.h"
+#include <iostream>
 
-int main(){
+int main() {
 
 	nnlib::Matrix a(5, 5);
 	nnlib::Matrix b(5, 5);
@@ -9,15 +10,18 @@ int main(){
 	a.setValue(0, 3, 8);
 	a.setValue(0, 3, -8);
 	a.setValue(1, 3, -0.22333);
+	a.setValue(3, 3, 10000);
+	a.setValue(2, 3, 0);
 	b.setValue(1, 1, 1);
 
 	a*b;
 
 	nnlib::Matrix * c = a.copy();
 
-	printf("%s\n", a.toString());
+	std::cout << b.toString();
+	a.print();
 	//c -> print();
 
-	printf("END OF THE PROG.\n");
-
+	printf("QED\n");
+	return 0;
 }

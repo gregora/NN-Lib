@@ -16,17 +16,6 @@ namespace nnlib {
 		table = allocate2DArray(width, height);
 	}
 
-	void Matrix::print() const {
-
-		for (int j = 0; j < height; j++) {
-			for (int i = 0; i < width; i++) {
-				printf("%f ", table[i][j]);
-			}
-			printf("\n");
-		}
-
-	}
-
 	float Matrix::getValue(uint x, uint y) const {
 
 		if (x >= width || y >= height)
@@ -128,17 +117,40 @@ namespace nnlib {
 
 	}
 
-	char* Matrix::toString(uint float_width, uint float_precision) {
-		// +2: one for sign and one for the decimal separator
-		const int float_len = float_width + float_precision + 2;
+	void Matrix::print(uint float_width, uint float_precision) const {
+		char* buff = this->toBuffer(float_width, float_precision);
+		printf("%s", buff);
+		free(buff);
+		// alternatively: cout << toString();
+	}
 
-		char* buffer = (char*)malloc((
+	std::string Matrix::toString(uint float_width, uint float_precision) const {
+		char* buffer = toBuffer(float_width, float_precision);
+		std::string str((const char*)buffer);
+		free(buffer);
+		return str;
+	}
+
+	char* Matrix::toBuffer(uint float_width, uint float_precision) const {
+		// TODO: only expand the columns as needed
+
+		// first, get the length of the maximum entry
+		uint max_length = floor(max());
+		if (max_length != 0)
+			max_length = floor(log10(max_length)) + 1;
+		else max_length = 1;
+
+		// assure float_width fits the maximum entry
+		if (float_width < float_precision + 2 + max_length)
+			float_width = float_precision + 2 + max_length;
+		// +2 places account for the decimal dot and sign symbol
+
+		const int allocated =
 				2 // "[\n"
-				+ height*(width*(float_len + 1)) // "%f " for all elements
+				+ height*(width*(float_width + 1)) // "%f " for all elements
 				+ height*1 // plus one newline per height
-				+ 3 // "]\n\0"
-			) * sizeof(char)
-		);
+				+ 3; // "]\n\0"
+		char* buffer = (char*)malloc(allocated * sizeof(char));
 		char* buffer_start = buffer;
 
 		buffer += sprintf(buffer, "[\n");
@@ -154,7 +166,21 @@ namespace nnlib {
 			buffer += sprintf(buffer, "\n");
 		}
 		buffer += sprintf(buffer, "]\n");
+		//printf("used %d, allocated %d\n", buffer - buffer_start, allocated);
 		return buffer_start;
+	}
+
+	// needed to calculate space for allocation in toBuffer, toString and print
+	float Matrix::max() const {
+		float m = 0;
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				float val = table[i][j] > 0? table[i][j] : -table[i][j];
+				if (val > m)
+					m = val;
+			}
+		}
+		return m;
 	}
 
 	Matrix* Matrix::copy() const{

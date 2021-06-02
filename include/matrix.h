@@ -14,8 +14,6 @@ namespace nnlib {
 
 		Matrix(uint size);
 
-		void print() const;
-
 		float getValue(uint x, uint y) const;
 
 		void setValue(uint x, uint y, float value);
@@ -32,7 +30,10 @@ namespace nnlib {
 
 		void fillRandom(float min_value = 0, float max_value = 1);
 
-		char* toString(uint float_width = 5, uint float_precision = 2);
+		// if float_width is too small, the smallest possible value will be used
+		void           print(uint float_width = 5, uint float_precision = 2) const;
+		std::string toString(uint float_width = 5, uint float_precision = 2) const;
+		char*       toBuffer(uint float_width = 5, uint float_precision = 2) const;
 
 		Matrix* copy() const;
 
@@ -42,6 +43,8 @@ namespace nnlib {
 		float ** table;
 
 		static float ** allocate2DArray(uint width, uint height);
+
+		float max() const; // get maximum absolute value in the matrix
 
 	};
 

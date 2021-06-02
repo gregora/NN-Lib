@@ -57,7 +57,7 @@ namespace nnlib {
 	}
 
 	Matrix Matrix::operator+ (const Matrix& v) {
-		if(width != v.width || height != v.height)
+		if (width != v.width || height != v.height)
 			throw std::invalid_argument("Adding matrices of different sizes");
 
 		Matrix ret(width, height);
@@ -72,13 +72,13 @@ namespace nnlib {
 	}
 
 	Matrix Matrix::operator- (const Matrix& v) {
-		if(width != v.width || height != v.height)
+		if (width != v.width || height != v.height)
 			throw std::invalid_argument("Subtracting matrices of different sizes");
 
 		Matrix ret(width, height);
 
-		for(uint i = 0; i < width; i++){
-			for(uint j = 0; j < height; j++){
+		for (uint i = 0; i < width; i++) {
+			for (uint j = 0; j < height; j++) {
 				ret.setValue(i, j, getValue(i, j) - v.getValue(i, j));
 			}
 		}
@@ -87,16 +87,16 @@ namespace nnlib {
 	}
 
 	Matrix Matrix::operator* (const Matrix& v) {
-		if(width != v.height)
+		if (width != v.height)
 			throw std::invalid_argument("Multiplying matrices of invalid sizes");
 
 		Matrix ret(v.width, height);
 
-		for (int i = 0; i < v.width; i++) {
-			for (int j = 0; j < height; j++) {
+		for (uint i = 0; i < v.width; i++) {
+			for (uint j = 0; j < height; j++) {
 				float sum = 0;
 
-				for (int k = 0; k < width; k++) {
+				for (uint k = 0; k < width; k++) {
 					sum += getValue(k, j) * v.getValue(i, k);
 				}
 
@@ -109,8 +109,8 @@ namespace nnlib {
 
 	void Matrix::fillRandom(float min_value, float max_value) {
 
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
+		for (uint i = 0; i < width; i++) {
+			for (uint j = 0; j < height; j++) {
 				setValue(i, j, random(min_value, max_value));
 			}
 		}
@@ -119,8 +119,8 @@ namespace nnlib {
 
 	void Matrix::fillZero() {
 
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
+		for (uint i = 0; i < width; i++) {
+			for (uint j = 0; j < height; j++) {
 				setValue(i, j, 0);
 			}
 		}
@@ -130,8 +130,8 @@ namespace nnlib {
 	void Matrix::identity() {
 
 		fillZero();
-		int min_dim = width < height? width : height;
-		for (int i = 0; i < min_dim; i++) {
+		uint min_dim = width < height? width : height;
+		for (uint i = 0; i < min_dim; i++) {
 			setValue(i, i, 1);
 		}
 
@@ -174,8 +174,8 @@ namespace nnlib {
 		char* buffer_start = buffer;
 
 		buffer += sprintf(buffer, "[\n");
-		for (int j = 0; j < height; j++) {
-			for (int i = 0; i < width; i++) {
+		for (uint j = 0; j < height; j++) {
+			for (uint i = 0; i < width; i++) {
 				buffer += sprintf(buffer,
 					"% *.*f ",
 					float_width,
@@ -193,8 +193,8 @@ namespace nnlib {
 	// needed to calculate space for allocation in toBuffer, toString and print
 	float Matrix::max() const {
 		float m = 0;
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
+		for (uint i = 0; i < width; i++) {
+			for (uint j = 0; j < height; j++) {
 				float val = getValue(i, j);
 				val = val > 0? val : -val;
 				if (val > m)
@@ -207,8 +207,8 @@ namespace nnlib {
 	Matrix* Matrix::copy() const{
 		Matrix * ret = new Matrix(width, height);
 
-		for(int i = 0; i < width; i++){
-			for(int j = 0; j < height; j++){
+		for (uint i = 0; i < width; i++){
+			for (uint j = 0; j < height; j++){
 				ret -> setValue(i, j, getValue(i, j));
 			}
 		}
@@ -217,7 +217,7 @@ namespace nnlib {
 	}
 
 	Matrix::~Matrix(){
-		for (int i = 0; i < width; i++) {
+		for (uint i = 0; i < width; i++) {
 			free(table[i]);
 		}
 		free(table);
@@ -228,7 +228,7 @@ namespace nnlib {
 	float ** Matrix::allocate2DArray(uint width, uint height){
 
 		float ** ret = (float**) calloc(width, sizeof(float *));
-		for (int i = 0; i < width; i++) {
+		for (uint i = 0; i < width; i++) {
 			ret[i] = (float*) calloc(height, sizeof(float));
 		}
 

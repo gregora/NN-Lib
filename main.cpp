@@ -19,8 +19,10 @@ int main() {
 	nnlib::Matrix * c = a.copy();
 
 	std::cout << b.toString();
+
+	printf("matrix c: %s\n", c -> toString().c_str());
+
 	a.print();
-	//c -> print();
 
 	printf("QED\n");
 	return 0;

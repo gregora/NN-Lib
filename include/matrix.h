@@ -1,4 +1,5 @@
 #include "misc.h"
+#include <string.h>
 
 namespace nnlib {
 
@@ -32,9 +33,11 @@ namespace nnlib {
 
 		Matrix fillRandom(float min_value = 0, float max_value = 1);
 
-		/*Matrix copy();
+		String toString();
 
-		~ Matrix();*/
+		//Matrix copy();
+
+		~ Matrix();
 
 	private:
 		float ** table;

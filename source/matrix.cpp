@@ -130,9 +130,26 @@ namespace nnlib {
 
 	}
 
+	String toString() {
+		std::stringstream buffer;
+		sprintf(buffer, "[\n");
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				sprintf(buffer, "%f ", table[i][j]);
+			}
+			sprintf(buffer, "\n");
+		}
+		sprintf(buffer, "]\n");
+		return buffer.str();
+	}
 
-	/*Matrix Matrix::copy();
+	//Matrix Matrix::copy();
 
-	~ Matrix();*/
+	~ Matrix() {
+		for (int i = 0; i < width; i++) {
+			free(table[i]);
+		}
+		free(table);
+	}
 
 }

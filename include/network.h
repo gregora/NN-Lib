@@ -11,7 +11,9 @@ namespace nnlib {
 		virtual std::string serialize() = 0;
 		virtual std::string deserialize() = 0;
 
-		virtual float eval(uint datac, float* datav);
+		virtual float eval(Matrix* input, Matrix* output);
+
+		virtual Layer* clone();
 
 	};
 
@@ -21,6 +23,8 @@ namespace nnlib {
 
 		std::string serialize();
 		std::string deserialize();
+
+		Matrix* matrix;
 
 	};
 
@@ -42,7 +46,7 @@ namespace nnlib {
 		// pretty-print; not for exporting
 		std::string toString();
 
-		Network clone();
+		Network* clone();
 
 	private:
 		Layer* layers;

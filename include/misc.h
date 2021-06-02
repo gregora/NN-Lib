@@ -9,11 +9,11 @@ namespace nnlib {
 
 	float sigmoid(float x);
 
-	float sparseCategoricalCrossentropy(float* predicted, float truth);
+	float sparseCategoricalCrossentropy(Matrix* predicted, uint truth);
 
-	float categoricalCrossentropy(float* predicted, float* truth);
+	float categoricalCrossentropy(Matrix* predicted, Matrix* truth);
 
-	float binaryCrossentropy(float* predicted, float* truth);
+	float binaryCrossentropy(Matrix* predicted, Matrix* truth);
 
-	float meanSquaredError(float* predicted, float* truth);
+	float meanSquaredError(Matrix* predicted, Matrix* truth);
 }

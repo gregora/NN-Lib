@@ -8,6 +8,13 @@ int main(){
 	a.setValue(0, 0, 3);
 	a.setValue(0, 3, 8);
 	b.setValue(1, 1, 1);
-	(a*b).print();
+
+	a*b;
+
+	nnlib::Matrix * c = a.copy();
+
+	//c -> print();
+
+	printf("END OF THE PROG.\n");
 
 }

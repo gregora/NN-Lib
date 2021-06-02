@@ -15,32 +15,35 @@ namespace nnlib {
 
 		Matrix(uint size);
 
-		void print();
+		void print() const;
 
-		float getValue(uint x, uint y);
+		float getValue(uint x, uint y) const;
 
 		void setValue(uint x, uint y, float value);
 
-		Matrix operator* (float n);
+		Matrix operator* (const float& n);
 
-		Matrix operator/ (float n);
+		Matrix operator/ (const float& n);
 
-		Matrix operator+ (Matrix v);
+		Matrix operator+ (const Matrix& v);
 
-		Matrix operator- (Matrix v);
+		Matrix operator- (const Matrix& v);
 
-		Matrix operator* (Matrix v);
+		Matrix operator* (const Matrix& v);
 
-		Matrix fillRandom(float min_value = 0, float max_value = 1);
+		void fillRandom(float min_value = 0, float max_value = 1);
 
 		String toString();
+		Matrix* copy() const;
 
-		//Matrix copy();
+		~ Matrix();
 
 		~ Matrix();
 
 	private:
 		float ** table;
+
+		static float ** allocate2DArray(uint width, uint height);
 
 	};
 

@@ -6,26 +6,20 @@ namespace nnlib {
 		this -> height = height;
 		this -> width = width;
 
-		table = (float**) calloc(width, sizeof(float *));
-		for (int i = 0; i < width; i++) {
-			table[i] = (float*) calloc(height, sizeof(float));
-		}
+		table = allocate2DArray(width, height);
 	}
 
 	Matrix::Matrix(uint size){
 		this -> height = size;
 		this -> width = size;
 
-		table = (float**) calloc(width, sizeof(float *));
-		for (int i = 0; i < width; i++) {
-			table[i] = (float*) calloc(height, sizeof(float));
-		}
+		table = allocate2DArray(width, height);
 	}
 
-	void Matrix::print(){
+	void Matrix::print() const{
 
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
+		for (int j = 0; j < height; j++) {
+			for (int i = 0; i < width; i++) {
 				printf("%f ", table[i][j]);
 			}
 			printf("\n");
@@ -33,7 +27,7 @@ namespace nnlib {
 
 	}
 
-	float Matrix::getValue(uint x, uint y){
+	float Matrix::getValue(uint x, uint y) const{
 
 		if(x >= width || y >= height)
 			throw std::invalid_argument("Fetching value outside of matrix");
@@ -49,7 +43,7 @@ namespace nnlib {
 		table[x][y] = value;
 	}
 
-	Matrix Matrix::operator* (float n){
+	Matrix Matrix::operator* (const float& n){
 		Matrix ret(width, height);
 
 		for(uint i = 0; i < width; i++){
@@ -61,7 +55,7 @@ namespace nnlib {
 		return ret;
 	}
 
-	Matrix Matrix::operator/ (float n){
+	Matrix Matrix::operator/ (const float& n){
 		Matrix ret(width, height);
 
 		for(uint i = 0; i < width; i++){
@@ -73,7 +67,7 @@ namespace nnlib {
 		return ret;
 	}
 
-	Matrix Matrix::operator+ (Matrix v){
+	Matrix Matrix::operator+ (const Matrix& v){
 		if(width != v.width || height != v.height)
 			throw std::invalid_argument("Adding up matrices of different sizes");
 
@@ -88,18 +82,22 @@ namespace nnlib {
 		return ret;
 	}
 
-	Matrix Matrix::operator- (Matrix v){
+	Matrix Matrix::operator- (const Matrix& v){
 		if(width != v.width || height != v.height)
 			throw std::invalid_argument("Subtracting matrices of different sizes");
 
 		Matrix ret(width, height);
 
-		ret = (*this) + (v*-1);
+		for(uint i = 0; i < width; i++){
+			for(uint j = 0; j < height; j++){
+				ret.setValue(i, j, getValue(i, j) - v.getValue(i, j));
+			}
+		}
 
 		return ret;
 	}
 
-	Matrix Matrix::operator* (Matrix v){
+	Matrix Matrix::operator* (const Matrix& v){
 		if(width != v.height)
 			throw std::invalid_argument("Multiplying matrices of invalid sizes");
 
@@ -120,7 +118,7 @@ namespace nnlib {
 		return ret;
 	}
 
-	Matrix Matrix::fillRandom(float min_value, float max_value){
+	void Matrix::fillRandom(float min_value, float max_value){
 
 		for(int i = 0; i < width; i++){
 			for(int j = 0; j < height; j++){
@@ -143,13 +141,38 @@ namespace nnlib {
 		return buffer.str();
 	}
 
-	//Matrix Matrix::copy();
+	Matrix* Matrix::copy() const{
+		Matrix * ret = new Matrix(width, height);
 
-	~ Matrix() {
-		for (int i = 0; i < width; i++) {
-			free(table[i]);
+		for(int i = 0; i < width; i++){
+			for(int j = 0; j < height; j++){
+				ret -> setValue(i, j, getValue(i, j));
+			}
 		}
-		free(table);
+
+		return ret;
+	}
+
+	Matrix::~Matrix(){
+		printf("DESTRUCTING\n");
+		print();
+		printf("%ld\n", table);
+		for(int i = 0; i < width; i++){
+			delete[] table[i];
+		}
+	}
+
+
+
+	float ** Matrix::allocate2DArray(uint width, uint height){
+
+		float ** ret = (float**) calloc(width, sizeof(float *));
+	    for (int i = 0; i < width; i++) {
+	        ret[i] = (float*) calloc(height, sizeof(float));
+	    }
+
+		return ret;
+
 	}
 
 }

@@ -26,10 +26,10 @@ namespace nnlib {
 		void fillZero();
 		void identity();
 
-		// if float_width is too small, the smallest possible value will be used
-		void           print(uint float_width = 5, uint float_precision = 2) const;
-		std::string toString(uint float_width = 5, uint float_precision = 2) const;
-		char*       toBuffer(uint float_width = 5, uint float_precision = 2) const;
+		std::string serialize(uint float_width = 5, uint float_precision = 2) const;
+		void deserialize();
+
+		void print(uint float_width = 5, uint float_precision = 2) const;
 
 		Matrix* clone() const;
 

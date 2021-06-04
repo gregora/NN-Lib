@@ -217,10 +217,7 @@ namespace nnlib {
 	}
 
 	Matrix::~Matrix(){
-		for (uint i = 0; i < width; i++) {
-			free(table[i]);
-		}
-		free(table);
+		deallocate2DArray(table, width, height);
 	}
 
 
@@ -236,4 +233,10 @@ namespace nnlib {
 
 	}
 
+	void Matrix::deallocate2DArray(float ** array, uint width, uint height){
+		for (uint i = 0; i < width; i++) {
+			free(array[i]);
+		}
+		free(array);
+	}
 }

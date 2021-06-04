@@ -40,6 +40,8 @@ namespace nnlib {
 
 		static float ** allocate2DArray(uint width, uint height);
 
+		static void deallocate2DArray(float ** array, uint width, uint height);
+
 		float max() const; // get maximum absolute value in the matrix
 
 	};

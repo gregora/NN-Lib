@@ -18,4 +18,8 @@ namespace nnlib {
 		return random()*(max-min) + min;
 
 	}
+
+	int numlen(int x) {
+		return floor(log10(max_length)) + 1;
+	}
 }

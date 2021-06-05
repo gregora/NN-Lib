@@ -42,7 +42,7 @@ namespace nnlib {
 
 		static void deallocate2DArray(float ** array, uint width, uint height);
 
-		float max() const; // get maximum absolute value in the matrix
+		float max_absolute_entry() const;
 
 	};
 

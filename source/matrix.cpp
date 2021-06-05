@@ -140,14 +140,14 @@ namespace nnlib {
 		}
 
 	}
-	
+
 	std::string Matrix::serialize(uint float_width, uint float_precision) const {
 		// TODO: only expand the columns as needed
 
 		// first, get the length of the maximum entry
-		uint max_length = floor(max());
+		uint max_length = floor(max_absolute_entry());
 		if (max_length != 0)
-			max_length = floor(log10(max_length)) + 1;
+			max_length = numlen(max_length);
 		else max_length = 1;
 
 		// assure float_width fits the maximum entry
@@ -156,14 +156,15 @@ namespace nnlib {
 		// +2 places account for the decimal dot and sign symbol
 
 		const int allocated =
-				2 // "[\n"
+				15 // "Matrix (h= w=)\n"
+				+ numlen(w) + numlen(h)
 				+ height*(width*(float_width + 1)) // "%f " for all elements
 				+ height*1 // plus one newline per height
-				+ 3; // "]\n\0"
+				+ 1; // "\0"
 		char* buffer = (char*)malloc(allocated * sizeof(char));
 		char* buffer_start = buffer;
 
-		buffer += sprintf(buffer, "[\n");
+		buffer += sprintf(buffer, "Matrix (h=%d w=%d)\n", h, w);
 		for (uint j = 0; j < height; j++) {
 			for (uint i = 0; i < width; i++) {
 				buffer += sprintf(buffer,
@@ -175,7 +176,6 @@ namespace nnlib {
 			}
 			buffer += sprintf(buffer, "\n");
 		}
-		buffer += sprintf(buffer, "]\n");
 		//printf("used %d, allocated %d\n", buffer - buffer_start, allocated);
 		std::string str((const char*)buffer_start);
 		free(buffer_start);
@@ -183,7 +183,8 @@ namespace nnlib {
 	}
 
 	// needed to calculate space for allocation in toBuffer, toString and print
-	float Matrix::max() const {
+	float Matrix::max_absolute_entry() const {
+		// get maximum absolute value in the matrix
 		float m = 0;
 		for (uint i = 0; i < width; i++) {
 			for (uint j = 0; j < height; j++) {

@@ -6,6 +6,9 @@ namespace nnlib {
 	float random();
 	float random(float min, float max);
 
+	// number of digits x takes up when printed (numlen(0) = 1)
+	int numlen(int x);
+
 	float sigmoid(float x);
 
 	float sparseCategoricalCrossentropy(Matrix* predicted, uint truth);

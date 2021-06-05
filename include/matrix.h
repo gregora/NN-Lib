@@ -1,4 +1,6 @@
-#include "misc.h"
+#ifndef __MATRIX_H
+#define __MATRIX_H
+#include <string>
 
 namespace nnlib {
 
@@ -29,8 +31,6 @@ namespace nnlib {
 		std::string serialize(uint float_width = 5, uint float_precision = 2) const;
 		void deserialize();
 
-		void print(uint float_width = 5, uint float_precision = 2) const;
-
 		Matrix* clone() const;
 
 		~ Matrix();
@@ -47,3 +47,5 @@ namespace nnlib {
 	};
 
 }
+
+#endif

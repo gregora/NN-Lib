@@ -1,4 +1,8 @@
+#include <stdexcept>
+#include <random>
+
 #include "../include/matrix.h"
+#include "../include/misc.h"
 
 namespace nnlib {
 
@@ -136,22 +140,8 @@ namespace nnlib {
 		}
 
 	}
-
-	void Matrix::print(uint float_width, uint float_precision) const {
-		char* buff = this->toBuffer(float_width, float_precision);
-		printf("%s", buff);
-		free(buff);
-		// alternatively: cout << toString();
-	}
-
-	std::string Matrix::toString(uint float_width, uint float_precision) const {
-		char* buffer = toBuffer(float_width, float_precision);
-		std::string str((const char*)buffer);
-		free(buffer);
-		return str;
-	}
-
-	char* Matrix::toBuffer(uint float_width, uint float_precision) const {
+	
+	std::string Matrix::serialize(uint float_width, uint float_precision) const {
 		// TODO: only expand the columns as needed
 
 		// first, get the length of the maximum entry
@@ -187,7 +177,9 @@ namespace nnlib {
 		}
 		buffer += sprintf(buffer, "]\n");
 		//printf("used %d, allocated %d\n", buffer - buffer_start, allocated);
-		return buffer_start;
+		std::string str((const char*)buffer_start);
+		free(buffer_start);
+		return str;
 	}
 
 	// needed to calculate space for allocation in toBuffer, toString and print

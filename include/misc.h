@@ -1,5 +1,4 @@
-#include <random>
-#include <stdexcept>
+#include "matrix.h"
 
 namespace nnlib {
 

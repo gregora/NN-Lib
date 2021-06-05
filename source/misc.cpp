@@ -1,4 +1,5 @@
 #include "../include/misc.h"
+#include <random>
 
 namespace nnlib {
 

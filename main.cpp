@@ -18,11 +18,9 @@ int main() {
 
 	nnlib::Matrix * c = a.clone();
 
-	std::cout << b.toString();
+	std::cout << b.serialize();
 
-	printf("matrix c: %s\n", c -> toString().c_str());
-
-	a.print();
+	printf("matrix c: %s\n", c -> serialize().c_str());
 
 	/*
 	nnlib::Network model = nnlib::Network();

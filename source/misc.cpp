@@ -20,6 +20,6 @@ namespace nnlib {
 	}
 
 	int numlen(int x) {
-		return floor(log10(max_length)) + 1;
+		return floor(log10(x)) + 1;
 	}
 }

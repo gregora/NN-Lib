@@ -157,14 +157,14 @@ namespace nnlib {
 
 		const int allocated =
 				15 // "Matrix (h= w=)\n"
-				+ numlen(w) + numlen(h)
+				+ numlen(width) + numlen(height)
 				+ height*(width*(float_width + 1)) // "%f " for all elements
 				+ height*1 // plus one newline per height
 				+ 1; // "\0"
 		char* buffer = (char*)malloc(allocated * sizeof(char));
 		char* buffer_start = buffer;
 
-		buffer += sprintf(buffer, "Matrix (h=%d w=%d)\n", h, w);
+		buffer += sprintf(buffer, "Matrix (h=%d w=%d)\n", height, width);
 		for (uint j = 0; j < height; j++) {
 			for (uint i = 0; i < width; i++) {
 				buffer += sprintf(buffer,

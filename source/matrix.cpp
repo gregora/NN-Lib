@@ -20,6 +20,21 @@ namespace nnlib {
 		table = allocate2DArray(width, height);
 	}
 
+	Matrix::Matrix(std::string path_to_serialized_file) {
+		std::ifstream file(path_to_serialized_file);
+		if (!file)
+			throw std::invalid_argument("Cannot read file '"+path_to_serialized_file+"'");
+		this -> width = this -> height = 0;
+		this -> deserialize(&file);
+	}
+
+	void Matrix::save(std::string path_to_serialized_file) {
+		std::ofstream file(path_to_serialized_file);
+		if (!file)
+			throw std::invalid_argument("Cannot write to file '"+path_to_serialized_file+"'");
+		file << this->serialize();
+	}
+
 	float Matrix::getValue(uint x, uint y) const {
 
 		if (x >= width || y >= height)
@@ -141,7 +156,7 @@ namespace nnlib {
 
 	}
 
-	std::string Matrix::serialize(uint float_width, uint float_precision) const {
+	std::string Matrix::serialize(uint float_precision, uint float_width) const {
 		// TODO: only expand the columns as needed
 
 		// first, get the length of the maximum entry
@@ -182,6 +197,29 @@ namespace nnlib {
 		return str;
 	}
 
+	void Matrix::deserialize(std::ifstream* serialized) {
+		deallocate2DArray(this->table, this->width, this->height);
+
+		std::string s;
+		char c; // useless buffer
+		*serialized >> s; // "Matrix"
+		*serialized >> c >> c >> c; // "(h="
+		*serialized >> this->height;
+		*serialized >> c >> c; // "w="
+		*serialized >> this->width;
+		*serialized >> c; // ")"
+
+		this->table = allocate2DArray(this->width, this->height);
+
+		for (uint j = 0; j < this->height; j++) {
+			for (uint i = 0; i < this->width; i++) {
+				float value;
+				*serialized >> value;
+				this->setValue(i, j, value);
+			}
+		}
+	}
+
 	// needed to calculate space for allocation in toBuffer, toString and print
 	float Matrix::max_absolute_entry() const {
 		// get maximum absolute value in the matrix
@@ -215,7 +253,7 @@ namespace nnlib {
 
 
 
-	float ** Matrix::allocate2DArray(uint width, uint height){
+	float ** Matrix::allocate2DArray(uint width, uint height) {
 
 		float ** ret = (float**) calloc(width, sizeof(float *));
 		for (uint i = 0; i < width; i++) {
@@ -226,7 +264,9 @@ namespace nnlib {
 
 	}
 
-	void Matrix::deallocate2DArray(float ** array, uint width, uint height){
+	void Matrix::deallocate2DArray(float ** array, uint width, uint height) {
+		if (width == 0 || height == 0) return;
+
 		for (uint i = 0; i < width; i++) {
 			free(array[i]);
 		}

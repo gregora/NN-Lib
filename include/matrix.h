@@ -1,6 +1,8 @@
 #ifndef __MATRIX_H
 #define __MATRIX_H
 #include <string>
+#include <fstream>
+#include <sstream>
 
 namespace nnlib {
 
@@ -14,6 +16,11 @@ namespace nnlib {
 
 		Matrix(uint width, uint height);
 		Matrix(uint size);
+		Matrix(std::string path_to_serialized_file);
+
+		void save(std::string path_to_serialized_file);
+		std::string serialize(uint float_precision = 2, uint float_width = 5) const;
+		void deserialize(std::ifstream* serialized);
 
 		float getValue(uint x, uint y) const;
 		void setValue(uint x, uint y, float value);
@@ -27,9 +34,6 @@ namespace nnlib {
 		void fillRandom(float min_value = 0, float max_value = 1);
 		void fillZero();
 		void identity();
-
-		std::string serialize(uint float_width = 5, uint float_precision = 2) const;
-		void deserialize();
 
 		Matrix* clone() const;
 

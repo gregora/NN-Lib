@@ -44,6 +44,14 @@ int main() {
 	}
 	*/
 
+	nnlib::Matrix("identity5.matrix");
+
+	nnlib::Matrix horse(4, 8);
+	horse.fillRandom(0, 10);
+	horse.save("horse.matrix");
+
+	nnlib::Matrix bluaberry_pie("horse.matrix");
+	std::cout << bluaberry_pie.serialize();
 
 	printf("QED\n");
 	return 0;

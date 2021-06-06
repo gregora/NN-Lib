@@ -6,16 +6,18 @@
 
 namespace nnlib {
 
-	Matrix::Matrix(uint width, uint height) {
+	Matrix::Matrix(uint width, uint height, std::string name) {
 		this -> height = height;
 		this -> width = width;
+		this -> setName(name);
 
 		table = allocate2DArray(width, height);
 	}
 
-	Matrix::Matrix(uint size) {
+	Matrix::Matrix(uint size, std::string name) {
 		this -> height = size;
 		this -> width = size;
+		this -> setName(name);
 
 		table = allocate2DArray(width, height);
 	}
@@ -28,6 +30,10 @@ namespace nnlib {
 		this -> deserialize(&file);
 	}
 
+	void Matrix::save() {
+		this->save(this->name + ".matrix");
+	}
+
 	void Matrix::save(std::string path_to_serialized_file) {
 		std::ofstream file(path_to_serialized_file);
 		if (!file)
@@ -37,18 +43,39 @@ namespace nnlib {
 
 	float Matrix::getValue(uint x, uint y) const {
 
-		if (x >= width || y >= height)
-			throw std::invalid_argument("Fetching value outside of matrix");
+		if (x >= width || y >= height || x < 0 || y < 0) {
+			std::ostringstream stringStream;
+			stringStream << "Fetching value (" << x << "," << y << ")";
+			stringStream << " outside of matrix " << name;
+			stringStream << " (h=" << height << " w=" << width << ")";
+			throw std::invalid_argument(stringStream.str());
+		}
 
 		return table[x][y];
 	}
 
 	void Matrix::setValue(uint x, uint y, float value) {
 
-		if (x >= width || y >= height)
-			throw std::invalid_argument("Setting value outside of matrix");
+		if (x >= width || y >= height || x < 0 || y < 0) {
+			std::ostringstream stringStream;
+			stringStream << "Setting value (" << x << "," << y << ")";
+			stringStream << " outside of matrix " << name;
+			stringStream << " (h=" << height << " w=" << width << ")";
+			throw std::invalid_argument(stringStream.str());
+		};
 
 		table[x][y] = value;
+	}
+
+	std::string Matrix::getName() const {
+		return this->name;
+	}
+
+	void Matrix::setName(std::string new_name) {
+		for (uint i = 0; i < new_name.length(); i++)
+			if (isspace(new_name[i]))
+				throw std::invalid_argument(new_name + " contains whitespace characters!");
+		this->name = new_name;
 	}
 
 	Matrix Matrix::operator* (const float& n) const {
@@ -64,6 +91,9 @@ namespace nnlib {
 	}
 
 	Matrix Matrix::operator/ (const float& n) const {
+		if (n == 0)
+			throw std::invalid_argument("Dividing " + this->getName() + " by 0!");
+
 		Matrix ret(width, height);
 
 		for (uint i = 0; i < width; i++) {
@@ -76,8 +106,14 @@ namespace nnlib {
 	}
 
 	Matrix Matrix::operator+ (const Matrix& v) const {
-		if (width != v.width || height != v.height)
-			throw std::invalid_argument("Adding matrices of different sizes");
+		if (width != v.width || height != v.height) {
+			std::ostringstream stringStream;
+			stringStream << "Adding matrices " << this->name << " + " << v.name;
+			stringStream << " of different dimensions ";
+			stringStream << " (h=" << this->height << " w=" << this->width << ")";
+			stringStream << " and (h=" << v.height << " w=" << v.width << ")";
+			throw std::invalid_argument(stringStream.str());
+		}
 
 		Matrix ret(width, height);
 
@@ -91,8 +127,14 @@ namespace nnlib {
 	}
 
 	Matrix Matrix::operator- (const Matrix& v) const {
-		if (width != v.width || height != v.height)
-			throw std::invalid_argument("Subtracting matrices of different sizes");
+		if (width != v.width || height != v.height) {
+			std::ostringstream stringStream;
+			stringStream << "Subtracting matrices " << this->name << " - " << v.name;
+			stringStream << " of different dimensions ";
+			stringStream << " (h=" << this->height << " w=" << this->width << ")";
+			stringStream << " and (h=" << v.height << " w=" << v.width << ")";
+			throw std::invalid_argument(stringStream.str());
+		}
 
 		Matrix ret(width, height);
 
@@ -106,8 +148,14 @@ namespace nnlib {
 	}
 
 	Matrix Matrix::operator* (const Matrix& v) const {
-		if (width != v.height)
-			throw std::invalid_argument("Multiplying matrices of invalid sizes");
+		if (width != v.height) {
+			std::ostringstream stringStream;
+			stringStream << "Multiplying matrices " << this->name << " * " << v.name;
+			stringStream << " of invalid dimensions ";
+			stringStream << " (h=" << this->height << " w=" << this->width << ")";
+			stringStream << " and (h=" << v.height << " w=" << v.width << ")";
+			throw std::invalid_argument(stringStream.str());
+		}
 
 		Matrix ret(v.width, height);
 
@@ -179,7 +227,7 @@ namespace nnlib {
 		char* buffer = (char*)malloc(allocated * sizeof(char));
 		char* buffer_start = buffer;
 
-		buffer += sprintf(buffer, "Matrix (h=%d w=%d)\n", height, width);
+		buffer += sprintf(buffer, (this->name + " (h=%d w=%d)\n").c_str(), height, width);
 		for (uint j = 0; j < height; j++) {
 			for (uint i = 0; i < width; i++) {
 				buffer += sprintf(buffer,
@@ -200,9 +248,8 @@ namespace nnlib {
 	void Matrix::deserialize(std::ifstream* serialized) {
 		deallocate2DArray(this->table, this->width, this->height);
 
-		std::string s;
 		char c; // useless buffer
-		*serialized >> s; // "Matrix"
+		*serialized >> this->name; // "Matrix"
 		*serialized >> c >> c >> c; // "(h="
 		*serialized >> this->height;
 		*serialized >> c >> c; // "w="
@@ -236,7 +283,7 @@ namespace nnlib {
 	}
 
 	Matrix* Matrix::clone() const{
-		Matrix * ret = new Matrix(width, height);
+		Matrix * ret = new Matrix(width, height, this->name);
 
 		for (uint i = 0; i < width; i++){
 			for (uint j = 0; j < height; j++){

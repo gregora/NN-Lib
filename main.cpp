@@ -3,8 +3,8 @@
 
 int main() {
 
-	nnlib::Matrix a(5, 5);
-	nnlib::Matrix b(5, 5);
+	nnlib::Matrix a(5, 5, "MatA");
+	nnlib::Matrix b(5, 5, "MatB");
 	a.fillRandom();
 	a.setValue(0, 0, 3);
 	a.setValue(0, 3, 8);
@@ -17,10 +17,11 @@ int main() {
 	a*b;
 
 	nnlib::Matrix * c = a.clone();
+	c->setName("C_(clone-of-A)");
 
 	std::cout << b.serialize();
 
-	printf("matrix c: %s\n", c -> serialize().c_str());
+	printf("matrix c: %s", c -> serialize().c_str());
 
 	/*
 	nnlib::Network model = nnlib::Network();
@@ -46,11 +47,11 @@ int main() {
 
 	nnlib::Matrix("identity5.matrix");
 
-	nnlib::Matrix horse(4, 8);
+	nnlib::Matrix horse(4, 8, "Horse");
 	horse.fillRandom(0, 10);
-	horse.save("horse.matrix");
+	horse.save();
 
-	nnlib::Matrix bluaberry_pie("horse.matrix");
+	nnlib::Matrix bluaberry_pie("Horse.matrix");
 	std::cout << bluaberry_pie.serialize();
 
 	printf("QED\n");

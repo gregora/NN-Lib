@@ -15,7 +15,7 @@ namespace nnlib {
 
 	double fast_pow(double base, uint exponent) {
 		double result = 1;
-		while (exponent > 0) {
+		while (exponent) {
 			if (!(exponent % 2)) {
 				result *= base;
 			}

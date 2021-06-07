@@ -211,15 +211,17 @@ namespace nnlib {
 		uint* col_width = (uint*)calloc(this->width, sizeof(uint));
 		// ISO C++ forbids variable length array, so it has to be malloc()ed
 		// (calloc in this case performs faster due to proper uint alignment)
-		char* col_signed = (char*)calloc(this->width, sizeof(char));
-		// array of columns, telling whether we need to print the sign
 		uint ten_to_prec = (uint)fast_pow(10, float_precision);
 		for (uint i = 0; i < this -> width; i++) {
 			// first, calculate the minimum possible width for every column
 			float max_absolute_entry = 0;
+			char all_entires_positive = 1;
 			for (uint j = 0; j < height; j++) {
 				float val = round(getValue(i, j)*ten_to_prec)/(float)ten_to_prec;
-				val = val > 0? val : -val;
+				if (val < 0) {
+					all_entires_positive = 0;
+					val = -val;
+				}
 				if (val > max_absolute_entry)
 					max_absolute_entry = val;
 			}
@@ -235,16 +237,8 @@ namespace nnlib {
 				col_width[i]++;
 
 			// check if we need to add the sign symbols
-			char all_entires_positive = 1;
-			for (uint j = 0; j < height; j++) {
-				if (getValue(i, j) < 0) {
-					all_entires_positive = 0;
-					break;
-				}
-			}
 			if (!all_entires_positive) {
 				col_width[i]++; // sign symbol
-				col_signed[i] = 1;
 			}
 
 			// if more space was requested, grant it

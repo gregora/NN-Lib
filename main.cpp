@@ -7,8 +7,7 @@ int main() {
 	nnlib::Matrix b(5, 5, "MatB");
 	a.fillRandom();
 	a.setValue(0, 0, 3);
-	a.setValue(0, 3, 8);
-	a.setValue(0, 3, -8);
+	a.setValue(0, 3, 9.999);
 	a.setValue(1, 3, -0.22333);
 	a.setValue(3, 3, 10000);
 	a.setValue(2, 3, 0);
@@ -52,7 +51,7 @@ int main() {
 	horse.save();
 
 	nnlib::Matrix bluaberry_pie("Horse.matrix");
-	std::cout << bluaberry_pie.serialize();
+	std::cout << bluaberry_pie.serialize(4, 7);
 
 	printf("QED\n");
 	return 0;

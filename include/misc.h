@@ -6,6 +6,8 @@ namespace nnlib {
 	float random();
 	float random(float min, float max);
 
+	double fast_pow(double base, uint exponent);
+
 	// number of digits x takes up when printed (numlen(0) = 1)
 	int numlen(int x);
 

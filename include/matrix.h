@@ -20,7 +20,7 @@ namespace nnlib {
 
 		void save();
 		void save(std::string path_to_serialized_file);
-		std::string serialize(uint float_precision = 2, uint float_width = 5) const;
+		std::string serialize(uint float_precision = 2, uint min_float_width = 0) const;
 		void deserialize(std::ifstream* serialized);
 
 		float getValue(uint x, uint y) const;
@@ -50,8 +50,6 @@ namespace nnlib {
 		static float ** allocate2DArray(uint width, uint height);
 
 		static void deallocate2DArray(float ** array, uint width, uint height);
-
-		float max_absolute_entry() const;
 
 	};
 

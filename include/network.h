@@ -6,12 +6,11 @@ namespace nnlib {
 	// abstract Layer class: not to be implemented
 	class Layer {
 	public:
-		virtual std::string toString() = 0;
 
-		virtual std::string serialize() = 0;
-		virtual void deserialize(std::string input) = 0;
+		virtual std::string serialize();
+		virtual void deserialize(std::string input);
 
-		virtual float eval(Matrix* input, Matrix* output);
+		virtual void eval(Matrix* input, Matrix* output);
 
 		virtual Layer* clone();
 
@@ -19,11 +18,17 @@ namespace nnlib {
 
 	class Dense: public Layer {
 	public:
-		std::string toString();
+
+		Dense(uint input, uint output);
 
 		std::string serialize();
 		void deserialize(std::string input);
 
+		void eval(Matrix* input, Matrix* output);
+
+		Layer* clone();
+
+	private:
 		Matrix* matrix;
 
 	};

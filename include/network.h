@@ -9,7 +9,7 @@ namespace nnlib {
 		virtual std::string toString() = 0;
 
 		virtual std::string serialize() = 0;
-		virtual void deserialize() = 0;
+		virtual void deserialize(std::string input) = 0;
 
 		virtual float eval(Matrix* input, Matrix* output);
 
@@ -22,7 +22,7 @@ namespace nnlib {
 		std::string toString();
 
 		std::string serialize();
-		void deserialize();
+		void deserialize(std::string input);
 
 		Matrix* matrix;
 
@@ -41,7 +41,7 @@ namespace nnlib {
 		void load(std::string path);
 
 		std::string serialize();
-		void deserialize();
+		void deserialize(std::string input);
 
 		// pretty-print; not for exporting
 		std::string toString();

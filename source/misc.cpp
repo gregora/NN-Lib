@@ -13,6 +13,18 @@ namespace nnlib {
 
 	}
 
+	double fast_pow(double base, uint exponent) {
+		double result = 1;
+		while (exponent > 0) {
+			if (!(exponent % 2)) {
+				result *= base;
+			}
+			base *= base;
+			exponent >>= 1; // divide by 2
+		}
+		return result;
+	}
+
 	float random(float min, float max) {
 
 		return random()*(max-min) + min;

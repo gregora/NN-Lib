@@ -26,8 +26,14 @@ namespace nnlib {
 		std::ifstream file(path_to_serialized_file);
 		if (!file)
 			throw std::invalid_argument("Cannot read file '"+path_to_serialized_file+"'");
+
+		// this, because deserialize will try to free() the nonexistent table otherwise
 		this -> width = this -> height = 0;
-		this -> deserialize(&file);
+
+		// read file to std::string
+		std::string str((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+
+		this -> deserialize(str);
 	}
 
 	void Matrix::save() {
@@ -283,23 +289,25 @@ namespace nnlib {
 		return str;
 	}
 
-	void Matrix::deserialize(std::ifstream* serialized) {
+	void Matrix::deserialize(std::string serialized) {
+		std::istringstream stream = std::istringstream(serialized);
+
 		deallocate2DArray(this->table, this->width, this->height);
 
 		char c; // useless buffer
-		*serialized >> this->name; // "Matrix"
-		*serialized >> c >> c >> c; // "(h="
-		*serialized >> this->height;
-		*serialized >> c >> c; // "w="
-		*serialized >> this->width;
-		*serialized >> c; // ")"
+		stream >> this->name; // "Matrix"
+		stream >> c >> c >> c; // "(h="
+		stream >> this->height;
+		stream >> c >> c; // "w="
+		stream >> this->width;
+		stream >> c; // ")"
 
 		this->table = allocate2DArray(this->width, this->height);
 
 		for (uint j = 0; j < this->height; j++) {
 			for (uint i = 0; i < this->width; i++) {
 				float value;
-				*serialized >> value;
+				stream >> value;
 				this->setValue(i, j, value);
 			}
 		}

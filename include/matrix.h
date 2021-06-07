@@ -21,7 +21,7 @@ namespace nnlib {
 		void save();
 		void save(std::string path_to_serialized_file);
 		std::string serialize(uint float_precision = 2, uint min_float_width = 0) const;
-		void deserialize(std::ifstream* serialized);
+		void deserialize(std::string serialized);
 
 		float getValue(uint x, uint y) const;
 		void setValue(uint x, uint y, float value);

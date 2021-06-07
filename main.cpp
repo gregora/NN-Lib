@@ -48,10 +48,14 @@ int main() {
 
 	nnlib::Matrix horse(4, 8, "Horse");
 	horse.fillRandom(0, 10);
-	horse.save();
+	//horse.save();
 
 	nnlib::Matrix bluaberry_pie("Horse.matrix");
 	std::cout << bluaberry_pie.serialize(4, 7);
+
+	nnlib::Matrix bob(0);
+	bob.deserialize(horse.serialize());
+	std::cout << bob.serialize();
 
 	printf("QED\n");
 	return 0;

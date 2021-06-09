@@ -37,7 +37,7 @@ namespace nnlib {
 	}
 
 	void Matrix::save() {
-		this->save(this->name + ".matrix");
+		this->save(this->getName() + ".matrix");
 	}
 
 	void Matrix::save(std::string path_to_serialized_file) {
@@ -52,7 +52,7 @@ namespace nnlib {
 		if (x >= width || y >= height || x < 0 || y < 0) {
 			std::ostringstream stringStream;
 			stringStream << "Fetching value (" << x << "," << y << ")";
-			stringStream << " outside of matrix " << name;
+			stringStream << " outside of matrix " << getName();
 			stringStream << " (h=" << height << " w=" << width << ")";
 			throw std::invalid_argument(stringStream.str());
 		}
@@ -65,7 +65,7 @@ namespace nnlib {
 		if (x >= width || y >= height || x < 0 || y < 0) {
 			std::ostringstream stringStream;
 			stringStream << "Setting value (" << x << "," << y << ")";
-			stringStream << " outside of matrix " << name;
+			stringStream << " outside of matrix " << getName();
 			stringStream << " (h=" << height << " w=" << width << ")";
 			throw std::invalid_argument(stringStream.str());
 		};
@@ -114,7 +114,7 @@ namespace nnlib {
 	Matrix Matrix::operator+ (const Matrix& v) const {
 		if (width != v.width || height != v.height) {
 			std::ostringstream stringStream;
-			stringStream << "Adding matrices " << this->name << " + " << v.name;
+			stringStream << "Adding matrices " << this->getName() << " + " << v.getName();
 			stringStream << " of different dimensions ";
 			stringStream << " (h=" << this->height << " w=" << this->width << ")";
 			stringStream << " and (h=" << v.height << " w=" << v.width << ")";
@@ -135,7 +135,7 @@ namespace nnlib {
 	Matrix Matrix::operator- (const Matrix& v) const {
 		if (width != v.width || height != v.height) {
 			std::ostringstream stringStream;
-			stringStream << "Subtracting matrices " << this->name << " - " << v.name;
+			stringStream << "Subtracting matrices " << this->getName() << " - " << v.getName();
 			stringStream << " of different dimensions ";
 			stringStream << " (h=" << this->height << " w=" << this->width << ")";
 			stringStream << " and (h=" << v.height << " w=" << v.width << ")";
@@ -156,7 +156,7 @@ namespace nnlib {
 	Matrix Matrix::operator* (const Matrix& v) const {
 		if (width != v.height) {
 			std::ostringstream stringStream;
-			stringStream << "Multiplying matrices " << this->name << " * " << v.name;
+			stringStream << "Multiplying matrices " << this->getName() << " * " << v.getName();
 			stringStream << " of invalid dimensions ";
 			stringStream << " (h=" << this->height << " w=" << this->width << ")";
 			stringStream << " and (h=" << v.height << " w=" << v.width << ")";
@@ -257,7 +257,7 @@ namespace nnlib {
 		total_width++; // every line ends with "\n"
 
 		const int allocated =
-				this->name.length() // "Matrix"
+				this->getName().length() // "Matrix"
 				+ 9 // " (h= w=)\n"
 				+ numlen(width) + numlen(height) // matrix dimensions
 				+ height*total_width // matrix data
@@ -266,7 +266,7 @@ namespace nnlib {
 		char* buffer = (char*)malloc(allocated * sizeof(char));
 		char* buffer_start = buffer;
 
-		buffer += sprintf(buffer, (this->name + " (h=%d w=%d)\n").c_str(), height, width);
+		buffer += sprintf(buffer, (this->getName() + " (h=%d w=%d)\n").c_str(), height, width);
 		for (uint j = 0; j < height; j++) {
 			for (uint i = 0; i < width; i++) {
 				buffer += sprintf(buffer,
@@ -295,7 +295,7 @@ namespace nnlib {
 		deallocate2DArray(this->table, this->width, this->height);
 
 		char c; // useless buffer
-		stream >> this->name; // "Matrix"
+		stream >> this->getName(); // "Matrix"
 		stream >> c >> c >> c; // "(h="
 		stream >> this->height;
 		stream >> c >> c; // "w="
@@ -314,7 +314,7 @@ namespace nnlib {
 	}
 
 	Matrix* Matrix::clone() const{
-		Matrix * ret = new Matrix(width, height, this->name);
+		Matrix * ret = new Matrix(width, height, this->getName());
 
 		for (uint i = 0; i < width; i++){
 			for (uint j = 0; j < height; j++){

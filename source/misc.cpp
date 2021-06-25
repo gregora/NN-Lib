@@ -34,4 +34,8 @@ namespace nnlib {
 	int numlen(int x) {
 		return floor(log10(x)) + 1;
 	}
+
+	float fast_sigmoid(float x){
+		return x / (1 + abs(x));
+	}
 }

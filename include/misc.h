@@ -13,6 +13,8 @@ namespace nnlib {
 
 	float sigmoid(float x);
 
+	float fast_sigmoid(float x);
+
 	float sparseCategoricalCrossentropy(Matrix* predicted, uint truth);
 
 	float categoricalCrossentropy(Matrix* predicted, Matrix* truth);

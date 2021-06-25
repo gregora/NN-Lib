@@ -7,29 +7,34 @@ namespace nnlib {
 	class Layer {
 	public:
 
-		virtual std::string serialize();
-		virtual void deserialize(std::string input);
+		virtual std::string serialize() = 0;
+		virtual void deserialize(std::string input) = 0;
 
-		virtual void eval(Matrix* input, Matrix* output);
+		virtual Matrix eval(Matrix input) = 0;
 
-		virtual Layer* clone();
+		virtual Layer* clone() = 0;
 
 	};
 
 	class Dense: public Layer {
 	public:
 
+
+
 		Dense(uint input, uint output);
 
 		std::string serialize();
 		void deserialize(std::string input);
 
-		void eval(Matrix* input, Matrix* output);
+		Matrix eval(Matrix input);
 
 		Layer* clone();
 
 	private:
-		Matrix* matrix;
+		Matrix* weights;
+		Matrix* biases;
+
+		float (*activation)(float) = nullptr;
 
 	};
 

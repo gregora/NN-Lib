@@ -129,6 +129,7 @@ namespace nnlib {
 			}
 		}
 
+		ret.setName("(" + this->getName() + "+" + v.getName()+")");
 		return ret;
 	}
 
@@ -150,6 +151,7 @@ namespace nnlib {
 			}
 		}
 
+		ret.setName("(" + this->getName() + "-" + v.getName()+")");
 		return ret;
 	}
 
@@ -177,6 +179,7 @@ namespace nnlib {
 			}
 		}
 
+		ret.setName(this->getName() + "*" + v.getName());
 		return ret;
 	}
 

@@ -327,7 +327,7 @@ namespace nnlib {
 		return ret;
 	}
 
-	Matrix::~Matrix(){
+	Matrix::~Matrix() {
 		deallocate2DArray(table, width, height);
 	}
 

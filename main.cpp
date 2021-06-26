@@ -3,13 +3,14 @@
 
 int main() {
 
-	nnlib::Dense dense_layer(10, 1);
+	nnlib::Dense dense_layer(10, 1, "DLayer");
 
-	nnlib::Matrix input(1, 10);
+	nnlib::Matrix input(1, 10, "input");
 	input.fillRandom();
 
 	std::cout << input.serialize() << "\n";
 
 	std::cout << (dense_layer.eval(input).serialize()) << "\n";
 
+	return 0;
 }

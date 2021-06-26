@@ -14,14 +14,17 @@ namespace nnlib {
 
 		virtual Layer* clone() = 0;
 
+		std::string getName() const;
+		void setName(std::string new_name);
+
+	private:
+		std::string name;
 	};
 
 	class Dense: public Layer {
 	public:
 
-
-
-		Dense(uint input, uint output);
+		Dense(uint input, uint output, std::string name = "dense_layer");
 
 		std::string serialize();
 		void deserialize(std::string input);

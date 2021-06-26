@@ -295,13 +295,15 @@ namespace nnlib {
 		deallocate2DArray(this->table, this->width, this->height);
 
 		char c; // useless buffer
-		stream >> this->getName(); // "Matrix"
+		std::string name;
+		stream >> name; // "Matrix"
 		stream >> c >> c >> c; // "(h="
 		stream >> this->height;
 		stream >> c >> c; // "w="
 		stream >> this->width;
 		stream >> c; // ")"
 
+		this->setName(name);
 		this->table = allocate2DArray(this->width, this->height);
 
 		for (uint j = 0; j < this->height; j++) {

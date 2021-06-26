@@ -14,9 +14,9 @@ namespace nnlib {
 		biases -> setName(name + "_biases");
 	}
 
-	Matrix Dense::eval(Matrix input){
+	Matrix Dense::eval(const Matrix* input) {
 
-		return (*weights) * input + (*biases);
+		return (*weights) * (*input) + (*biases);
 
 	}
 

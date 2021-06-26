@@ -10,7 +10,7 @@ namespace nnlib {
 		virtual std::string serialize() = 0;
 		virtual void deserialize(std::string input) = 0;
 
-		virtual Matrix eval(Matrix input) = 0;
+		virtual Matrix eval(const Matrix* input) = 0;
 
 		virtual Layer* clone() = 0;
 
@@ -29,7 +29,7 @@ namespace nnlib {
 		std::string serialize();
 		void deserialize(std::string input);
 
-		Matrix eval(Matrix input);
+		Matrix eval(const Matrix* input);
 
 		Layer* clone();
 

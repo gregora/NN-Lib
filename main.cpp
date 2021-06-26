@@ -10,7 +10,7 @@ int main() {
 
 	std::cout << input.serialize() << "\n";
 
-	std::cout << (dense_layer.eval(input).serialize()) << "\n";
+	std::cout << (dense_layer.eval(&input).serialize()) << "\n";
 
 	return 0;
 }

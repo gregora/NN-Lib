@@ -16,21 +16,40 @@ namespace nnlib {
 
 	Matrix Dense::eval(const Matrix* input) {
 
-		return (*weights) * (*input) + (*biases);
+		Matrix output = (*weights) * (*input) + (*biases);
+
+		//run activation function on output
+		for(uint i = 0; i < output.height; i++){
+			float value = output.getValue(0, i);
+			output.setValue(0, i, activationFunction(value));
+		}
+
+		return output;
 
 	}
 
 
 	std::string Dense::serialize() {
-		return NULL;
+		return getName() + "\n===\n" + weights -> serialize() + "\n===\n" + biases -> serialize();
 
 	}
-	void Dense::deserialize(std::string input) {
 
+	void Dense::deserialize(std::string input) {
+		std::vector<std::string> split = splitString(input, "\n===\n");
+
+		setName(split[0]);
+		weights -> deserialize(split[1]);
+		biases -> deserialize(split[2]);
 	}
 
 	Layer* Dense::clone() {
-		return NULL;
+		Layer * copy = new Dense(weights -> width, weights -> height, getName());
+		copy -> deserialize(serialize());
+		return copy;
+	}
+
+	void Dense::setActivationFunction(float (*newActivationFunction)(float)){
+		activationFunction = newActivationFunction;
 	}
 
 

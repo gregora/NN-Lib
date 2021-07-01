@@ -1,4 +1,7 @@
 #include "matrix.h"
+//is this double declaration of <vector> and <string>?
+#include <vector>
+#include <string>
 
 namespace nnlib {
 
@@ -22,4 +25,8 @@ namespace nnlib {
 	float binaryCrossentropy(Matrix* predicted, Matrix* truth);
 
 	float meanSquaredError(Matrix* predicted, Matrix* truth);
+
+
+	std::vector<std::string> splitString(std::string string, std::string split_by);
+
 }

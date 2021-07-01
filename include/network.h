@@ -1,5 +1,5 @@
 #include "matrix.h"
-
+#include "misc.h"
 
 namespace nnlib {
 
@@ -33,11 +33,13 @@ namespace nnlib {
 
 		Layer* clone();
 
+		void setActivationFunction(float (*newActivationFunction)(float));
+
 	private:
 		Matrix* weights;
 		Matrix* biases;
 
-		float (*activation)(float) = nullptr;
+		float (*activationFunction)(float) = &fast_sigmoid;
 
 	};
 

@@ -14,6 +14,7 @@ namespace nnlib {
 		uint width;
 		uint height;
 
+		Matrix();
 		Matrix(uint width, uint height, std::string name = "Matrix");
 		Matrix(uint size, std::string name = "Matrix");
 		Matrix(std::string path_to_serialized_file);
@@ -29,6 +30,7 @@ namespace nnlib {
 		std::string getName() const;
 		void setName(std::string new_name);
 
+		void operator= (const Matrix& matrix);
 		Matrix operator* (const float& n) const;
 		Matrix operator/ (const float& n) const;
 		Matrix operator+ (const Matrix& v) const;
@@ -41,7 +43,7 @@ namespace nnlib {
 
 		Matrix* clone() const;
 
-		~ Matrix();
+		~Matrix();
 
 	private:
 		float ** table;

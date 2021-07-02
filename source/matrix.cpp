@@ -6,6 +6,12 @@
 
 namespace nnlib {
 
+	Matrix::Matrix() {
+		width = 0;
+		height = 0;
+		name = "";
+	}
+
 	Matrix::Matrix(uint width, uint height, std::string name) {
 		this -> height = height;
 		this -> width = width;
@@ -82,6 +88,23 @@ namespace nnlib {
 			if (isspace(new_name[i]))
 				throw std::invalid_argument(new_name + " contains whitespace characters!");
 		this->name = new_name;
+	}
+
+	void Matrix::operator= (const Matrix& matrix) {
+
+		deallocate2DArray(table, width, height);
+
+		width = matrix.width;
+		height = matrix.height;
+
+		table = allocate2DArray(width, height);
+
+		for(uint i = 0; i < width; i++){
+			for(uint j = 0; j < height; j++){
+				table[i][j] = matrix.getValue(i, j);
+			}
+		}
+
 	}
 
 	Matrix Matrix::operator* (const float& n) const {
@@ -349,6 +372,7 @@ namespace nnlib {
 
 	void Matrix::deallocate2DArray(float ** array, uint width, uint height) {
 		if (width == 0 || height == 0) return;
+		if (array == nullptr) return;
 
 		for (uint i = 0; i < width; i++) {
 			free(array[i]);

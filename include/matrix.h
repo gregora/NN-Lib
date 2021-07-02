@@ -46,7 +46,7 @@ namespace nnlib {
 		~Matrix();
 
 	private:
-		float ** table;
+		float ** table = nullptr;
 		std::string name;
 
 		static float ** allocate2DArray(uint width, uint height);

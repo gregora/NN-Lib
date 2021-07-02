@@ -377,6 +377,7 @@ namespace nnlib {
 		for (uint i = 0; i < width; i++) {
 			free(array[i]);
 		}
+
 		free(array);
 	}
 }

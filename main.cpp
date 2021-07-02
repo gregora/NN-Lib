@@ -27,7 +27,7 @@ int main() {
 
 	nnlib::Network n2;
 	n2.load("test.AI");
-	std::cout << n2.serialize();
+	n2.print();
 
 
 	return 0;

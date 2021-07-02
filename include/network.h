@@ -68,8 +68,8 @@ namespace nnlib {
 		void save(std::string path);
 		void load(std::string path);
 
-		// pretty-print; not for exporting
-		std::string toString();
+		// pretty-print; not for exporting (could be renamed to debug())
+		void print();
 
 		Network* clone();
 

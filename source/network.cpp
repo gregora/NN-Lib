@@ -153,8 +153,11 @@ namespace nnlib {
 	}
 
 	// pretty-print; not for exporting
-	std::string Network::toString(){
-		return "";
+	void Network::print(){
+		printf("Network pretty print:\n");
+		for(uint i = 0; i < layers.size(); i++){
+			printf(" - Layer %d type: %s\n", i+1, layers[i] -> type.c_str());
+		}
 	}
 
 	Network* Network::clone(){

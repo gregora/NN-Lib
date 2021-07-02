@@ -30,7 +30,7 @@ namespace nnlib {
 
 
 	std::string Dense::serialize() {
-		return getName() + "\n===\n" + weights -> serialize() + "\n===\n" + biases -> serialize();
+		return getName() + "\n===\n" + weights -> serialize(7) + "\n===\n" + biases -> serialize(7);
 
 	}
 

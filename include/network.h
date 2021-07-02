@@ -17,6 +17,10 @@ namespace nnlib {
 		std::string getName() const;
 		void setName(std::string new_name);
 
+		//potentially add input/output sizes for addLayer() function in Network class
+
+		virtual ~Layer(){};
+
 	private:
 		std::string name;
 	};
@@ -35,6 +39,8 @@ namespace nnlib {
 
 		void setActivationFunction(float (*newActivationFunction)(float));
 
+		~Dense();
+
 	private:
 		Matrix* weights;
 		Matrix* biases;
@@ -46,25 +52,25 @@ namespace nnlib {
 	class Network {
 	public:
 		Network();
-		~Network();
 
 		void addLayer(Layer* l);
 
-		float eval(uint datac, float* datav);
-
-		void save(std::string path);
-		void load(std::string path);
+		Matrix eval(const Matrix* input);
 
 		std::string serialize();
 		void deserialize(std::string input);
+
+		void save(std::string path);
+		void load(std::string path);
 
 		// pretty-print; not for exporting
 		std::string toString();
 
 		Network* clone();
 
-	private:
-		Layer* layers;
+		~Network();
 
+	private:
+		std::vector<Layer*> layers;
 	};
 }

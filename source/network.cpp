@@ -53,6 +53,11 @@ namespace nnlib {
 	}
 
 
+	Dense::~Dense(){
+		delete weights;
+		delete biases;
+	}
+
 	std::string Layer::getName() const {
 		return this->name;
 	}
@@ -63,4 +68,48 @@ namespace nnlib {
 				throw std::invalid_argument(new_name + " contains whitespace characters!");
 		this->name = new_name;
 	}
+
+
+
+	Network::Network(){}
+
+
+	void Network::addLayer(Layer* l){
+		layers.push_back(l);
+	}
+
+	Matrix Network::eval(const Matrix* input){
+
+		//Next two lines HAVE TO BE TWO SEPARATE LINES. I spent 2 hours on this and i am not doing that again
+		Matrix values;
+		values = (*input);
+
+		values.setName("values");
+
+		for(uint i = 0; i < layers.size(); i++){
+			values = layers[i] -> eval(&values);
+		}
+
+		return values;
+	}
+
+	std::string Network::serialize(){
+		return "";
+	}
+	void Network::deserialize(std::string input){}
+
+	void Network::save(std::string path){}
+	void Network::load(std::string path){}
+
+	// pretty-print; not for exporting
+	std::string Network::toString(){
+		return "";
+	}
+
+	Network* Network::clone(){
+		return nullptr;
+	}
+
+	Network::~Network(){}
+
 }

@@ -135,8 +135,22 @@ namespace nnlib {
 		}
 	}
 
-	void Network::save(std::string path){}
-	void Network::load(std::string path){}
+	void Network::save(std::string path){
+	    std::ofstream file(path);
+	    file << serialize();
+	    file.close();
+	}
+
+	void Network::load(std::string path){
+		std::ifstream file;
+		file.open(path);
+
+		std::stringstream buffer;
+		buffer << file.rdbuf(); //read the file
+		std::string string = buffer.str(); //str holds the content of the file
+
+		deserialize(string);
+	}
 
 	// pretty-print; not for exporting
 	std::string Network::toString(){
@@ -144,7 +158,10 @@ namespace nnlib {
 	}
 
 	Network* Network::clone(){
-		return nullptr;
+		Network* ret = new Network;
+		ret -> deserialize(serialize());
+
+		return ret;
 	}
 
 	Network::~Network(){

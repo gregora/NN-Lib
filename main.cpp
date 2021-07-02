@@ -2,10 +2,6 @@
 #include <iostream>
 
 
-float func(float a){
-	return a;
-}
-
 int main() {
 
 	nnlib::Dense* dense_layer1 = new nnlib::Dense(10, 10, "DLayer1");
@@ -27,14 +23,12 @@ int main() {
 	network.addLayer(dense_layer5);
 	network.addLayer(dense_layer6);
 
-	nnlib::Matrix a = network.eval(&input);
-	a.setName("a");
+	network.save("test.AI");
 
-	nnlib::Network net2;
-	std::string s = network.serialize();
-	net2.deserialize(s);
+	nnlib::Network n2;
+	n2.load("test.AI");
+	std::cout << n2.serialize();
 
-	std::cout << net2.serialize() << std::endl;
 
 	return 0;
 }

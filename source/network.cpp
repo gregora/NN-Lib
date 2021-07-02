@@ -3,6 +3,9 @@
 namespace nnlib {
 
 	Dense::Dense(uint input, uint output, std::string name) {
+
+		type = "Dense";
+
 		weights = new Matrix(input, output);
 		weights -> fillRandom();
 
@@ -30,7 +33,7 @@ namespace nnlib {
 
 
 	std::string Dense::serialize() {
-		return getName() + "\n===\n" + weights -> serialize(7) + "\n===\n" + biases -> serialize(7);
+		return getName() + "\n===\n" + weights -> serialize(7) + "===\n" + biases -> serialize(7);
 
 	}
 
@@ -38,7 +41,7 @@ namespace nnlib {
 		std::vector<std::string> split = splitString(input, "\n===\n");
 
 		setName(split[0]);
-		weights -> deserialize(split[1]);
+		weights -> deserialize(split[1] + "\n");
 		biases -> deserialize(split[2]);
 	}
 
@@ -94,9 +97,43 @@ namespace nnlib {
 	}
 
 	std::string Network::serialize(){
-		return "";
+		std::string ret;
+
+		for(uint i = 0; i < layers.size(); i++){
+			ret += "====================\nLayer: ";
+			ret += layers[i] -> type + ";\n";
+			ret += layers[i] -> serialize();
+		}
+
+		return ret;
 	}
-	void Network::deserialize(std::string input){}
+	void Network::deserialize(std::string input){
+
+		for(uint i = 0; i < layers.size(); i++){
+			delete layers[i];
+		}
+
+		layers.clear();
+
+		std::vector<std::string> split = splitString(input, "====================\nLayer: ");
+
+		for(uint i = 0; i < split.size(); i++){
+
+			if(split[i] != ""){
+
+				std::vector<std::string> split2 = splitString(split[i], ";\n");
+
+				Layer* layer;
+				if(split2[0] == "Dense"){
+					layer = new Dense(1, 1);
+					layer -> deserialize(split2[1]);
+				}
+
+				layers.push_back(layer);
+
+			}
+		}
+	}
 
 	void Network::save(std::string path){}
 	void Network::load(std::string path){}
@@ -110,6 +147,10 @@ namespace nnlib {
 		return nullptr;
 	}
 
-	Network::~Network(){}
+	Network::~Network(){
+		for(uint i = 0; i < layers.size(); i++){
+			delete layers[i];
+		}
+	}
 
 }

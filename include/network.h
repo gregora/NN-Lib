@@ -6,6 +6,7 @@ namespace nnlib {
 	// abstract Layer class: not to be implemented
 	class Layer {
 	public:
+		std::string type;
 
 		virtual std::string serialize() = 0;
 		virtual void deserialize(std::string input) = 0;
@@ -48,6 +49,10 @@ namespace nnlib {
 		float (*activationFunction)(float) = &fast_sigmoid;
 
 	};
+
+
+
+
 
 	class Network {
 	public:

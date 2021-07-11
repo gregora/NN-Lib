@@ -14,7 +14,7 @@ int main() {
 	nnlib::Matrix input(1, 10, "input");
 	input.fillRandom();
 
-	nnlib::Network network;
+	nnlib::Network network("test.AI");
 
 	network.addLayer(dense_layer1);
 	network.addLayer(dense_layer2);
@@ -23,7 +23,7 @@ int main() {
 	network.addLayer(dense_layer5);
 	network.addLayer(dense_layer6);
 
-	network.save("test.AI");
+	network.save();
 
 	std::cout << network.eval(&input).serialize();
 

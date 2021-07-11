@@ -39,7 +39,8 @@ namespace nnlib {
 
 	void Dense::deserialize(std::string input) {
 		std::vector<std::string> split = splitString(input, "\n===\n");
-
+		if (split.size() != 3)
+			throw std::invalid_argument("Attempting to deserialize an invalid Dense layer format");
 		setName(split[0]);
 		weights -> deserialize(split[1] + "\n");
 		biases -> deserialize(split[2]);
@@ -117,23 +118,29 @@ namespace nnlib {
 
 		layers.clear();
 
-		std::vector<std::string> split = splitString(input, "====================\nLayer: ");
+		std::vector<std::string> splitLayers = splitString(input, "====================\nLayer: ");
+		if (splitLayers.size() < 2)
+			throw std::invalid_argument("Deserializing a Network without layers");
 
-		for(uint i = 0; i < split.size(); i++){
+		setName(splitLayers[0]);
 
-			if(split[i] != ""){
+		for (uint i = 1; i < splitLayers.size(); i++) {
 
-				std::vector<std::string> split2 = splitString(split[i], ";\n");
+			std::vector<std::string> split2 = splitString(splitLayers[i], ";\n");
+			if (split2.size() < 1)
+				throw std::invalid_argument("Deserializing a Network with an empty layer (#"+std::to_string(i)+")");
 
-				Layer* layer;
-				if(split2[0] == "Dense"){
-					layer = new Dense(1, 1);
-					layer -> deserialize(split2[1]);
-				}
-
-				layers.push_back(layer);
-
+			Layer* layer;
+			if (split2[0] == "Dense") {
+				layer = new Dense(1, 1);
+				layer -> deserialize(split2[1]);
 			}
+			else {
+				throw std::invalid_argument("Invalid layer type: " + split2[0] + " in " + input);
+			}
+
+			layers.push_back(layer);
+
 		}
 	}
 

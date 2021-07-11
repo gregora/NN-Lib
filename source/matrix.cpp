@@ -355,6 +355,8 @@ namespace nnlib {
 
 	Matrix::~Matrix() {
 		deallocate2DArray(table, width, height);
+		height = 0;
+		width = 0;
 	}
 
 

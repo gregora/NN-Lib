@@ -56,7 +56,7 @@ namespace nnlib {
 
 	class Network {
 	public:
-		Network();
+		Network(std::string name = "network");
 
 		void addLayer(Layer* l);
 
@@ -65,6 +65,7 @@ namespace nnlib {
 		std::string serialize();
 		void deserialize(std::string input);
 
+		void save();
 		void save(std::string path);
 		void load(std::string path);
 
@@ -73,9 +74,13 @@ namespace nnlib {
 
 		Network* clone();
 
+		std::string getName() const;
+		void setName(std::string new_name);
+
 		~Network();
 
 	private:
 		std::vector<Layer*> layers;
+		std::string name;
 	};
 }

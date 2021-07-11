@@ -51,12 +51,12 @@ namespace nnlib {
 		return copy;
 	}
 
-	void Dense::setActivationFunction(float (*newActivationFunction)(float)){
+	void Dense::setActivationFunction(float (*newActivationFunction)(float)) {
 		activationFunction = newActivationFunction;
 	}
 
 
-	Dense::~Dense(){
+	Dense::~Dense() {
 		delete weights;
 		delete biases;
 	}
@@ -74,32 +74,34 @@ namespace nnlib {
 
 
 
-	Network::Network(){}
+	Network::Network(std::string name) {
+		this->setName(name);
+	}
 
 
-	void Network::addLayer(Layer* l){
+	void Network::addLayer(Layer* l) {
 		layers.push_back(l);
 	}
 
-	Matrix Network::eval(const Matrix* input){
+	Matrix Network::eval(const Matrix* input) {
 
 		//Next two lines HAVE TO BE TWO SEPARATE LINES. I spent 2 hours on this and i am not doing that again
 		Matrix values;
 		values = (*input);
 
-		values.setName("values");
+		values.setName(this->getName() + "_evaluated_on_" + input->getName());
 
-		for(uint i = 0; i < layers.size(); i++){
+		for(uint i = 0; i < layers.size(); i++) {
 			values = layers[i] -> eval(&values);
 		}
 
 		return values;
 	}
 
-	std::string Network::serialize(){
-		std::string ret;
+	std::string Network::serialize() {
+		std::string ret = this->getName() + "\n";
 
-		for(uint i = 0; i < layers.size(); i++){
+		for(uint i = 0; i < layers.size(); i++) {
 			ret += "====================\nLayer: ";
 			ret += layers[i] -> type + ";\n";
 			ret += layers[i] -> serialize();
@@ -107,9 +109,9 @@ namespace nnlib {
 
 		return ret;
 	}
-	void Network::deserialize(std::string input){
+	void Network::deserialize(std::string input) {
 
-		for(uint i = 0; i < layers.size(); i++){
+		for(uint i = 0; i < layers.size(); i++) {
 			delete layers[i];
 		}
 
@@ -135,13 +137,17 @@ namespace nnlib {
 		}
 	}
 
-	void Network::save(std::string path){
-	    std::ofstream file(path);
-	    file << serialize();
-	    file.close();
+	void Network::save() {
+		this->save(this->getName());
 	}
 
-	void Network::load(std::string path){
+	void Network::save(std::string path) {
+		std::ofstream file(path);
+		file << serialize();
+		file.close();
+	}
+
+	void Network::load(std::string path) {
 		std::ifstream file;
 		file.open(path);
 
@@ -153,18 +159,26 @@ namespace nnlib {
 	}
 
 	// pretty-print; not for exporting
-	void Network::print(){
+	void Network::print() {
 		printf("Network pretty print:\n");
 		for(uint i = 0; i < layers.size(); i++){
-			printf(" - Layer %d type: %s\n", i+1, layers[i] -> type.c_str());
+			printf(" %d. %s (%s)\n", i, layers[i] -> getName().c_str(), layers[i] -> type.c_str());
 		}
 	}
 
-	Network* Network::clone(){
+	Network* Network::clone() {
 		Network* ret = new Network;
 		ret -> deserialize(serialize());
 
 		return ret;
+	}
+
+	std::string Network::getName() const {
+		return this->name;
+	}
+
+	void Network::setName(std::string new_name) {
+		this->name = new_name;
 	}
 
 	Network::~Network(){

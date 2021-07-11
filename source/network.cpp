@@ -85,10 +85,7 @@ namespace nnlib {
 	}
 
 	Matrix Network::eval(const Matrix* input) {
-
-		//Next two lines HAVE TO BE TWO SEPARATE LINES. I spent 2 hours on this and i am not doing that again
-		Matrix values;
-		values = (*input);
+		Matrix values = (*input);
 
 		values.setName(this->getName() + "_evaluated_on_" + input->getName());
 

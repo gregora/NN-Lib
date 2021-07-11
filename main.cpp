@@ -25,10 +25,11 @@ int main() {
 
 	network.save("test.AI");
 
+	std::cout << network.eval(&input).serialize();
+
 	nnlib::Network n2;
 	n2.load("test.AI");
 	n2.print();
-
 
 	return 0;
 }

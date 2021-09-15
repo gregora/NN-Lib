@@ -2,6 +2,7 @@
 #include "misc.h"
 
 namespace nnlib {
+	Matrix dereference(const Matrix * matrix);
 
 	// abstract Layer class: not to be implemented
 	class Layer {
@@ -83,4 +84,5 @@ namespace nnlib {
 		std::vector<Layer*> layers;
 		std::string name;
 	};
+
 }

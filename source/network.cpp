@@ -2,6 +2,20 @@
 
 namespace nnlib {
 
+	Matrix dereference(const Matrix* matrix){
+		Matrix ret = *matrix;
+		ret.table = ret.allocate2DArray(ret.width, ret.height);
+
+		for(unsigned int i = 0; i < ret.width; i++){
+			for(unsigned int j = 0; j < ret.width; j++){
+				ret.setValue(i, j, matrix -> getValue(i, j));
+			}
+		}
+
+		return ret;
+	}
+
+
 	Dense::Dense(uint input, uint output, std::string name) {
 
 		type = "Dense";
@@ -19,7 +33,7 @@ namespace nnlib {
 
 	Matrix Dense::eval(const Matrix* input) {
 
-		Matrix output = (*weights) * (*input) + (*biases);
+		Matrix output = dereference(weights) * dereference(input) + dereference(biases);
 
 		//run activation function on output
 		for(uint i = 0; i < output.height; i++){
@@ -85,7 +99,7 @@ namespace nnlib {
 	}
 
 	Matrix Network::eval(const Matrix* input) {
-		Matrix values = (*input);
+		Matrix values = dereference(input);
 
 		values.setName(this->getName() + "_evaluated_on_" + input->getName());
 

@@ -10,6 +10,7 @@ namespace nnlib {
 	class Matrix {
 
 	public:
+		float ** table = nullptr;
 
 		uint width;
 		uint height;
@@ -45,13 +46,12 @@ namespace nnlib {
 
 		~Matrix();
 
+		static float ** allocate2DArray(uint width, uint height);
+		static void deallocate2DArray(float ** array, uint width, uint height);
+
 	private:
-		float ** table = nullptr;
 		std::string name;
 
-		static float ** allocate2DArray(uint width, uint height);
-
-		static void deallocate2DArray(float ** array, uint width, uint height);
 
 	};
 

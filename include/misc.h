@@ -8,6 +8,7 @@ namespace nnlib {
 	// uniformly distributed random float between 0 and 1
 	float random();
 	float random(float min, float max);
+	int randomInt(int min, int max);
 
 	double fast_pow(double base, uint exponent);
 

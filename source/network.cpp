@@ -2,20 +2,6 @@
 
 namespace nnlib {
 
-	Matrix dereference(const Matrix* matrix){
-		Matrix ret = *matrix;
-		ret.table = ret.allocate2DArray(ret.width, ret.height);
-
-		for(unsigned int i = 0; i < ret.width; i++){
-			for(unsigned int j = 0; j < ret.width; j++){
-				ret.setValue(i, j, matrix -> getValue(i, j));
-			}
-		}
-
-		return ret;
-	}
-
-
 	Dense::Dense(uint input, uint output, std::string name) {
 
 		type = "Dense";
@@ -68,6 +54,24 @@ namespace nnlib {
 
 	void Dense::setActivationFunction(float (*newActivationFunction)(float)) {
 		activationFunction = newActivationFunction;
+	}
+
+	void Dense::mutate(float min, float max){
+		float rand = random();
+		int weights_num = weights->width * weights->height;
+		int biases_num = biases->width * biases->height;
+
+		if(rand < (float)weights_num / (weights_num + biases_num)){
+			//change random weight
+			int x = randomInt(0, weights->width - 1);
+			int y = randomInt(0, weights->height - 1);
+			weights -> setValue(x, y, random(min, max));
+		}else{
+			//change random bias
+			int x = randomInt(0, biases->width - 1);
+			int y = randomInt(0, biases->height - 1);
+			biases -> setValue(x, y, random(min, max));
+		}
 	}
 
 

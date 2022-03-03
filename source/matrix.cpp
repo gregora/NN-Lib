@@ -382,4 +382,18 @@ namespace nnlib {
 
 		free(array);
 	}
+
+
+	Matrix dereference(const Matrix* matrix){
+		Matrix ret = *matrix;
+		ret.table = ret.allocate2DArray(ret.width, ret.height);
+
+		for(unsigned int i = 0; i < ret.width; i++){
+			for(unsigned int j = 0; j < ret.width; j++){
+				ret.setValue(i, j, matrix -> getValue(i, j));
+			}
+		}
+
+		return ret;
+	}
 }

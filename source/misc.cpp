@@ -1,5 +1,6 @@
 #include "../include/misc.h"
 #include <random>
+#include <cmath>
 
 namespace nnlib {
 
@@ -26,9 +27,12 @@ namespace nnlib {
 	}
 
 	float random(float min, float max) {
-
 		return random()*(max-min) + min;
+	}
 
+	int randomInt(int min, int max){
+		int ret = (int) random((float)min, (float)max + 1);
+		return ret - (ret > max); //dont allow numbers bigger than max
 	}
 
 	int numlen(int x) {

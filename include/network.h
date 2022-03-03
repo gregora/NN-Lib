@@ -2,7 +2,6 @@
 #include "misc.h"
 
 namespace nnlib {
-	Matrix dereference(const Matrix * matrix);
 
 	// abstract Layer class: not to be implemented
 	class Layer {
@@ -40,6 +39,8 @@ namespace nnlib {
 		Layer* clone();
 
 		void setActivationFunction(float (*newActivationFunction)(float));
+
+		void mutate(float min, float max);
 
 		~Dense();
 

@@ -6,7 +6,6 @@
 
 namespace nnlib {
 
-
 	class Matrix {
 
 	public:
@@ -54,6 +53,8 @@ namespace nnlib {
 
 
 	};
+
+	Matrix dereference(const Matrix* matrix);
 
 }
 

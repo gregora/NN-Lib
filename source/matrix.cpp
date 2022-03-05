@@ -389,7 +389,7 @@ namespace nnlib {
 		ret.table = ret.allocate2DArray(ret.width, ret.height);
 
 		for(unsigned int i = 0; i < ret.width; i++){
-			for(unsigned int j = 0; j < ret.width; j++){
+			for(unsigned int j = 0; j < ret.height; j++){
 				ret.setValue(i, j, matrix -> getValue(i, j));
 			}
 		}

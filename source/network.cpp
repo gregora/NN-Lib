@@ -56,6 +56,12 @@ namespace nnlib {
 		activationFunction = newActivationFunction;
 	}
 
+
+	void Dense::randomize(float min, float max){
+		weights -> fillRandom(min, max);
+		biases -> fillRandom(min, max);
+	}
+
 	void Dense::mutate(float min, float max){
 		float rand = random();
 		int weights_num = weights->width * weights->height;
@@ -72,6 +78,74 @@ namespace nnlib {
 			int y = randomInt(0, biases->height - 1);
 			biases -> setValue(x, y, random(min, max));
 		}
+	}
+
+	Dense* Dense::crossover(const Dense* b) const{
+		if(b -> inputSize() == inputSize() && b -> outputSize() == outputSize()){
+			Dense* ret = new Dense(inputSize(), outputSize());
+
+			for(int j = 0; j < outputSize(); j++){
+				for(int i = 0; i < inputSize(); i++){
+					if(random() > 0.5){
+						ret -> weights -> setValue(i, j, weights -> getValue(i, j));
+					}else{
+						ret -> weights -> setValue(i, j, b -> weights -> getValue(i, j));
+					}
+				}
+
+				if(random() > 0.5){
+					ret -> biases -> setValue(0, j, biases -> getValue(0, j));
+				}else{
+					ret -> biases -> setValue(0, j, b -> biases -> getValue(0, j));
+				}
+
+			}
+
+			return ret;
+
+		}else{
+			throw std::invalid_argument("Combining layers of different sizes!");
+		}
+
+	}
+
+
+	Dense* Dense::crossover_avg(const Dense* b) const{
+		if(b -> inputSize() == inputSize() && b -> outputSize() == outputSize()){
+			Dense* ret = new Dense(inputSize(), outputSize());
+
+			for(int j = 0; j < outputSize(); j++){
+				for(int i = 0; i < inputSize(); i++){
+					float value1 = weights -> getValue(i, j);
+					float value2 = b -> weights -> getValue(i, j);
+
+					float rand = random();
+					ret -> weights -> setValue(i, j, rand*value1 + (1 - rand)*value2);
+
+				}
+
+				float value1 = biases -> getValue(0, j);
+				float value2 = b -> biases -> getValue(0, j);
+
+				float rand = random();
+				ret -> weights -> setValue(0, j, rand*value1 + (1 - rand)*value2);
+
+			}
+
+			return ret;
+
+		}else{
+			throw std::invalid_argument("Combining layers of different sizes!");
+		}
+
+	}
+
+	int Dense::inputSize() const{
+		return weights -> width;
+	}
+
+	int Dense::outputSize() const{
+		return weights -> height;
 	}
 
 
@@ -101,6 +175,15 @@ namespace nnlib {
 	void Network::addLayer(Layer* l) {
 		layers.push_back(l);
 	}
+
+	Layer* Network::getLayer(uint index){
+		return layers[index];
+	}
+
+	int Network::getLayerNumber(){
+		return layers.size();
+	}
+
 
 	Matrix Network::eval(const Matrix* input) {
 		Matrix values = dereference(input);

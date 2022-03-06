@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include <random>
+#include <iostream>
 
 #include "../include/matrix.h"
 #include "../include/misc.h"
@@ -85,8 +86,8 @@ namespace nnlib {
 
 	void Matrix::setName(std::string new_name) {
 		for (uint i = 0; i < new_name.length(); i++)
-			if (isspace(new_name[i]))
-				throw std::invalid_argument(new_name + " contains whitespace characters!");
+			//if (isspace(new_name[i]))
+			//	throw std::invalid_argument(new_name + " contains whitespace characters!");
 		this->name = new_name;
 	}
 
@@ -179,6 +180,7 @@ namespace nnlib {
 	}
 
 	Matrix Matrix::operator* (const Matrix& v) const {
+
 		if (width != v.height) {
 			std::ostringstream stringStream;
 			stringStream << "Multiplying matrices " << this->getName() << " * " << v.getName();

@@ -251,7 +251,7 @@ namespace nnlib {
 			float max_absolute_entry = 0;
 			char all_entires_positive = 1;
 			for (uint j = 0; j < height; j++) {
-				float val = round(getValue(i, j)*ten_to_prec)/(float)ten_to_prec;
+				float val = getValue(i, j);
 				if (val < 0) {
 					all_entires_positive = 0;
 					val = -val;

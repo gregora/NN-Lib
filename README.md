@@ -9,11 +9,13 @@ The source code is in `/source` folder.
 	* `matrix.h` - Declaration of the `Matrix` class and all its functions
 	* `misc.h` - Declaration of all miscellaneous classes and functions
 	* `network.h` - Declaration of the `Network` class and all its functions
+	* `algorithms.h` - Declaration of different learning algorithms
 
 * `/source`
 	* `matrix.cpp` - `Matrix` class implementation
 	* `misc.cpp` - Implementation of miscellaneous classes and functions
 	* `network.cpp` - `Network` class implementation
+	* `algorithms.cpp` - Implementation of learning algorithms
 
 ## Compiling
 

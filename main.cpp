@@ -1,4 +1,4 @@
-#include "include/network.h"
+#include "include/algorithms.h"
 #include <iostream>
 #include <math.h>
 
@@ -25,8 +25,8 @@ void evaluate(uint size, Network** networks, float* scores){
 
 int main() {
 
-	int POPULATION = 100000;
-	int GENERATIONS = 10000;
+	int POPULATION = 500;
+	int GENERATIONS = 100;
 	Network* networks[POPULATION];
 
 	for(int i = 0; i < POPULATION; i++){
@@ -37,13 +37,17 @@ int main() {
 	}
 
 	gen_settings settings = {
+		//general settings
 		population: POPULATION,
-		generations: GENERATIONS,
-		mutations: 1,
-		rep_coef: 0.9,
-		min: 0,
-		max: 1,
-		recompute_parents: false,
+		generations: GENERATIONS, //number of generations to run
+		mutations: 1, //number of mutations on each child
+		rep_coef: 0.5, //percent of population to reproduce
+		min: 0, //minimum value for weights / biases
+		max: 1, //maximum value for weights / biases
+		recompute_parents: false, //recompute parents (for non-deterministic evaluation functions)
+		//output settings
+		output: true,
+		start_generation: 1
 	};
 
 	genetic(networks, evaluate, settings);

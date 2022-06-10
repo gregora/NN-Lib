@@ -2,6 +2,8 @@
 #include "misc.h"
 #include <iostream>
 #include <algorithm>
+#include <ctime>
+
 
 namespace nnlib {
 

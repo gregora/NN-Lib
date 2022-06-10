@@ -326,7 +326,8 @@ namespace nnlib {
 
 
 		for(uint i = 0; i < generations; i++){
-			std::cout << "Generation " << i << std::endl;
+			std::cout << "---- Generation " << i << " ----" << std::endl;
+			time_t start_time = clock();
 			//run evaluation function
 			eval(population_size, networks, scores);
 
@@ -373,7 +374,9 @@ namespace nnlib {
 				}
 			}
 
-			std::cout << "Best score: " << scores[0] << std::endl;
+			time_t end_time = clock();
+			std::cout << " Best score: " << scores[0] << std::endl;
+			std::cout << " Computation time: " << (float)((end_time - start_time) / 10000) / 100 << "s" << std::endl;
 		}
 
 		return networks;

@@ -24,7 +24,7 @@ void evaluate(uint size, Network** networks, float* scores){
 
 int main() {
 
-	int POPULATION = 1000;
+	int POPULATION = 100;
 	Network* networks[POPULATION];
 
 	for(int i = 0; i < POPULATION; i++){

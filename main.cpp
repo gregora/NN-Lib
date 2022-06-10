@@ -18,13 +18,15 @@ void evaluate(uint size, Network** networks, float* scores){
 		score += abs(res.getValue(0, 1) - 1.0f);
 		score += abs(res.getValue(0, 2) - 0.0f);
 		scores[i] = score;
+
 	}
 
 }
 
 int main() {
 
-	int POPULATION = 100;
+	int POPULATION = 100000;
+	int GENERATIONS = 10000;
 	Network* networks[POPULATION];
 
 	for(int i = 0; i < POPULATION; i++){
@@ -34,7 +36,17 @@ int main() {
 		networks[i] -> addLayer(layer);
 	}
 
-	genetic(networks, evaluate, POPULATION, 50, 3, 0, 1);
+	gen_settings settings = {
+		population: POPULATION,
+		generations: GENERATIONS,
+		mutations: 1,
+		rep_coef: 0.9,
+		min: 0,
+		max: 1,
+		recompute_parents: false,
+	};
+
+	genetic(networks, evaluate, settings);
 
 	std::cout << networks[0] -> serialize() << std::endl;
 

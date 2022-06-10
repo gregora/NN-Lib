@@ -1,6 +1,7 @@
 #include "matrix.h"
 #include "misc.h"
 #include <iostream>
+#include <algorithm>
 
 namespace nnlib {
 
@@ -101,5 +102,8 @@ namespace nnlib {
 
 	//mutate function for networks with deep layers
 	void mutate(Network * network, float min, float max);
+
+	//run evaluation for n-generations, returns sorted array
+	Network** genetic(Network** networks, float* (*eval)(uint, Network**, float*), uint population_size, uint generations, uint mutations, float mmin, float mmax);
 
 }

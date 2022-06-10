@@ -296,6 +296,7 @@ namespace nnlib {
 
 	//miscellaneous functions
 
+	//mutate network of dense layers
 	void mutate(Network * network, float min, float max){
 		for(int i = 0; i < network -> getNetworkSize(); i++){
 			try{
@@ -311,5 +312,70 @@ namespace nnlib {
 			}
 		}
 	}
+
+	//comparator function (useful for sorting pairs <network, score>)
+	bool compare(const std::pair<Network*, float> lhs, const std::pair<Network*, float> rhs){
+		return lhs.second < rhs.second;
+	}
+
+	//run genetic learning algorithm with given evaluation function
+	//tries to minimize given evaluation function
+	Network** genetic(Network** networks, float* (*eval)(uint, Network**, float*), uint population_size, uint generations, uint mutations, float mmin, float mmax){
+
+		float scores[population_size];
+
+
+		for(uint i = 0; i < generations; i++){
+			//run evaluation function
+			eval(population_size, networks, scores);
+
+			//sort values
+			std::vector<std::pair<Network*, float>> pairs(population_size);
+			for(uint j = 0; j < population_size; j++){
+				pairs[j] = std::make_pair(networks[j], scores[j]);
+			}
+
+			std::sort(pairs.begin(), pairs.end(), compare);
+
+			for(uint j = 0; j < population_size; j++){
+				Network* evaluate(Network * networks, float* (*func)(uint, Network*), uint population_size, uint generations);
+				networks[j] = pairs[j].first;
+				scores[j] = pairs[j].second;
+			}
+
+			//remove 1/2 of population and repopulate
+			uint half_population = population_size / 2;
+			for(uint j = half_population; j < population_size; i++){
+				//delete network
+				delete networks[j];
+
+				//create a new child
+				networks[j] = new nnlib::Network();
+
+				//choose random parents
+				int parent1 = nnlib::randomInt(0, half_population - 1);
+				int parent2 = nnlib::randomInt(0, half_population - 1);
+
+				for(int l = 0; l < parent1; ){
+					nnlib::Dense * layer1 = ((nnlib::Dense *)(networks[parent1] -> getLayer(l)));
+					nnlib::Dense * layer2 = ((nnlib::Dense *)(networks[parent2] -> getLayer(l)));
+
+					nnlib::Dense * layer_child = layer1 -> crossover(layer2);
+
+					networks[j] -> addLayer(layer_child);
+
+					//mutate layer
+					for(uint m = 0; m < mutations; m++){
+						layer_child -> mutate(mmin, mmax);
+					}
+				}
+
+			}
+		}
+
+		return networks;
+
+	}
+
 
 }

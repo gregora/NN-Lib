@@ -121,6 +121,7 @@ namespace nnlib {
 
 		//output settings
 		bool output = true;
+		uint start_generation = 1;
 	};
 
 	Network** genetic(Network** networks, void (*eval)(uint, Network**, float*), gen_settings settings);

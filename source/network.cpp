@@ -339,7 +339,7 @@ namespace nnlib {
 			start_time = std::clock();
 
 			if(settings.output){
-				std::cout << "---- Generation " << i << " ----" << std::endl;
+				std::cout << "---- Generation " << i + settings.start_generation << " ----" << std::endl;
 			}
 
 

@@ -320,12 +320,13 @@ namespace nnlib {
 
 	//run genetic learning algorithm with given evaluation function
 	//tries to minimize given evaluation function
-	Network** genetic(Network** networks, float* (*eval)(uint, Network**, float*), uint population_size, uint generations, uint mutations, float mmin, float mmax){
+	Network** genetic(Network** networks, void (*eval)(uint, Network**, float*), uint population_size, uint generations, uint mutations, float mmin, float mmax){
 
 		float scores[population_size];
 
 
 		for(uint i = 0; i < generations; i++){
+			std::cout << "Generation " << i << std::endl;
 			//run evaluation function
 			eval(population_size, networks, scores);
 
@@ -343,9 +344,10 @@ namespace nnlib {
 				scores[j] = pairs[j].second;
 			}
 
+
 			//remove 1/2 of population and repopulate
 			uint half_population = population_size / 2;
-			for(uint j = half_population; j < population_size; i++){
+			for(uint j = half_population; j < population_size; j++){
 				//delete network
 				delete networks[j];
 
@@ -356,7 +358,7 @@ namespace nnlib {
 				int parent1 = nnlib::randomInt(0, half_population - 1);
 				int parent2 = nnlib::randomInt(0, half_population - 1);
 
-				for(int l = 0; l < parent1; ){
+				for(int l = 0; l < networks[parent1] -> getNetworkSize(); l++){
 					nnlib::Dense * layer1 = ((nnlib::Dense *)(networks[parent1] -> getLayer(l)));
 					nnlib::Dense * layer2 = ((nnlib::Dense *)(networks[parent2] -> getLayer(l)));
 
@@ -369,8 +371,9 @@ namespace nnlib {
 						layer_child -> mutate(mmin, mmax);
 					}
 				}
-
 			}
+
+			std::cout << "Best score: " << scores[0] << std::endl;
 		}
 
 		return networks;

@@ -1,35 +1,49 @@
 #include "include/network.h"
 #include <iostream>
+#include <math.h>
 
+using namespace nnlib;
+
+void evaluate(uint size, Network** networks, float* scores){
+
+	Matrix input(1, 3);
+	input.setValue(0, 0, 0);
+	input.setValue(0, 1, 1);
+	input.setValue(0, 2, 0);
+
+	for(uint i = 0; i < size; i++){
+		float score = 0;
+		Matrix res = networks[i] -> eval(&input);
+		score += abs(res.getValue(0, 0) - 0.0f);
+		score += abs(res.getValue(0, 1) - 1.0f);
+		score += abs(res.getValue(0, 2) - 0.0f);
+		scores[i] = score;
+	}
+
+}
 
 int main() {
 
-	nnlib::Dense* dense_layer1 = new nnlib::Dense(10, 10, "DLayer1");
-	nnlib::Dense* dense_layer2 = new nnlib::Dense(10, 10, "DLayer2");
-	nnlib::Dense* dense_layer3 = new nnlib::Dense(10, 10, "DLayer3");
-	nnlib::Dense* dense_layer4 = new nnlib::Dense(10, 10, "DLayer4");
-	nnlib::Dense* dense_layer5 = new nnlib::Dense(10, 10, "DLayer5");
-	nnlib::Dense* dense_layer6 = new nnlib::Dense(10, 10, "DLayer6");
+	int POPULATION = 100;
+	Network* networks[POPULATION];
 
-	nnlib::Matrix input(1, 10, "input");
-	input.fillRandom();
+	for(int i = 0; i < POPULATION; i++){
+		networks[i] = new Network();
+		Dense* layer = new Dense(3, 3);
+		layer -> randomize(0, 1);
+		networks[i] -> addLayer(layer);
+	}
 
-	nnlib::Network network("test.AI");
+	genetic(networks, evaluate, POPULATION, 50, 3, 0, 1);
 
-	network.addLayer(dense_layer1);
-	network.addLayer(dense_layer2);
-	network.addLayer(dense_layer3);
-	network.addLayer(dense_layer4);
-	network.addLayer(dense_layer5);
-	network.addLayer(dense_layer6);
+	std::cout << networks[0] -> serialize() << std::endl;
 
-	network.save();
-
-	std::cout << network.eval(&input).serialize();
-
-	nnlib::Network n2;
-	n2.load("test.AI");
-	n2.print();
+	Matrix input(1, 3);
+	input.setValue(0, 0, 0);
+	input.setValue(0, 1, 1);
+	input.setValue(0, 2, 0);
+	Matrix res = networks[0] -> eval(&input);
+	std::cout << res.serialize() << std::endl;
 
 	return 0;
 }

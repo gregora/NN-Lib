@@ -104,6 +104,6 @@ namespace nnlib {
 	void mutate(Network * network, float min, float max);
 
 	//run evaluation for n-generations, returns sorted array
-	Network** genetic(Network** networks, float* (*eval)(uint, Network**, float*), uint population_size, uint generations, uint mutations, float mmin, float mmax);
+	Network** genetic(Network** networks, void (*eval)(uint, Network**, float*), uint population_size, uint generations, uint mutations, float mmin, float mmax);
 
 }

@@ -292,4 +292,24 @@ namespace nnlib {
 		}
 	}
 
+
+
+	//miscellaneous functions
+
+	void mutate(Network * network, float min, float max){
+		for(int i = 0; i < network -> getNetworkSize(); i++){
+			try{
+				Layer* layer = network -> getLayer(i);
+				if(layer -> type == "Dense"){
+					((Dense*) layer) -> mutate(min, max);
+					std::cout << "Mutated " << i << std::endl;
+				}else{
+					throw i + 1;
+				}
+			}catch (int exc){
+				std::cout << "Layer " << exc << " is not dense!" << std::endl;
+			}
+		}
+	}
+
 }

@@ -96,4 +96,10 @@ namespace nnlib {
 		std::string name;
 	};
 
+
+	//miscellaneous functions for learning algorithms
+
+	//mutate function for networks with deep layers
+	void mutate(Network * network, float min, float max);
+
 }

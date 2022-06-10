@@ -180,7 +180,7 @@ namespace nnlib {
 		return layers[index];
 	}
 
-	int Network::getLayerNumber(){
+	int Network::getNetworkSize(){
 		return layers.size();
 	}
 

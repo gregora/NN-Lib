@@ -70,7 +70,7 @@ namespace nnlib {
 
 		void addLayer(Layer* l);
 		Layer* getLayer(uint index);
-		int getLayerNumber();
+		int getNetworkSize();
 
 		Matrix eval(const Matrix* input);
 

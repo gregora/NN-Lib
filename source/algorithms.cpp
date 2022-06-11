@@ -41,7 +41,6 @@ namespace nnlib {
 	//assumes array: [parent1, parent2, ...., parent n, child 1, child 2, ...]
 	void repopulate(Network ** networks, gen_settings settings){
 		uint population = settings.population;
-		uint generations = settings.generations;
 		uint mutations = settings.mutations;
 
 		uint parent_population = (uint) (((float) population) * settings.rep_coef) ;
@@ -83,26 +82,26 @@ namespace nnlib {
 
 		uint population = settings.population;
 		uint generations = settings.generations;
-		uint mutations = settings.mutations;
+		//uint mutations = settings.mutations;
 
 		uint parent_population = (uint) (((float) population) * settings.rep_coef) ;
 
-		float mmin = settings.min;
-		float mmax = settings.max;
+		//float mmin = settings.min;
+		//float mmax = settings.max;
 
 		float scores[population];
 
 
 		for(uint i = 0; i < generations; i++){
-			std::clock_t start_time;
-			start_time = std::clock();
+			std::clock_t start_time = std::clock();
+			std::clock_t start_time_2;
 
 			if(settings.output){
-				std::cout << "---- Generation " << i + settings.start_generation << " ----" << std::endl;
+				printf("---- Generation %d ----\n\n", i);
 			}
 
-
 			//run evaluation function
+			start_time_2 = std::clock();
 			if(settings.recompute_parents || i == 0){
 				//reset scores
 				for(uint s = 0; s < population; s++){
@@ -118,19 +117,26 @@ namespace nnlib {
 
 				eval(population - parent_population, networks + parent_population, scores + parent_population);
 			}
+			if(settings.output){
+				printf(" Evaluation:    %.2fs\n", (std::clock() - start_time_2)/(double)CLOCKS_PER_SEC);
+			}
 
 			//sort networks
 			sort(population, networks, scores);
 
 			//repopulate
+			start_time_2 = std::clock();
 			repopulate(networks, settings);
-
-
-			std::clock_t end_time;
-			end_time = std::clock();
 			if(settings.output){
-				printf(" Best score: %.2f\n", scores[0]);
-				printf(" Computation time: %.2fs\n", (end_time - start_time)/(double)CLOCKS_PER_SEC);
+				printf(" Repopulation:  %.2fs\n", (std::clock() - start_time_2)/(double)CLOCKS_PER_SEC);
+			}
+
+
+			std::clock_t end_time = std::clock();
+			if(settings.output){
+				printf(" Overall:       %.2fs\n", (end_time - start_time)/(double)CLOCKS_PER_SEC);
+				printf("\n Best score:    %.2f\n", scores[0]);
+				printf("\n\n");
 			}
 		}
 

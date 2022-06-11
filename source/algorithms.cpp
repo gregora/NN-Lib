@@ -18,6 +18,8 @@ namespace nnlib {
 		}
 	}
 
+
+
 	//comparator function (useful for sorting pairs <network, score>)
 	bool compare(const std::pair<Network*, float> lhs, const std::pair<Network*, float> rhs){
 		return lhs.second < rhs.second;
@@ -38,6 +40,35 @@ namespace nnlib {
 		}
 	}
 
+	//create a child from parents
+	Network* create_child(Network * parent1, Network * parent2, gen_settings settings){
+
+		float mmin = settings.min;
+		float mmax = settings.max;
+		uint mutations = settings.mutations;
+
+		//create a new child
+		Network* child = new nnlib::Network();
+
+		for(int l = 0; l < parent1 -> getNetworkSize(); l++){
+			nnlib::Dense * layer1 = ((nnlib::Dense *)(parent1 -> getLayer(l)));
+			nnlib::Dense * layer2 = ((nnlib::Dense *)(parent2 -> getLayer(l)));
+
+			nnlib::Dense * layer_child = layer1 -> crossover(layer2);
+
+			child -> addLayer(layer_child);
+
+			//mutate layer
+			for(uint m = 0; m < mutations; m++){
+				layer_child -> mutate(mmin, mmax);
+			}
+		}
+
+		return child;
+
+	}
+
+	//repopulate with children
 	//assumes array: [parent1, parent2, ...., parent n, child 1, child 2, ...]
 	void repopulate(Network ** networks, gen_settings settings){
 		uint population = settings.population;
@@ -49,30 +80,14 @@ namespace nnlib {
 		float mmax = settings.max;
 
 		//remove part of the population and repopulate
-		for(uint j = parent_population; j < population; j++){
-			//delete network
-			delete networks[j];
-
-			//create a new child
-			networks[j] = new nnlib::Network();
+		for(uint i = parent_population; i < population; i++){
+			delete networks[i];
 
 			//choose random parents
 			int parent1 = nnlib::randomInt(0, parent_population - 1);
 			int parent2 = nnlib::randomInt(0, parent_population - 1);
+			networks[i] = create_child(networks[parent1], networks[parent2], settings);
 
-			for(int l = 0; l < networks[parent1] -> getNetworkSize(); l++){
-				nnlib::Dense * layer1 = ((nnlib::Dense *)(networks[parent1] -> getLayer(l)));
-				nnlib::Dense * layer2 = ((nnlib::Dense *)(networks[parent2] -> getLayer(l)));
-
-				nnlib::Dense * layer_child = layer1 -> crossover(layer2);
-
-				networks[j] -> addLayer(layer_child);
-
-				//mutate layer
-				for(uint m = 0; m < mutations; m++){
-					layer_child -> mutate(mmin, mmax);
-				}
-			}
 		}
 	}
 
@@ -82,12 +97,8 @@ namespace nnlib {
 
 		uint population = settings.population;
 		uint generations = settings.generations;
-		//uint mutations = settings.mutations;
 
 		uint parent_population = (uint) (((float) population) * settings.rep_coef) ;
-
-		//float mmin = settings.min;
-		//float mmax = settings.max;
 
 		float scores[population];
 
@@ -127,6 +138,7 @@ namespace nnlib {
 			//repopulate
 			start_time_2 = std::clock();
 			repopulate(networks, settings);
+
 			if(settings.output){
 				printf(" Repopulation:  %.2fs\n", (std::clock() - start_time_2)/(double)CLOCKS_PER_SEC);
 			}

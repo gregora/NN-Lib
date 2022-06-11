@@ -1,6 +1,7 @@
 #include "matrix.h"
 #include "misc.h"
 #include "network.h"
+#include <thread>
 
 namespace nnlib {
 	//mutate function for networks with deep layers

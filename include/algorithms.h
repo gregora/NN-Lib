@@ -20,10 +20,14 @@ namespace nnlib {
 
 		bool recompute_parents = false; //recompute parents (for non-deterministic evaluation functions)
 
+		bool multithreading = false;
+
 		//output settings
 		bool output = true;
 		uint start_generation = 1;
 	};
+
+	void sort(uint size, Network ** networks, float * scores);
 
 	Network** genetic(Network** networks, void (*eval)(uint, Network**, float*), gen_settings settings);
 

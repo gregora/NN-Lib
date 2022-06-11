@@ -19,6 +19,10 @@ void evaluate(uint size, Network** networks, float* scores){
 		score += abs(res.getValue(0, 2) - 0.0f);
 		scores[i] = score;
 
+		for(int j = 0; j < 1000000; j++){
+			//simulate long evaluation function
+		}
+
 	}
 
 }
@@ -26,7 +30,7 @@ void evaluate(uint size, Network** networks, float* scores){
 int main() {
 
 	int POPULATION = 500;
-	int GENERATIONS = 100;
+	int GENERATIONS = 15;
 	Network* networks[POPULATION];
 
 	for(int i = 0; i < POPULATION; i++){
@@ -45,6 +49,7 @@ int main() {
 		min: 0, //minimum value for weights / biases
 		max: 1, //maximum value for weights / biases
 		recompute_parents: false, //recompute parents (for non-deterministic evaluation functions)
+		multithreading: false,
 		//output settings
 		output: true,
 		start_generation: 1

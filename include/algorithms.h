@@ -21,7 +21,8 @@ namespace nnlib {
 
 		bool recompute_parents = false; //recompute parents (for non-deterministic evaluation functions)
 
-		bool multithreading = false;
+		bool multithreading_evaluation = false;
+		bool multithreading_repopulation = false; //useful only on a large number of cpu-s / small population
 
 		//output settings
 		bool output = true;

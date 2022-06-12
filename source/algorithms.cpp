@@ -1,6 +1,7 @@
 #include "../include/algorithms.h"
 
 namespace nnlib {
+
 	//mutate network of dense layers
 	void mutate(Network * network, float min, float max){
 		for(int i = 0; i < network -> getNetworkSize(); i++){
@@ -17,6 +18,10 @@ namespace nnlib {
 			}
 		}
 	}
+
+
+
+
 
 
 
@@ -41,11 +46,13 @@ namespace nnlib {
 	}
 
 	//create a child from parents
-	Network* create_child(Network * parent1, Network * parent2, gen_settings settings){
+	void create_child(Network * parent1, Network * parent2, Network ** child_p, gen_settings settings){
 
 		float mmin = settings.min;
 		float mmax = settings.max;
 		uint mutations = settings.mutations;
+
+		delete *child_p;
 
 		//create a new child
 		Network* child = new nnlib::Network();
@@ -64,7 +71,7 @@ namespace nnlib {
 			}
 		}
 
-		return child;
+		*child_p = child;
 
 	}
 
@@ -79,16 +86,29 @@ namespace nnlib {
 		float mmin = settings.min;
 		float mmax = settings.max;
 
+		std::thread threads[population - parent_population];
+
 		//remove part of the population and repopulate
 		for(uint i = parent_population; i < population; i++){
-			delete networks[i];
-
 			//choose random parents
 			int parent1 = nnlib::randomInt(0, parent_population - 1);
 			int parent2 = nnlib::randomInt(0, parent_population - 1);
-			networks[i] = create_child(networks[parent1], networks[parent2], settings);
 
+			if(!settings.multithreading_repopulation){
+				//single thread
+				create_child(networks[parent1], networks[parent2], &(networks[i]), settings);
+			}else{
+				threads[i - parent_population] = std::thread(create_child, networks[parent1], networks[parent2], &(networks[i]), settings);
+			}
 		}
+
+		//join threads
+		if(settings.multithreading_repopulation){
+			for(uint i = parent_population; i < population; i++){
+				threads[i - parent_population].join();
+			}
+		}
+
 	}
 
 	//run genetic learning algorithm with given evaluation function
@@ -110,6 +130,7 @@ namespace nnlib {
 			if(settings.output){
 				printf("---- Generation %d ----\n\n", i);
 			}
+
 
 			//run evaluation function
 			start_time_2 = std::clock();

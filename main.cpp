@@ -29,8 +29,8 @@ void evaluate(uint size, Network** networks, float* scores){
 
 int main() {
 
-	int POPULATION = 500;
-	int GENERATIONS = 15;
+	int POPULATION = 100;
+	int GENERATIONS = 20;
 	Network* networks[POPULATION];
 
 	for(int i = 0; i < POPULATION; i++){
@@ -44,12 +44,13 @@ int main() {
 		//general settings
 		population: POPULATION,
 		generations: GENERATIONS, //number of generations to run
-		mutations: 1, //number of mutations on each child
+		mutations: 100, //number of mutations on each child
 		rep_coef: 0.5, //percent of population to reproduce
 		min: 0, //minimum value for weights / biases
 		max: 1, //maximum value for weights / biases
 		recompute_parents: false, //recompute parents (for non-deterministic evaluation functions)
-		multithreading: false,
+		multithreading_evaluation: false,
+		multithreading_repopulation: false,
 		//output settings
 		output: true,
 		start_generation: 1

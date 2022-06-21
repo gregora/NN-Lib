@@ -49,8 +49,7 @@ int main() {
 		min: 0, //minimum value for weights / biases
 		max: 1, //maximum value for weights / biases
 		recompute_parents: false, //recompute parents (for non-deterministic evaluation functions)
-		multithreading_evaluation: false,
-		multithreading_repopulation: false,
+		multithreading: true,
 		//output settings
 		output: true,
 		start_generation: 1

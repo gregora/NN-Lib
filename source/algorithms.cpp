@@ -2,6 +2,12 @@
 
 namespace nnlib {
 
+	//clock
+	using std::chrono::high_resolution_clock;
+	using std::chrono::duration_cast;
+	using std::chrono::duration;
+	using std::chrono::milliseconds;
+
 	//mutate network of dense layers
 	void mutate(Network * network, float min, float max){
 		for(int i = 0; i < network -> getNetworkSize(); i++){
@@ -94,7 +100,7 @@ namespace nnlib {
 			int parent1 = nnlib::randomInt(0, parent_population - 1);
 			int parent2 = nnlib::randomInt(0, parent_population - 1);
 
-			if(!settings.multithreading_repopulation){
+			if(!settings.multithreading){
 				//single thread
 				create_child(networks[parent1], networks[parent2], &(networks[i]), settings);
 			}else{
@@ -103,7 +109,7 @@ namespace nnlib {
 		}
 
 		//join threads
-		if(settings.multithreading_repopulation){
+		if(settings.multithreading){
 			for(uint i = parent_population; i < population; i++){
 				threads[i - parent_population].join();
 			}
@@ -124,8 +130,8 @@ namespace nnlib {
 
 
 		for(uint i = 0; i < generations; i++){
-			std::clock_t start_time = std::clock();
-			std::clock_t start_time_2;
+			auto start_time = high_resolution_clock::now();
+			auto start_time_2 = start_time;
 
 			if(settings.output){
 				printf("---- Generation %d ----\n\n", i);
@@ -133,7 +139,7 @@ namespace nnlib {
 
 
 			//run evaluation function
-			start_time_2 = std::clock();
+			start_time_2 = high_resolution_clock::now();
 			if(settings.recompute_parents || i == 0){
 				//reset scores
 				for(uint s = 0; s < population; s++){
@@ -150,24 +156,24 @@ namespace nnlib {
 				eval(population - parent_population, networks + parent_population, scores + parent_population);
 			}
 			if(settings.output){
-				printf(" Evaluation:    %.2fs\n", (std::clock() - start_time_2)/(double)CLOCKS_PER_SEC);
+				printf(" Evaluation:    %.2fs\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time_2)).count() / 1000);
 			}
 
 			//sort networks
 			sort(population, networks, scores);
 
 			//repopulate
-			start_time_2 = std::clock();
+			start_time_2 = high_resolution_clock::now();
 			repopulate(networks, settings);
 
 			if(settings.output){
-				printf(" Repopulation:  %.2fs\n", (std::clock() - start_time_2)/(double)CLOCKS_PER_SEC);
+				printf(" Repopulation:  %.2fs\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time_2)).count() / 1000);
 			}
 
 
-			std::clock_t end_time = std::clock();
+			auto end_time = high_resolution_clock::now();
 			if(settings.output){
-				printf(" Overall:       %.2fs\n", (end_time - start_time)/(double)CLOCKS_PER_SEC);
+				printf(" Overall:       %0.2fs\n", (float)(duration_cast<milliseconds>(end_time - start_time)).count() / 1000);
 				printf("\n Best score:    %.2f\n", scores[0]);
 				printf("\n\n");
 			}

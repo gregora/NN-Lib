@@ -2,6 +2,7 @@
 //is this double declaration of <vector> and <string>?
 #include <vector>
 #include <string>
+#include <thread>
 
 namespace nnlib {
 
@@ -29,5 +30,7 @@ namespace nnlib {
 
 
 	std::vector<std::string> splitString(std::string string, std::string split_by);
+
+	uint getProcessorCount();
 
 }

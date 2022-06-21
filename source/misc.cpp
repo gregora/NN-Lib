@@ -62,4 +62,12 @@ namespace nnlib {
 
 	}
 
+	uint getProcessorCount(){
+		const uint processors = std::thread::hardware_concurrency();
+		if(processors == 0)
+			return 1;
+
+		return processors;
+	}
+
 }

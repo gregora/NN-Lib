@@ -30,7 +30,6 @@ namespace nnlib {
 
 
 
-
 	//comparator function (useful for sorting pairs <network, score>)
 	bool compare(const std::pair<Network*, float> lhs, const std::pair<Network*, float> rhs){
 		return lhs.second < rhs.second;
@@ -134,7 +133,7 @@ namespace nnlib {
 			auto start_time_2 = start_time;
 
 			if(settings.output){
-				printf("---- Generation %d ----\n\n", i);
+				printf("---- Generation %d ----\n\n", i + settings.start_generation);
 			}
 
 

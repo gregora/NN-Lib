@@ -20,7 +20,7 @@ The source code is in `/source` folder.
 ## Compiling
 
 ### Linux
-To compile, run the `./compile.sh` script, use `./main.out` to launch the program.
+To compile, run the `make` command, and then use `./main.out` to launch the program.
 
 ### Windows
 Follow [instructions here](https://www.cnet.com/how-to/how-to-install-linux/)  

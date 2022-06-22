@@ -62,7 +62,7 @@ int main() {
 		//general settings
 		population: POPULATION,
 		generations: GENERATIONS, //number of generations to run
-		mutations: 100, //number of mutations on each child
+		mutations: 3, //number of mutations on each child
 		rep_coef: 0.5, //percent of population to reproduce
 		min: 0, //minimum value for weights / biases
 		max: 1, //maximum value for weights / biases

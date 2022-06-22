@@ -156,7 +156,7 @@ namespace nnlib {
 				eval(population - parent_population, networks + parent_population, scores + parent_population);
 			}
 			if(settings.output){
-				printf(" Evaluation:    %.2fs\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time_2)).count() / 1000);
+				printf(" Evaluation:    %10.2f s\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time_2)).count() / 1000);
 			}
 
 			//sort networks
@@ -167,14 +167,14 @@ namespace nnlib {
 			repopulate(networks, settings);
 
 			if(settings.output){
-				printf(" Repopulation:  %.2fs\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time_2)).count() / 1000);
+				printf(" Repopulation:  %10.2f s\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time_2)).count() / 1000);
 			}
 
 
 			auto end_time = high_resolution_clock::now();
 			if(settings.output){
-				printf(" Overall:       %0.2fs\n", (float)(duration_cast<milliseconds>(end_time - start_time)).count() / 1000);
-				printf("\n Best score:    %.2f\n", scores[0]);
+				printf(" Overall:       %10.2f s\n", (float)(duration_cast<milliseconds>(end_time - start_time)).count() / 1000);
+				printf("\n Best score:    %10.2f\n", scores[0]);
 				printf("\n\n");
 			}
 		}
@@ -247,7 +247,7 @@ namespace nnlib {
 
 			}
 			if(settings.output){
-				printf(" Evaluation:    %.2fs\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time_2)).count() / 1000);
+				printf(" Evaluation:    %10.2f s\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time_2)).count() / 1000);
 			}
 
 			//sort networks
@@ -258,14 +258,14 @@ namespace nnlib {
 			repopulate(networks, settings);
 
 			if(settings.output){
-				printf(" Repopulation:  %.2fs\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time_2)).count() / 1000);
+				printf(" Repopulation:  %10.2f s\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time_2)).count() / 1000);
 			}
 
 
 			auto end_time = high_resolution_clock::now();
 			if(settings.output){
-				printf(" Overall:       %0.2fs\n", (float)(duration_cast<milliseconds>(end_time - start_time)).count() / 1000);
-				printf("\n Best score:    %.2f\n", scores[0]);
+				printf(" Overall:       %10.2f s\n", (float)(duration_cast<milliseconds>(end_time - start_time)).count() / 1000);
+				printf("\n Best score:    %10.2f\n", scores[0]);
 				printf("\n\n");
 			}
 		}

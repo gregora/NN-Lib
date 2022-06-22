@@ -116,6 +116,7 @@ namespace nnlib {
 
 	}
 
+	//assumes evaluation of all networks in one call
 	//run genetic learning algorithm with given evaluation function
 	//tries to minimize given evaluation function
 	Network** genetic(Network** networks, void (*eval)(uint, Network**, float*), gen_settings settings){
@@ -180,6 +181,96 @@ namespace nnlib {
 
 		return networks;
 
+	}
+
+
+	//assumes evaluation of each network individually
+	Network** genetic(Network ** networks, void (*eval)(Network*, float *), gen_settings settings){
+		uint population = settings.population;
+		uint generations = settings.generations;
+
+		uint parent_population = (uint) (((float) population) * settings.rep_coef) ;
+
+		float scores[population];
+
+
+		for(uint i = 0; i < generations; i++){
+			auto start_time = high_resolution_clock::now();
+			auto start_time_2 = start_time;
+
+			if(settings.output){
+				printf("---- Generation %d ----\n\n", i + settings.start_generation);
+			}
+
+			//run evaluation function
+			start_time_2 = high_resolution_clock::now();
+			if(settings.recompute_parents || i == 0){
+
+				std::thread threads[population];
+
+				for(uint s = 0; s < population; s++){
+					//reset scores
+					scores[s] = 0;
+
+					if(!settings.multithreading){
+						eval(networks[s], scores + s);
+					}else{
+						threads[s] = std::thread(eval, networks[s], scores + s);
+					}
+				}
+
+				if(settings.multithreading){
+					for(uint s = 0; s < population; s++){
+						threads[s].join();
+					}
+				}
+
+			}else{
+				std::thread threads[population - parent_population];
+
+				//reset scores
+				for(uint s = parent_population; s < population; s++){
+					scores[s] = 0;
+
+					if(!settings.multithreading){
+						eval(networks[s], scores + s);
+					}else{
+						threads[s - parent_population] = std::thread(eval, networks[s], scores + s);
+					}
+				}
+
+				if(settings.multithreading){
+					for(uint s = parent_population; s < population; s++){
+						threads[s - parent_population].join();
+					}
+				}
+
+			}
+			if(settings.output){
+				printf(" Evaluation:    %.2fs\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time_2)).count() / 1000);
+			}
+
+			//sort networks
+			sort(population, networks, scores);
+
+			//repopulate
+			start_time_2 = high_resolution_clock::now();
+			repopulate(networks, settings);
+
+			if(settings.output){
+				printf(" Repopulation:  %.2fs\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time_2)).count() / 1000);
+			}
+
+
+			auto end_time = high_resolution_clock::now();
+			if(settings.output){
+				printf(" Overall:       %0.2fs\n", (float)(duration_cast<milliseconds>(end_time - start_time)).count() / 1000);
+				printf("\n Best score:    %.2f\n", scores[0]);
+				printf("\n\n");
+			}
+		}
+
+		return networks;
 	}
 
 }

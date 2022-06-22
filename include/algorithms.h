@@ -18,17 +18,21 @@ namespace nnlib {
 		float min = 0; //minimum value for weights / biases
 		float max = 1; //maximum value for weights / biases
 
-		bool recompute_parents = false; //recompute parents (for non-deterministic evaluation functions)
+		bool recompute_parents = true; //recompute parents (for non-deterministic evaluation functions)
 
 		bool multithreading = false;
-		
+
 		//output settings
 		bool output = true;
-		uint start_generation = 1;
+		uint start_generation = 1; //purely cosmetic
 	};
 
 	void sort(uint size, Network ** networks, float * scores);
 
+	//assumes evaluation of all networks in one call
 	Network** genetic(Network** networks, void (*eval)(uint, Network**, float*), gen_settings settings);
+
+	//assumes evaluation of each network individually
+	Network** genetic(Network ** networks, void (*eval)(Network*, float*), gen_settings settings);
 
 }

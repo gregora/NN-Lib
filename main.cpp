@@ -27,9 +27,27 @@ void evaluate(uint size, Network** networks, float* scores){
 
 }
 
+void evaluate_single(Network* network, float* score){
+
+		Matrix input(1, 3);
+		input.setValue(0, 0, 0);
+		input.setValue(0, 1, 1);
+		input.setValue(0, 2, 0);
+
+		*score = 0;
+		Matrix res = network -> eval(&input);
+		*score += abs(res.getValue(0, 0) - 0.0f);
+		*score += abs(res.getValue(0, 1) - 1.0f);
+		*score += abs(res.getValue(0, 2) - 0.0f);
+
+		for(int j = 0; j < 1000000; j++){
+			//simulate long evaluation function
+		}
+}
+
 int main() {
 
-	int POPULATION = 100;
+	int POPULATION = 300;
 	int GENERATIONS = 20;
 	Network* networks[POPULATION];
 
@@ -55,7 +73,8 @@ int main() {
 		start_generation: 1
 	};
 
-	genetic(networks, evaluate, settings);
+	//genetic(networks, evaluate, settings);
+	genetic(networks, evaluate_single, settings);
 
 	std::cout << networks[0] -> serialize() << std::endl;
 

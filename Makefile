@@ -7,7 +7,7 @@ bin/nnlib.a: matrix.o misc.o network.o algorithms.o
 	rm matrix.o misc.o network.o algorithms.o
 	mv nnlib.so bin/nnlib.so
 	ar rcs bin/libnn.a bin/nnlib.so
-	rm bin/nnlib.so
+	#rm bin/nnlib.so
 
 #build object files
 

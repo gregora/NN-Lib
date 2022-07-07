@@ -15,7 +15,7 @@ namespace nnlib {
 
 		float rep_coef = 0.5; //percent of population to reproduce
 
-		float min = 0; //minimum value for weights / biases
+		float min = -1; //minimum value for weights / biases
 		float max = 1; //maximum value for weights / biases
 
 		bool recompute_parents = true; //recompute parents (for non-deterministic evaluation functions)

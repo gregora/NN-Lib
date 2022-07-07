@@ -39,8 +39,16 @@ namespace nnlib {
 		return floor(log10(x)) + 1;
 	}
 
+	float linear(float x){
+		return x;
+	}
+
 	float fast_sigmoid(float x){
 		return x / (1 + abs(x));
+	}
+
+	float relu(float x){
+		return std::max(0.0f, x);
 	}
 
 

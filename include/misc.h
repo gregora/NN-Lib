@@ -16,9 +16,15 @@ namespace nnlib {
 	// number of digits x takes up when printed (numlen(0) = 1)
 	int numlen(int x);
 
+
+	// activation functions
+	float linear(float x);
+
 	float sigmoid(float x);
 
 	float fast_sigmoid(float x);
+
+	float relu(float x);
 
 	float sparseCategoricalCrossentropy(Matrix* predicted, uint truth);
 

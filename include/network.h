@@ -59,7 +59,7 @@ namespace nnlib {
 		Matrix* biases;
 
 	private:
-		float (*activationFunction)(float) = &fast_sigmoid;
+		float (*activationFunction)(float) = &relu;
 
 	};
 

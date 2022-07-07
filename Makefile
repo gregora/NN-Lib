@@ -1,6 +1,7 @@
 #build main.out
 main.out: bin/nnlib.a main.cpp
 	g++ -o main.out main.cpp -Lbin/ -lnn -lpthread
+
 #build shared library and move it to bin/ folder
 bin/nnlib.a: matrix.o misc.o network.o algorithms.o
 	ld -relocatable algorithms.o network.o misc.o matrix.o -o nnlib.so

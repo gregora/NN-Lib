@@ -86,21 +86,31 @@ namespace nnlib {
 		if(b -> inputSize() == inputSize() && b -> outputSize() == outputSize()){
 			Dense* ret = new Dense(inputSize(), outputSize());
 
+			int g = 0;
+
+			//random crossover start and end
+			int crossover_s = randomInt(0, inputSize()*outputSize() + outputSize());
+			int crossover_e = randomInt(crossover_s, inputSize()*outputSize() + outputSize());
+
 			for(int j = 0; j < outputSize(); j++){
 				for(int i = 0; i < inputSize(); i++){
-					if(random() > 0.5){
+
+					if(g >= crossover_s && g <= crossover_e){
 						ret -> weights -> setValue(i, j, weights -> getValue(i, j));
 					}else{
 						ret -> weights -> setValue(i, j, b -> weights -> getValue(i, j));
 					}
+
+					g++;
 				}
 
-				if(random() > 0.5){
+				if(g >= crossover_s && g <= crossover_e){
 					ret -> biases -> setValue(0, j, biases -> getValue(0, j));
 				}else{
 					ret -> biases -> setValue(0, j, b -> biases -> getValue(0, j));
 				}
 
+				g++;
 			}
 
 			return ret;

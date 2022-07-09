@@ -43,6 +43,10 @@ namespace nnlib {
 		return x;
 	}
 
+	float sigmoid(float x){
+		return 1 / (1 + exp(-x));
+	}
+
 	float fast_sigmoid(float x){
 		return x / (1 + abs(x));
 	}

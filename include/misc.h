@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <thread>
+#include <math.h>
 
 namespace nnlib {
 

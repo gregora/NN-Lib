@@ -33,17 +33,17 @@ namespace nnlib {
 
 
 	std::string Dense::serialize() {
-		return getName() + "\n===\n" + weights -> serialize(7) + "===\n" + biases -> serialize(7);
-
+		return getName() + "\n===\n" + activationFunctionName + "\n===\n" + weights -> serialize(7) + "===\n" + biases -> serialize(7);
 	}
 
 	void Dense::deserialize(std::string input) {
 		std::vector<std::string> split = splitString(input, "\n===\n");
-		if (split.size() != 3)
+		if (split.size() != 4)
 			throw std::invalid_argument("Attempting to deserialize an invalid Dense layer format");
 		setName(split[0]);
-		weights -> deserialize(split[1] + "\n");
-		biases -> deserialize(split[2]);
+		setActivationFunction(split[1]);
+		weights -> deserialize(split[2] + "\n");
+		biases -> deserialize(split[3]);
 	}
 
 	Layer* Dense::clone() {
@@ -52,8 +52,25 @@ namespace nnlib {
 		return copy;
 	}
 
-	void Dense::setActivationFunction(float (*newActivationFunction)(float)) {
-		activationFunction = newActivationFunction;
+	void Dense::setActivationFunction(std::string name) {
+		if(name == "fast_sigmoid"){
+			activationFunction = &fast_sigmoid;
+		}else if(name == "sigmoid"){
+			activationFunction = &sigmoid;
+		}else if(name == "relu"){
+			activationFunction = &relu;
+		}else if(name == "linear"){
+			activationFunction = &linear;
+		}else if(name == "atan"){
+			activationFunction = &atan;
+		}else if(name == "tanh"){
+			activationFunction = &tanh;
+		}else{
+			throw name + " is not a valid function name";
+			return;
+		}
+
+		activationFunctionName = name;
 	}
 
 
@@ -85,6 +102,8 @@ namespace nnlib {
 	Dense* Dense::crossover(const Dense* b) const{
 		if(b -> inputSize() == inputSize() && b -> outputSize() == outputSize()){
 			Dense* ret = new Dense(inputSize(), outputSize());
+
+			ret -> setActivationFunction(activationFunctionName);
 
 			int g = 0;
 

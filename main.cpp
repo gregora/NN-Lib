@@ -43,7 +43,7 @@ int main() {
 	//sine curve approximation with a neural network
 
 	int POPULATION = 100;
-	int GENERATIONS = 200;
+	int GENERATIONS = 100;
 	Network* networks[POPULATION];
 
 	for(int i = 0; i < POPULATION; i++){
@@ -64,13 +64,13 @@ int main() {
 		layer3_5 -> randomize(-1, 1);
 		layer5 -> randomize(-1, 1);
 
-		layer1 ->  setActivationFunction(tanh);
-		layer3_1 ->  setActivationFunction(tanh);
-		layer3_2 ->  setActivationFunction(tanh);
-		layer3_3 ->  setActivationFunction(tanh);
-		layer3_4 ->  setActivationFunction(tanh);
-		layer3_5 ->  setActivationFunction(tanh);
-		layer5 ->  setActivationFunction(linear);
+		layer1 ->  setActivationFunction("tanh");
+		layer3_1 ->  setActivationFunction("tanh");
+		layer3_2 ->  setActivationFunction("tanh");
+		layer3_3 ->  setActivationFunction("tanh");
+		layer3_4 ->  setActivationFunction("tanh");
+		layer3_5 ->  setActivationFunction("tanh");
+		layer5 ->  setActivationFunction("linear");
 
 		networks[i] -> addLayer(layer1);
 		networks[i] -> addLayer(layer3_1);
@@ -79,6 +79,7 @@ int main() {
 		networks[i] -> addLayer(layer3_4);
 		networks[i] -> addLayer(layer3_5);
 		networks[i] -> addLayer(layer5);
+
 	}
 
 	gen_settings settings = {
@@ -95,17 +96,35 @@ int main() {
 		start_generation: 1
 	};
 
+	std::cout << "Train the network ...\n\n\n\n";
 
 	//genetic(networks, evaluate, settings);
 	genetic(networks, evaluate_single, settings);
 
-	std::cout << networks[0] -> serialize() << std::endl;
+	std::cout << "Network output (sin curve approximation) ...\n\n\n\n";
 
 	Matrix input(1, 1);
 
 	for(float x = -2*3.14; x < 2*3.14; x+=4*3.14/20){
 		input.setValue(0, 0, x);
 		Matrix res = networks[0] -> eval(&input);
+		for(int p = 0; p - 30 < (res.getValue(0,0))*10; p++){
+			printf(" ");
+		}
+		printf("%2.1f\n", res.getValue(0,0));
+	}
+
+	std::cout << "\n\nSave the network as sin.AI ...\n\n\n\n";
+	networks[0] -> save("sin.AI");
+
+
+	std::cout << "\nLoad the network ...\n\n\n\n";
+
+	Network nnsin;
+	nnsin.load("sin.AI");
+	for(float x = -2*3.14; x < 2*3.14; x+=4*3.14/20){
+		input.setValue(0, 0, x);
+		Matrix res = nnsin.eval(&input);
 		for(int p = 0; p - 30 < (res.getValue(0,0))*10; p++){
 			printf(" ");
 		}

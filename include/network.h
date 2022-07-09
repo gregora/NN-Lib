@@ -46,7 +46,7 @@ namespace nnlib {
 		void setActivationFunction(float (*newActivationFunction)(float));
 
 		void randomize(float min, float max);
-		void mutate(float min, float max);
+		void mutate(float delta);
 		Dense * crossover(const Dense * b) const;
 		Dense * crossover_avg(const Dense * b) const;
 

@@ -87,10 +87,9 @@ int main() {
 		generations: GENERATIONS, //number of generations to run
 		mutations: 1, //number of mutations on each child
 		rep_coef: 0.1, //percent of population to reproduce
-		min: -1, //minimum value for weights / biases
-		max: 1, //maximum value for weights / biases
+		delta: 1,
 		recompute_parents: false, //recompute parents (for non-deterministic evaluation functions)
-		multithreading: true,
+		multithreading: false,
 		//output settings
 		output: true,
 		start_generation: 1

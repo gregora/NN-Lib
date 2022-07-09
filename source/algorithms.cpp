@@ -9,12 +9,12 @@ namespace nnlib {
 	using std::chrono::milliseconds;
 
 	//mutate network of dense layers
-	void mutate(Network * network, float min, float max){
+	void mutate(Network * network, float delta){
 		for(int i = 0; i < network -> getNetworkSize(); i++){
 			try{
 				Layer* layer = network -> getLayer(i);
 				if(layer -> type == "Dense"){
-					((Dense*) layer) -> mutate(min, max);
+					((Dense*) layer) -> mutate(delta);
 					std::cout << "Mutated " << i << std::endl;
 				}else{
 					throw i + 1;
@@ -53,8 +53,7 @@ namespace nnlib {
 	//create a child from parents
 	void create_child(Network * parent1, Network * parent2, Network ** child_p, gen_settings settings){
 
-		float mmin = settings.min;
-		float mmax = settings.max;
+		float delta = settings.delta;
 		uint mutations = settings.mutations;
 
 		delete *child_p;
@@ -72,7 +71,7 @@ namespace nnlib {
 
 			//mutate layer
 			for(uint m = 0; m < mutations; m++){
-				layer_child -> mutate(mmin, mmax);
+				layer_child -> mutate(delta);
 			}
 		}
 
@@ -87,9 +86,6 @@ namespace nnlib {
 		uint mutations = settings.mutations;
 
 		uint parent_population = (uint) (((float) population) * settings.rep_coef) ;
-
-		float mmin = settings.min;
-		float mmax = settings.max;
 
 		std::thread threads[population - parent_population];
 

@@ -4,7 +4,7 @@
 
 namespace nnlib {
 	//mutate function for networks with deep layers
-	void mutate(Network * network, float min, float max);
+	void mutate(Network * network, float delta);
 
 	//run evaluation for n-generations, returns sorted array
 	struct gen_settings {
@@ -15,8 +15,7 @@ namespace nnlib {
 
 		float rep_coef = 0.5; //percent of population to reproduce
 
-		float min = -1; //minimum value for weights / biases
-		float max = 1; //maximum value for weights / biases
+		float delta = 0.2; //maximum weight/bias change for mutations
 
 		bool recompute_parents = true; //recompute parents (for non-deterministic evaluation functions)
 

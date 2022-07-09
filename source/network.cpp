@@ -62,7 +62,7 @@ namespace nnlib {
 		biases -> fillRandom(min, max);
 	}
 
-	void Dense::mutate(float min, float max){
+	void Dense::mutate(float delta){
 		float rand = random();
 		int weights_num = weights->width * weights->height;
 		int biases_num = biases->width * biases->height;
@@ -71,12 +71,14 @@ namespace nnlib {
 			//change random weight
 			int x = randomInt(0, weights->width - 1);
 			int y = randomInt(0, weights->height - 1);
-			weights -> setValue(x, y, random(min, max));
+			float value = weights -> getValue(x, y) + random(-delta, delta);
+			weights -> setValue(x, y, value);
 		}else{
 			//change random bias
 			int x = randomInt(0, biases->width - 1);
 			int y = randomInt(0, biases->height - 1);
-			biases -> setValue(x, y, random(min, max));
+			float value = biases -> getValue(x, y) + random(-delta, delta);
+			biases -> setValue(x, y, value);
 		}
 	}
 

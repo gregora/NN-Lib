@@ -56,14 +56,6 @@ int main() {
 		Dense* layer3_5 = new Dense(10, 10);
 		Dense* layer5 = new Dense(10, 1);
 
-		layer1 -> randomize(-1, 1);
-		layer3_1 -> randomize(-1, 1);
-		layer3_2 -> randomize(-1, 1);
-		layer3_3 -> randomize(-1, 1);
-		layer3_4 -> randomize(-1, 1);
-		layer3_5 -> randomize(-1, 1);
-		layer5 -> randomize(-1, 1);
-
 		layer1 ->  setActivationFunction("tanh");
 		layer3_1 ->  setActivationFunction("tanh");
 		layer3_2 ->  setActivationFunction("tanh");

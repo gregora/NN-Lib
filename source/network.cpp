@@ -2,19 +2,21 @@
 
 namespace nnlib {
 
-	Dense::Dense(uint input, uint output, std::string name) {
+	Dense::Dense(uint input, uint output, std::string activation, std::string name) {
 
 		type = "Dense";
 
 		weights = new Matrix(input, output);
-		weights -> fillRandom();
+		weights -> fillRandom(-1, 1);
 
 		biases = new Matrix(1, output);
-		biases -> fillRandom();
+		biases -> fillRandom(-1, 1);
 
 		setName(name);
 		weights -> setName(name + "_weights");
 		biases -> setName(name + "_biases");
+
+		setActivationFunction(activation);
 	}
 
 	Matrix Dense::eval(const Matrix* input) {

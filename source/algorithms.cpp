@@ -86,7 +86,6 @@ namespace nnlib {
 	//assumes array: [parent1, parent2, ...., parent n, child 1, child 2, ...]
 	void repopulate(Network ** networks, gen_settings settings){
 		uint population = settings.population;
-		uint mutations = settings.mutation_rate;
 
 		uint parent_population = (uint) (((float) population) * settings.rep_coef) ;
 

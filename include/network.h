@@ -33,7 +33,7 @@ namespace nnlib {
 	class Dense: public Layer {
 	public:
 
-		Dense(uint input, uint output, std::string name = "dense_layer");
+		Dense(uint input, uint output, std::string activation = "sigmoid", std::string name = "dense_layer");
 
 
 		std::string serialize();

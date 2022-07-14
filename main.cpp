@@ -16,7 +16,7 @@ void evaluate(uint size, Network** networks, float* scores){
 		for(float x = -2*3.14; x < 2*3.14; x+=4*3.14/20){
 			input.setValue(0, 0, x);
 			Matrix res = networks[i] -> eval(&input);
-			score += abs(res.getValue(0, 0) - sin(x) - 1);
+			score += abs(res.getValue(0, 0) - sin(x));
 		}
 		scores[i] = score;
 
@@ -33,7 +33,7 @@ void evaluate_single(Network* network, float* score){
 		for(float x = -2*3.14; x < 2*3.14; x+=4*3.14/20){
 			input.setValue(0, 0, x);
 			Matrix res = network -> eval(&input);
-			*score += abs(res.getValue(0, 0) - sin(x) - 1);
+			*score += abs(res.getValue(0, 0) - sin(x));
 		}
 
 }
@@ -55,14 +55,6 @@ int main() {
 		Dense* layer3_4 = new Dense(10, 10);
 		Dense* layer3_5 = new Dense(10, 10);
 		Dense* layer5 = new Dense(10, 1);
-
-		layer1 -> randomize(-1, 1);
-		layer3_1 -> randomize(-1, 1);
-		layer3_2 -> randomize(-1, 1);
-		layer3_3 -> randomize(-1, 1);
-		layer3_4 -> randomize(-1, 1);
-		layer3_5 -> randomize(-1, 1);
-		layer5 -> randomize(-1, 1);
 
 		layer1 ->  setActivationFunction("tanh");
 		layer3_1 ->  setActivationFunction("tanh");
@@ -86,7 +78,7 @@ int main() {
 		//general settings
 		population: POPULATION,
 		generations: GENERATIONS, //number of generations to run
-		mutations: 1, //number of mutations on each child
+		mutation_rate: 0.1, //number of mutations on each child
 		rep_coef: 0.1, //percent of population to reproduce
 		delta: 0.2,
 		recompute_parents: false, //recompute parents (for non-deterministic evaluation functions)

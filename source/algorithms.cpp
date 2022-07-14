@@ -54,7 +54,7 @@ namespace nnlib {
 	void create_child(Network * parent1, Network * parent2, Network ** child_p, gen_settings settings){
 
 		float delta = settings.delta;
-		uint mutations = settings.mutations;
+		float mutations = settings.mutation_rate;
 
 		delete *child_p;
 
@@ -70,9 +70,12 @@ namespace nnlib {
 			child -> addLayer(layer_child);
 
 			//mutate layer
-			for(uint m = 0; m < mutations; m++){
+			float r = random();
+			//printf("%f\n", r);
+			if(r <= mutations){
 				layer_child -> mutate(delta);
 			}
+
 		}
 
 		*child_p = child;
@@ -83,7 +86,6 @@ namespace nnlib {
 	//assumes array: [parent1, parent2, ...., parent n, child 1, child 2, ...]
 	void repopulate(Network ** networks, gen_settings settings){
 		uint population = settings.population;
-		uint mutations = settings.mutations;
 
 		uint parent_population = (uint) (((float) population) * settings.rep_coef) ;
 

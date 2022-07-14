@@ -11,7 +11,7 @@ namespace nnlib {
 		//general settings
 		uint population;
 		uint generations = 100; //number of generations to run
-		uint mutations = 1; //number of mutations on each child
+		float mutation_rate = 0.1; //number of mutations on each child
 
 		float rep_coef = 0.5; //percent of population to reproduce
 

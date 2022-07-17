@@ -25,7 +25,7 @@ namespace nnlib {
 		//file saving settings
 		uint save_period = 10; //how often networks are saved (0 == never)
 		std::string path = "./"; //empty folder for saving
-		uint start_generation = 1; //purely cosmetic
+		uint start_generation = 1; //affects save files
 
 		//output settings
 		bool output = true;

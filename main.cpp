@@ -87,10 +87,10 @@ int main() {
 		//file saving settings
 		save_period: 100, //how often networks are saved
 		path: "saves/", //empty folder for saving
+		start_generation: 0,
 
 		//output settings
-		output: true,
-		start_generation: 0
+		output: true
 	};
 
 	std::cout << "Train the network ...\n\n\n\n";

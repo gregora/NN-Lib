@@ -183,7 +183,7 @@ namespace nnlib {
 				if(path.back() != '/'){
 					path += "/";
 				}
-				path+="Generation" + std::to_string(i);
+				path+="Generation" + std::to_string(i + settings.start_generation);
 
 				save_population(networks, population, path);
 
@@ -291,7 +291,7 @@ namespace nnlib {
 				if(path.back() != '/'){
 					path += "/";
 				}
-				path+="Generation" + std::to_string(i);
+				path+="Generation" + std::to_string(i + settings.start_generation);
 
 				save_population(networks, population, path);
 

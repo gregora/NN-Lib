@@ -25,10 +25,10 @@ namespace nnlib {
 		//file saving settings
 		uint save_period = 10; //how often networks are saved (0 == never)
 		std::string path = "./"; //empty folder for saving
+		uint start_generation = 1; //purely cosmetic
 
 		//output settings
 		bool output = true;
-		uint start_generation = 1; //purely cosmetic
 	};
 
 	void sort(uint size, Network ** networks, float * scores);

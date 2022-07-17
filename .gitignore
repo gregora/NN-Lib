@@ -33,3 +33,6 @@
 
 # Custom file extensions
 *.AI
+
+# Saved networks
+saves/*

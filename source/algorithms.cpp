@@ -175,6 +175,23 @@ namespace nnlib {
 				printf("\n Best score:    %10.2f\n", scores[0]);
 				printf("\n\n");
 			}
+
+
+			//save networks every settings.save_period
+			if(i == generations - 1 || ((i != 0) && (settings.save_period != 0) && (i % settings.save_period == 0))){
+				std::string path(settings.path);
+				if(path.back() != '/'){
+					path += "/";
+				}
+				path+="Generation" + std::to_string(i);
+
+				save_population(networks, population, path);
+
+				if(settings.output){
+					printf("NOTE: Saved networks to %s\n\n\n", path.c_str());
+				}
+			}
+
 		}
 
 		return networks;
@@ -266,9 +283,46 @@ namespace nnlib {
 				printf("\n Best score:    %10.2f\n", scores[0]);
 				printf("\n\n");
 			}
+
+
+			//save networks every settings.save_period
+			if(i == generations - 1 || ((i != 0) && (settings.save_period != 0) && (i % settings.save_period == 0))){
+				std::string path(settings.path);
+				if(path.back() != '/'){
+					path += "/";
+				}
+				path+="Generation" + std::to_string(i);
+
+				save_population(networks, population, path);
+
+				if(settings.output){
+					printf("NOTE: Saved networks to %s\n\n\n", path.c_str());
+				}
+			}
 		}
+
 
 		return networks;
 	}
 
+	void save_population(Network ** networks, uint population, std::string folder){
+
+		mkdir(folder.c_str(), 0777);
+
+		if(folder.back() != '/'){
+			folder += "/";
+		}
+
+		for(uint i = 0; i < population; i++){
+			networks[i] -> save(folder + std::to_string(i) + ".AI");
+		}
+
+	}
+
+	void load_population(Network ** networks, uint population, std::string folder){
+		for(uint i = 0; i < population; i++){
+			networks[i] = new Network;
+			networks[i] -> load(folder + std::to_string(i) + ".AI");
+		}
+	}
 }

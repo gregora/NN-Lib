@@ -18,7 +18,7 @@ void evaluate(uint size, Network** networks, float* scores){
 			Matrix res = networks[i] -> eval(&input);
 			score += abs(res.getValue(0, 0) - sin(x));
 		}
-		scores[i] = score;
+		scores[i] = score / 20;
 
 	}
 
@@ -43,7 +43,7 @@ int main() {
 	//sine curve approximation with a neural network
 
 	int POPULATION = 100;
-	int GENERATIONS = 100;
+	int GENERATIONS = 50;
 	Network* networks[POPULATION];
 
 	for(int i = 0; i < POPULATION; i++){
@@ -83,9 +83,14 @@ int main() {
 		delta: 0.2,
 		recompute_parents: false, //recompute parents (for non-deterministic evaluation functions)
 		multithreading: true,
+
+		//file saving settings
+		save_period: 100, //how often networks are saved
+		path: "saves/", //empty folder for saving
+
 		//output settings
 		output: true,
-		start_generation: 1
+		start_generation: 0
 	};
 
 	std::cout << "Train the network ...\n\n\n\n";

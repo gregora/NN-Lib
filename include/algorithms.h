@@ -1,6 +1,7 @@
 #include "matrix.h"
 #include "misc.h"
 #include "network.h"
+#include <sys/stat.h>
 
 namespace nnlib {
 	//mutate function for networks with deep layers
@@ -21,6 +22,10 @@ namespace nnlib {
 
 		bool multithreading = false;
 
+		//file saving settings
+		uint save_period = 10; //how often networks are saved (0 == never)
+		std::string path = "./"; //empty folder for saving
+
 		//output settings
 		bool output = true;
 		uint start_generation = 1; //purely cosmetic
@@ -33,5 +38,8 @@ namespace nnlib {
 
 	//assumes evaluation of each network individually
 	Network** genetic(Network ** networks, void (*eval)(Network*, float*), gen_settings settings);
+
+	void save_population(Network ** networks, uint population, std::string folder);
+	void load_population(Network ** networks, uint population, std::string folder);
 
 }

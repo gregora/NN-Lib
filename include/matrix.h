@@ -27,6 +27,9 @@ namespace nnlib {
 		float getValue(uint x, uint y) const;
 		void setValue(uint x, uint y, float value);
 
+		float get(uint x, uint y) const;
+		void set(uint x, uint y, float value);
+
 		std::string getName() const;
 		void setName(std::string new_name);
 

@@ -11,9 +11,9 @@ void evaluate(uint size, Network** networks, float* scores){
 	for(uint i = 0; i < size; i++){
 		float score = 0;
 		for(float x = -2*3.14; x < 2*3.14; x+=4*3.14/20){
-			input.setValue(0, 0, x);
+			input.set(0, 0, x);
 			Matrix res = networks[i] -> eval(&input);
-			score += abs(res.getValue(0, 0) - sin(x));
+			score += abs(res.get(0, 0) - sin(x));
 		}
 		scores[i] = score / 20;
 
@@ -28,55 +28,10 @@ void evaluate_single(Network* network, float* score){
 		*score = 0;
 
 		for(float x = -2*3.14; x < 2*3.14; x+=4*3.14/20){
-			input.setValue(0, 0, x);
+			input.set(0, 0, x);
 			Matrix res = network -> eval(&input);
-			*score += abs(res.getValue(0, 0) - sin(x));
+			*score += abs(res.get(0, 0) - sin(x));
 		}
-
-}
-
-int train_backpropagation(){
-	//approximating sine curve with a neural network using backpropagation
-
-	//create dataset
-	std::vector<Matrix*> input;
-	std::vector<Matrix*> target;
-
-	for(float x = -2*3.14; x < 2*3.14; x+=4*3.14/20){
-		Matrix* i = new Matrix(1, 1);
-		i -> setValue(0, 0, x);
-
-		Matrix* o = new Matrix(1, 1);
-		o -> setValue(0, 0, sin(x));
-
-		input.push_back(i);
-		target.push_back(o);
-	}
-
-	//build network
-	Network n;
-	Dense* layer1 = new Dense(1, 100);
-	Dense* layer4 = new Dense(100, 1);
-
-	layer1 -> setActivationFunction("relu");
-	layer4 -> setActivationFunction("linear");
-
-	n.addLayer(layer1);
-	n.addLayer(layer4);
-
-	//fit the model
-	fit(&n, input, target, 20000, 0.001);
-
-	//output
-	Matrix in(1,1);
-	for(float x = -2*3.14; x < 2*3.14; x+=4*3.14/20){
-		in.setValue(0, 0, x);
-		Matrix res = n.eval(&in);
-		for(int p = 0; p - 30 < (res.getValue(0,0))*10; p++){
-			printf(" ");
-		}
-		printf("%2.1f\n", res.getValue(0,0));
-	}
 
 }
 
@@ -144,12 +99,12 @@ int train_genetic() {
 	Matrix input(1, 1);
 
 	for(float x = -2*3.14; x < 2*3.14; x+=4*3.14/20){
-		input.setValue(0, 0, x);
+		input.set(0, 0, x);
 		Matrix res = networks[0] -> eval(&input);
-		for(int p = 0; p - 30 < (res.getValue(0,0))*10; p++){
+		for(int p = 0; p - 30 < (res.get(0,0))*10; p++){
 			printf(" ");
 		}
-		printf("%2.1f\n", res.getValue(0,0));
+		printf("%2.1f\n", res.get(0,0));
 	}
 
 	std::cout << "\n\nSave the network as sin.AI ...\n\n\n\n";
@@ -161,15 +116,66 @@ int train_genetic() {
 	Network nnsin;
 	nnsin.load("sin.AI");
 	for(float x = -2*3.14; x < 2*3.14; x+=4*3.14/20){
-		input.setValue(0, 0, x);
+		input.set(0, 0, x);
 		Matrix res = nnsin.eval(&input);
-		for(int p = 0; p - 30 < (res.getValue(0,0))*10; p++){
+		for(int p = 0; p - 30 < (res.get(0,0))*10; p++){
 			printf(" ");
 		}
-		printf("%2.1f\n", res.getValue(0,0));
+		printf("%2.1f\n", res.get(0,0));
 	}
 
 	return 0;
+}
+
+
+
+
+
+
+
+int train_backpropagation(){
+	//approximating sine curve with a neural network using backpropagation
+
+	//create dataset
+	std::vector<Matrix*> input;
+	std::vector<Matrix*> target;
+
+	for(float x = -2*3.14; x < 2*3.14; x+=4*3.14/20){
+		Matrix* i = new Matrix(1, 1);
+		i -> set(0, 0, x);
+
+		Matrix* o = new Matrix(1, 1);
+		o -> set(0, 0, sin(x));
+
+		input.push_back(i);
+		target.push_back(o);
+	}
+
+	//build network
+	Network n;
+	Dense* layer1 = new Dense(1, 100);
+	Dense* layer4 = new Dense(100, 1);
+
+	layer1 -> setActivationFunction("relu");
+	layer4 -> setActivationFunction("linear");
+
+	n.addLayer(layer1);
+	n.addLayer(layer4);
+
+	//fit the model
+	fit(&n, input, target, 20000, 0.001);
+
+	//output
+	Matrix in(1,1);
+	for(float x = -2*3.14; x < 2*3.14; x+=4*3.14/20){
+		in.set(0, 0, x);
+		Matrix res = n.eval(&in);
+		for(int p = 0; p - 30 < (res.get(0,0))*10; p++){
+			printf(" ");
+		}
+		printf("%2.1f\n", res.get(0,0));
+	}
+
 }
 
 int main(){

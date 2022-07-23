@@ -80,6 +80,14 @@ namespace nnlib {
 		table[x][y] = value;
 	}
 
+	float Matrix::get(uint x, uint y) const {
+		return getValue(x, y);
+	}
+
+	void Matrix::set(uint x, uint y, float value) {
+		return setValue(x, y, value);
+	}
+
 	std::string Matrix::getName() const {
 		return this->name;
 	}

@@ -38,7 +38,34 @@ void evaluate_single(Network* network, float* score){
 
 }
 
-int main() {
+int main(){
+	Network n;
+	Dense* layer1 = new Dense(2, 2);
+	Dense* layer2 = new Dense(2, 2);
+	Dense* layer3 = new Dense(2, 2);
+	Dense* layer4 = new Dense(2, 1);
+
+	n.addLayer(layer1);
+	n.addLayer(layer2);
+	n.addLayer(layer3);
+	n.addLayer(layer4);
+
+	Matrix input(1, 2);
+	input.setValue(0, 0, 1);
+	input.setValue(0, 1, 0);
+
+	Matrix target(1, 1);
+	target.setValue(0, 0, 0.5);
+
+	for(int i = 0; i < 1000; i++){
+		Matrix output = n.eval(&input);
+		printf("%f\n", output.getValue(0, 0));
+
+		backpropagate(&n, &target, 0.1);
+	}
+}
+
+int main2() {
 
 	//sine curve approximation with a neural network
 

@@ -42,4 +42,6 @@ namespace nnlib {
 	void save_population(Network ** networks, uint population, std::string folder);
 	void load_population(Network ** networks, uint population, std::string folder);
 
+	Matrix backpropagate(Network * network, const Matrix* target, float speed);
+
 }

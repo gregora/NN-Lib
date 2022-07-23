@@ -12,6 +12,8 @@ namespace nnlib {
 		biases = new Matrix(1, output);
 		biases -> fillRandom(-1, 1);
 
+		this -> input = new Matrix(1, input);
+
 		setName(name);
 		weights -> setName(name + "_weights");
 		biases -> setName(name + "_biases");
@@ -21,7 +23,13 @@ namespace nnlib {
 
 	Matrix Dense::eval(const Matrix* input) {
 
-		Matrix output = dereference(weights) * dereference(input) + dereference(biases);
+		Matrix inp = dereference(input);
+
+		for(uint j = 0; j < inp.height; j++){
+			this -> input -> setValue(0, j, inp.getValue(0, j));
+		}
+
+		Matrix output = dereference(weights) * inp + dereference(biases);
 
 		//run activation function on output
 		for(uint i = 0; i < output.height; i++){
@@ -30,6 +38,53 @@ namespace nnlib {
 		}
 
 		return output;
+
+	}
+
+	Matrix Dense::backpropagate(const Matrix* target, float speed){
+
+		Matrix linear_values = dereference(weights)  * dereference(input) + dereference(biases);
+		Matrix k(1, biases -> height);
+
+		//calculate k
+		for(uint j = 0; j < k.height; j++){
+			float value = -2*(target -> getValue(0, j) - activationFunction(linear_values.getValue(0, j)));
+			value*= activationFunctionDerivative(linear_values.getValue(0, j));
+
+			k.setValue(0, j, value);
+		}
+
+		//fix weights
+		for(uint i = 0; i < weights -> width; i++){
+			for(uint j = 0; j < weights -> height; j++){
+				float delta = k.getValue(0, j) * input -> getValue(0, i);
+				float value = weights -> getValue(i, j);
+				weights -> setValue(i, j, value - delta*speed);
+			}
+		}
+
+
+		//fix biases
+		for(uint j = 0; j < biases -> height; j++){
+			float delta = k.getValue(0, j);
+			float value = biases -> getValue(0, j);
+			biases -> setValue(0, j, value - delta*speed);
+		}
+
+		Matrix ret(1, input -> height);
+		//calculate new target
+		for(uint j = 0; j < input -> height; j++){
+			float delta = 0;
+			for(uint i = 0; i < target -> height; i++){
+				delta += k.getValue(0, i) * (weights -> getValue(j, i));
+			}
+			delta = delta / target -> height;
+
+			float value = input -> getValue(0, j);
+			ret.setValue(0, j, value - delta*speed);
+		}
+
+		return ret;
 
 	}
 

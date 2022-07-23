@@ -40,6 +40,7 @@ namespace nnlib {
 		void deserialize(std::string input);
 
 		Matrix eval(const Matrix* input);
+		Matrix backpropagate(const Matrix * target, float speed);
 
 		Layer* clone();
 

@@ -325,4 +325,25 @@ namespace nnlib {
 			networks[i] -> load(folder + std::to_string(i) + ".AI");
 		}
 	}
+
+
+	Matrix backpropagate(Network * network, const Matrix* target, float speed){
+		Matrix t = dereference(target);
+		try{
+			uint size = network -> getNetworkSize();
+			for(uint i = 0; i < size; i++){
+
+				Layer* layer = network -> getLayer(size - i - 1);
+				if(layer -> type == "Dense"){
+					t = ((Dense*)layer) -> backpropagate(&t, speed);
+				}else{
+					throw i + 1;
+				}
+			}
+		}catch (int exc){
+			std::cout << "Layer " << exc << " is not dense!" << std::endl;
+		}
+
+		return t;
+	}
 }

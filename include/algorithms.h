@@ -42,6 +42,11 @@ namespace nnlib {
 	void save_population(Network ** networks, uint population, std::string folder);
 	void load_population(Network ** networks, uint population, std::string folder);
 
+
+	//run backpropagation on all layers
 	Matrix backpropagate(Network * network, const Matrix* target, float speed);
+
+	//fit the neural network using backpropagation
+	void fit(Network * network, std::vector<Matrix*> input, std::vector<Matrix*> target, uint epochs, float speed);
 
 }

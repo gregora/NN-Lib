@@ -346,4 +346,32 @@ namespace nnlib {
 
 		return t;
 	}
+
+
+
+	void fit(Network * network, std::vector<Matrix*> input, std::vector<Matrix*> target, uint epochs, float speed){
+
+		for(uint i = 0; i < epochs; i++){
+			printf("------- Epoch %d -------\n\n", i);
+
+			auto start_time = high_resolution_clock::now();
+
+			float cost = 0;
+			for(uint d = 0; d < input.size(); d++){
+				Matrix out = network -> eval(input[d]);
+				backpropagate(network, target[d], speed);
+
+				for(uint o = 0; o < out.height; o++){
+					cost += pow(out.getValue(0, o) - target[d] -> getValue(0, o), 2);
+				}
+			}
+
+			cost = cost / input.size();
+			printf(" Computation:    %10.2f s\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time)).count() / 1000);
+			printf("\n");
+			printf(" Cost: %f\n", cost);
+			printf("\n\n");
+		}
+
+	}
 }

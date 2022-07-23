@@ -6,10 +6,7 @@ using namespace nnlib;
 
 void evaluate(uint size, Network** networks, float* scores){
 
-	Matrix input(1, 3);
-	input.setValue(0, 0, 0);
-	input.setValue(0, 1, 1);
-	input.setValue(0, 2, 0);
+	Matrix input(1, 1);
 
 	for(uint i = 0; i < size; i++){
 		float score = 0;
@@ -39,30 +36,43 @@ void evaluate_single(Network* network, float* score){
 }
 
 int main(){
+	//create dataset
+	std::vector<Matrix*> input;
+	std::vector<Matrix*> target;
+
+	for(float x = -2*3.14; x < 2*3.14; x+=4*3.14/20){
+		Matrix* i = new Matrix(1, 1);
+		i -> setValue(0, 0, x);
+
+		Matrix* o = new Matrix(1, 1);
+		o -> setValue(0, 0, sin(x));
+
+		input.push_back(i);
+		target.push_back(o);
+	}
+
 	Network n;
-	Dense* layer1 = new Dense(2, 2);
-	Dense* layer2 = new Dense(2, 2);
-	Dense* layer3 = new Dense(2, 2);
-	Dense* layer4 = new Dense(2, 1);
+	Dense* layer1 = new Dense(1, 100);
+	Dense* layer4 = new Dense(100, 1);
+
+	layer1 -> setActivationFunction("relu");
+	layer4 -> setActivationFunction("linear");
 
 	n.addLayer(layer1);
-	n.addLayer(layer2);
-	n.addLayer(layer3);
 	n.addLayer(layer4);
 
-	Matrix input(1, 2);
-	input.setValue(0, 0, 1);
-	input.setValue(0, 1, 0);
+	fit(&n, input, target, 20000, 0.001);
 
-	Matrix target(1, 1);
-	target.setValue(0, 0, 0.5);
-
-	for(int i = 0; i < 1000; i++){
-		Matrix output = n.eval(&input);
-		printf("%f\n", output.getValue(0, 0));
-
-		backpropagate(&n, &target, 0.1);
+	Matrix in(1,1);
+	for(float x = -2*3.14; x < 2*3.14; x+=4*3.14/20){
+		in.setValue(0, 0, x);
+		Matrix res = n.eval(&in);
+		for(int p = 0; p - 30 < (res.getValue(0,0))*10; p++){
+			printf(" ");
+		}
+		printf("%2.1f\n", res.getValue(0,0));
 	}
+
 }
 
 int main2() {

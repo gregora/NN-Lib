@@ -35,7 +35,9 @@ void evaluate_single(Network* network, float* score){
 
 }
 
-int main(){
+int train_backpropagation(){
+	//approximating sine curve with a neural network using backpropagation
+
 	//create dataset
 	std::vector<Matrix*> input;
 	std::vector<Matrix*> target;
@@ -51,6 +53,7 @@ int main(){
 		target.push_back(o);
 	}
 
+	//build network
 	Network n;
 	Dense* layer1 = new Dense(1, 100);
 	Dense* layer4 = new Dense(100, 1);
@@ -61,8 +64,10 @@ int main(){
 	n.addLayer(layer1);
 	n.addLayer(layer4);
 
+	//fit the model
 	fit(&n, input, target, 20000, 0.001);
 
+	//output
 	Matrix in(1,1);
 	for(float x = -2*3.14; x < 2*3.14; x+=4*3.14/20){
 		in.setValue(0, 0, x);
@@ -75,9 +80,8 @@ int main(){
 
 }
 
-int main2() {
-
-	//sine curve approximation with a neural network
+int train_genetic() {
+	//approximating sine curve with a neural network using genetic algorithm
 
 	int POPULATION = 100;
 	int GENERATIONS = 50;
@@ -166,4 +170,8 @@ int main2() {
 	}
 
 	return 0;
+}
+
+int main(){
+	train_backpropagation();
 }

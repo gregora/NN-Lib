@@ -57,16 +57,22 @@ namespace nnlib {
 	void Dense::setActivationFunction(std::string name) {
 		if(name == "fast_sigmoid"){
 			activationFunction = &fast_sigmoid;
+			activationFunctionDerivative = &dfast_sigmoid;
 		}else if(name == "sigmoid"){
 			activationFunction = &sigmoid;
+			activationFunctionDerivative = &dsigmoid;
 		}else if(name == "relu"){
 			activationFunction = &relu;
+			activationFunctionDerivative = &drelu;
 		}else if(name == "linear"){
 			activationFunction = &linear;
+			activationFunctionDerivative = &dlinear;
 		}else if(name == "atan"){
 			activationFunction = &atan;
+			activationFunctionDerivative = &datan;
 		}else if(name == "tanh"){
 			activationFunction = &tanh;
+			activationFunctionDerivative = &dtanh;
 		}else{
 			throw name + " is not a valid function name";
 			return;

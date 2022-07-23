@@ -57,9 +57,11 @@ namespace nnlib {
 
 		Matrix* weights;
 		Matrix* biases;
+		Matrix* input;
 
 	private:
 		float (*activationFunction)(float) = &fast_sigmoid;
+		float (*activationFunctionDerivative)(float) = &dfast_sigmoid;
 		std::string activationFunctionName = "fast_sigmoid";
 	};
 

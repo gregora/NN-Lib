@@ -56,6 +56,29 @@ namespace nnlib {
 	}
 
 
+	float dlinear(float x){
+		return 1;
+	}
+
+	float dsigmoid(float x){
+		return exp(x) / pow((exp(x) + 1), 2);
+	}
+
+	float dfast_sigmoid(float x){
+		return (x >= 0)*(1 / pow(x + 1, 2)) + (x < 0)*(1 / pow(x - 1, 2));
+	}
+
+	float drelu(float x){
+		return (x >= 0);
+	}
+
+	float datan(float x){
+		return 1 / (1 + pow(x, 2));
+	}
+
+	float dtanh(float x){
+		return 1 - pow(tanh(x), 2);
+	}
 
 
 	std::vector<std::string> splitString(std::string string, std::string split_by) {

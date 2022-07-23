@@ -20,19 +20,20 @@ namespace nnlib {
 
 	// activation functions
 	float linear(float x);
-
 	float sigmoid(float x);
-
 	float fast_sigmoid(float x);
-
 	float relu(float x);
+	//activation function derivatives
+	float dlinear(float x);
+	float dsigmoid(float x);
+	float dfast_sigmoid(float x);
+	float drelu(float x);
+	float datan(float x);
+	float dtanh(float x);
 
 	float sparseCategoricalCrossentropy(Matrix* predicted, uint truth);
-
 	float categoricalCrossentropy(Matrix* predicted, Matrix* truth);
-
 	float binaryCrossentropy(Matrix* predicted, Matrix* truth);
-
 	float meanSquaredError(Matrix* predicted, Matrix* truth);
 
 

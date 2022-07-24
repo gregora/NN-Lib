@@ -94,7 +94,7 @@ namespace nnlib {
 
 		uint parent_population = (uint) (((float) population) * settings.rep_coef) ;
 
-		std::thread threads[population - parent_population];
+		std::thread* threads = new std::thread[population - parent_population];
 
 		//remove part of the population and repopulate
 		for(uint i = parent_population; i < population; i++){
@@ -117,6 +117,7 @@ namespace nnlib {
 			}
 		}
 
+		delete[] threads;
 	}
 
 	//assumes evaluation of all networks in one call
@@ -129,8 +130,7 @@ namespace nnlib {
 
 		uint parent_population = (uint) (((float) population) * settings.rep_coef) ;
 
-		float scores[population];
-
+		float* scores = new float[population];
 
 		for(uint i = 0; i < generations; i++){
 			auto start_time = high_resolution_clock::now();
@@ -198,6 +198,7 @@ namespace nnlib {
 
 		}
 
+		delete[] scores;
 		return networks;
 
 	}
@@ -210,7 +211,7 @@ namespace nnlib {
 
 		uint parent_population = (uint) (((float) population) * settings.rep_coef) ;
 
-		float scores[population];
+		float* scores = new float[population];
 
 
 		for(uint i = 0; i < generations; i++){
@@ -225,7 +226,7 @@ namespace nnlib {
 			start_time_2 = high_resolution_clock::now();
 			if(settings.recompute_parents || i == 0){
 
-				std::thread threads[population];
+				std::thread* threads = new std::thread[population];
 
 				for(uint s = 0; s < population; s++){
 					//reset scores
@@ -244,8 +245,10 @@ namespace nnlib {
 					}
 				}
 
+				delete[] threads;
+
 			}else{
-				std::thread threads[population - parent_population];
+				std::thread* threads = new std::thread[population - parent_population];
 
 				//reset scores
 				for(uint s = parent_population; s < population; s++){
@@ -263,6 +266,8 @@ namespace nnlib {
 						threads[s - parent_population].join();
 					}
 				}
+
+				delete[] threads;
 
 			}
 			if(settings.output){
@@ -300,7 +305,7 @@ namespace nnlib {
 			}
 		}
 
-
+		delete[] scores;
 		return networks;
 	}
 
@@ -369,7 +374,7 @@ namespace nnlib {
 			}
 
 			//output
-			printf("===========================\n\n");
+			printf("============================\n\n");
 			printf(" Epoch:   %10d\n", i);
 
 			cost = cost / input.size();
@@ -386,7 +391,7 @@ namespace nnlib {
 			}
 			printf("] %3d%%\n", (int) ((float) i*100 / epochs));
 
-			printf("\n===========================\n\n");
+			printf("\n============================\n\n");
 
 			if(strcmp(settings.output.c_str(), "minimal") == 0 && i != epochs){
 				printf("\x1B[9A");

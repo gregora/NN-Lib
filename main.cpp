@@ -187,6 +187,6 @@ int train_backpropagation(){
 }
 
 int main(){
-	//train_backpropagation();
-	train_genetic();
+	train_backpropagation();
+	//train_genetic();
 }

@@ -174,7 +174,6 @@ namespace nnlib {
 			}
 
 
-			auto end_time = high_resolution_clock::now();
 			if(settings.output){
 				printf(" Overall:       %10.2f s\n", passedTime(start_time, high_resolution_clock::now()));
 				printf("\n Best score:    %10.2f\n", scores[0]);
@@ -279,11 +278,6 @@ namespace nnlib {
 
 			if(settings.output){
 				printf(" Repopulation:  %10.2f s\n", passedTime(start_time_2, high_resolution_clock::now()));
-			}
-
-
-			auto end_time = high_resolution_clock::now();
-			if(settings.output){
 				printf(" Overall:       %10.2f s\n", passedTime(start_time, high_resolution_clock::now()));
 				printf("\n Best score:    %10.2f\n", scores[0]);
 				printf("\n\n");
@@ -385,7 +379,7 @@ namespace nnlib {
 			printf(" [");
 			for(float p = 0.1; p <= 2; p += 0.1){
 				if(p/2 <= (float) i / epochs){
-					printf("=", 128);
+					printf("=");
 				}else{
 					printf(" ");
 				}

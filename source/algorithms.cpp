@@ -370,14 +370,14 @@ namespace nnlib {
 			}
 
 			//output
-			printf("=========================\n\n");
-			printf("Epoch:   %10d\n", i);
+			printf("===========================\n\n");
+			printf(" Epoch:   %10d\n", i);
 
 			cost = cost / input.size();
-			printf("Elapsed: %10.2f s\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time)).count() / 1000);
-			printf("Cost:    %10.5f\n", cost);
+			printf(" Elapsed: %10.2f s\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time)).count() / 1000);
+			printf(" Cost:    %10.5f\n", cost);
 
-			printf("[");
+			printf(" [");
 			for(float p = 0.1; p <= 2; p += 0.1){
 				if(p/2 <= (float) i / epochs){
 					printf("=", 128);
@@ -385,9 +385,9 @@ namespace nnlib {
 					printf(" ");
 				}
 			}
-			printf("] %d%\n", (int) ((float) i*100 / epochs));
+			printf("] %3d%\n", (int) ((float) i*100 / epochs));
 
-			printf("\n=========================\n\n");
+			printf("\n===========================\n\n");
 
 			if(strcmp(settings.output.c_str(), "minimal") == 0 && i != epochs){
 				printf("\x1B[9A");

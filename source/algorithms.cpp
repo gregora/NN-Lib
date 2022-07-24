@@ -384,7 +384,7 @@ namespace nnlib {
 					printf(" ");
 				}
 			}
-			printf("] %3d%\n", (int) ((float) i*100 / epochs));
+			printf("] %3d%%\n", (int) ((float) i*100 / epochs));
 
 			printf("\n===========================\n\n");
 

@@ -38,8 +38,8 @@ void evaluate_single(Network* network, float* score){
 int train_genetic() {
 	//approximating sine curve with a neural network using genetic algorithm
 
-	int POPULATION = 100;
-	int GENERATIONS = 50;
+	uint POPULATION = 100;
+	uint GENERATIONS = 50;
 	Network* networks[POPULATION];
 
 	for(int i = 0; i < POPULATION; i++){

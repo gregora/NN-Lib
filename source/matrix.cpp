@@ -253,7 +253,9 @@ namespace nnlib {
 		uint* col_width = (uint*)calloc(this->width, sizeof(uint));
 		// ISO C++ forbids variable length array, so it has to be malloc()ed
 		// (calloc in this case performs faster due to proper uint alignment)
-		uint ten_to_prec = (uint)fast_pow(10, float_precision);
+
+		//uint ten_to_prec = (uint)fast_pow(10, float_precision);
+
 		for (uint i = 0; i < this -> width; i++) {
 			// first, calculate the minimum possible width for every column
 			float max_absolute_entry = 0;

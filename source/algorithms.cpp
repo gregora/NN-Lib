@@ -7,6 +7,11 @@ namespace nnlib {
 	using std::chrono::duration_cast;
 	using std::chrono::duration;
 	using std::chrono::milliseconds;
+	using std::chrono::time_point;
+
+	float passedTime(std::chrono::time_point<std::chrono::system_clock> start, std::chrono::time_point<std::chrono::system_clock> end){
+		return (float)(duration_cast<milliseconds>(end - start)).count() / 1000;
+	}
 
 	//mutate network of dense layers
 	void mutate(Network * network, float delta){
@@ -71,7 +76,7 @@ namespace nnlib {
 
 			//mutate layer
 			float r = random();
-			//printf("%f\n", r);
+
 			if(r <= mutations){
 				layer_child -> mutate(delta);
 			}
@@ -154,7 +159,7 @@ namespace nnlib {
 				eval(population - parent_population, networks + parent_population, scores + parent_population);
 			}
 			if(settings.output){
-				printf(" Evaluation:    %10.2f s\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time_2)).count() / 1000);
+				printf(" Evaluation:    %10.2f s\n", passedTime(start_time_2, high_resolution_clock::now()));
 			}
 
 			//sort networks
@@ -165,13 +170,13 @@ namespace nnlib {
 			repopulate(networks, settings);
 
 			if(settings.output){
-				printf(" Repopulation:  %10.2f s\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time_2)).count() / 1000);
+				printf(" Repopulation:  %10.2f s\n", passedTime(start_time_2, high_resolution_clock::now()));
 			}
 
 
 			auto end_time = high_resolution_clock::now();
 			if(settings.output){
-				printf(" Overall:       %10.2f s\n", (float)(duration_cast<milliseconds>(end_time - start_time)).count() / 1000);
+				printf(" Overall:       %10.2f s\n", passedTime(start_time, high_resolution_clock::now()));
 				printf("\n Best score:    %10.2f\n", scores[0]);
 				printf("\n\n");
 			}
@@ -262,7 +267,7 @@ namespace nnlib {
 
 			}
 			if(settings.output){
-				printf(" Evaluation:    %10.2f s\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time_2)).count() / 1000);
+				printf(" Evaluation:    %10.2f s\n", passedTime(start_time_2, high_resolution_clock::now()));
 			}
 
 			//sort networks
@@ -273,13 +278,13 @@ namespace nnlib {
 			repopulate(networks, settings);
 
 			if(settings.output){
-				printf(" Repopulation:  %10.2f s\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time_2)).count() / 1000);
+				printf(" Repopulation:  %10.2f s\n", passedTime(start_time_2, high_resolution_clock::now()));
 			}
 
 
 			auto end_time = high_resolution_clock::now();
 			if(settings.output){
-				printf(" Overall:       %10.2f s\n", (float)(duration_cast<milliseconds>(end_time - start_time)).count() / 1000);
+				printf(" Overall:       %10.2f s\n", passedTime(start_time, high_resolution_clock::now()));
 				printf("\n Best score:    %10.2f\n", scores[0]);
 				printf("\n\n");
 			}
@@ -374,7 +379,7 @@ namespace nnlib {
 			printf(" Epoch:   %10d\n", i);
 
 			cost = cost / input.size();
-			printf(" Elapsed: %10.2f s\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time)).count() / 1000);
+			printf(" Elapsed: %10.2f s\n", passedTime(start_time, high_resolution_clock::now()));
 			printf(" Cost:    %10.5f\n", cost);
 
 			printf(" [");

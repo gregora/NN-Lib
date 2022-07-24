@@ -13,6 +13,7 @@ namespace nnlib {
 		biases -> fillRandom(-1, 1);
 
 		this -> input = new Matrix(1, input);
+		this -> linear_output = new Matrix(1, output);
 
 		setName(name);
 		weights -> setName(name + "_weights");
@@ -25,6 +26,7 @@ namespace nnlib {
 
 		Matrix inp = dereference(input);
 
+		//set input values
 		for(uint j = 0; j < inp.height; j++){
 			this -> input -> setValue(0, j, inp.getValue(0, j));
 		}
@@ -34,8 +36,10 @@ namespace nnlib {
 		//run activation function on output
 		for(uint i = 0; i < output.height; i++){
 			float value = output.getValue(0, i);
+			this -> linear_output -> setValue(0, i, output.getValue(0, i));
 			output.setValue(0, i, activationFunction(value));
 		}
+
 
 		return output;
 
@@ -43,7 +47,7 @@ namespace nnlib {
 
 	Matrix Dense::backpropagate(const Matrix* target, float speed){
 
-		Matrix linear_values = dereference(weights)  * dereference(input) + dereference(biases);
+		Matrix linear_values = dereference(linear_output);
 		Matrix k(1, biases -> height);
 
 		//calculate k

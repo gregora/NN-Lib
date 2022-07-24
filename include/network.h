@@ -59,6 +59,7 @@ namespace nnlib {
 		Matrix* weights;
 		Matrix* biases;
 		Matrix* input;
+		Matrix* linear_output;
 
 	private:
 		float (*activationFunction)(float) = &fast_sigmoid;

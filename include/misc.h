@@ -4,6 +4,7 @@
 #include <string>
 #include <thread>
 #include <math.h>
+#include <string.h>
 
 namespace nnlib {
 

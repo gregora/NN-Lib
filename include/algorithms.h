@@ -46,7 +46,17 @@ namespace nnlib {
 	//run backpropagation on all layers
 	Matrix backpropagate(Network * network, const Matrix* target, float speed);
 
+
+	struct fit_settings {
+		//backpropagation settings
+		uint epochs;
+		float speed;
+
+		//output
+		std::string output = "verbose"; // minimal / verbose
+	};
+
 	//fit the neural network using backpropagation
-	void fit(Network * network, std::vector<Matrix*> input, std::vector<Matrix*> target, uint epochs, float speed);
+	void fit(Network * network, std::vector<Matrix*> input, std::vector<Matrix*> target, fit_settings settings);
 
 }

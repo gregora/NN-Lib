@@ -349,13 +349,16 @@ namespace nnlib {
 
 
 
-	void fit(Network * network, std::vector<Matrix*> input, std::vector<Matrix*> target, uint epochs, float speed){
+	void fit(Network * network, std::vector<Matrix*> input, std::vector<Matrix*> target, fit_settings settings){
 
-		for(uint i = 0; i < epochs; i++){
-			printf("------- Epoch %d -------\n\n", i);
+		uint epochs = settings.epochs;
+		float speed = settings.speed;
 
-			auto start_time = high_resolution_clock::now();
+		printf("\n\n");
+		auto start_time = high_resolution_clock::now();
+		for(uint i = 1; i <= epochs; i++){
 
+			//run backpropagation
 			float cost = 0;
 			for(uint d = 0; d < input.size(); d++){
 				Matrix out = network -> eval(input[d]);
@@ -366,11 +369,29 @@ namespace nnlib {
 				}
 			}
 
+			//output
+			printf("=========================\n\n");
+			printf("Epoch:   %10d\n", i);
+
 			cost = cost / input.size();
-			printf(" Computation:    %10.2f s\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time)).count() / 1000);
-			printf("\n");
-			printf(" Cost: %f\n", cost);
-			printf("\n\n");
+			printf("Elapsed: %10.2f s\n", (float)(duration_cast<milliseconds>(high_resolution_clock::now() - start_time)).count() / 1000);
+			printf("Cost:    %10.5f\n", cost);
+
+			printf("[");
+			for(float p = 0.1; p <= 2; p += 0.1){
+				if(p/2 <= (float) i / epochs){
+					printf("=", 128);
+				}else{
+					printf(" ");
+				}
+			}
+			printf("] %d%\n", (int) ((float) i*100 / epochs));
+
+			printf("\n=========================\n\n");
+
+			if(strcmp(settings.output.c_str(), "minimal") == 0 && i != epochs){
+				printf("\x1B[9A");
+			}
 		}
 
 	}

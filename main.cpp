@@ -163,7 +163,15 @@ int train_backpropagation(){
 	n.addLayer(layer4);
 
 	//fit the model
-	fit(&n, input, target, 20000, 0.001);
+
+	fit_settings settings = {
+		epochs: 20000,
+		speed: 0.001,
+
+		output: "minimal"
+	};
+
+	fit(&n, input, target, settings);
 
 	//output
 	Matrix in(1,1);

@@ -105,6 +105,10 @@ namespace nnlib {
 		setActivationFunction(split[1]);
 		weights -> deserialize(split[2] + "\n");
 		biases -> deserialize(split[3]);
+
+
+		this -> input = new Matrix(1, weights -> width);
+		this -> linear_output = new Matrix(1, weights -> height);
 	}
 
 	Layer* Dense::clone() {

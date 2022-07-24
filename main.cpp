@@ -39,7 +39,7 @@ int train_genetic() {
 	//approximating sine curve with a neural network using genetic algorithm
 
 	uint POPULATION = 100;
-	uint GENERATIONS = 50;
+	uint GENERATIONS = 100;
 	Network* networks[POPULATION];
 
 	for(int i = 0; i < POPULATION; i++){
@@ -187,6 +187,6 @@ int train_backpropagation(){
 }
 
 int main(){
-	//train_backpropagation();
-	train_genetic();
+	train_backpropagation();
+	//train_genetic();
 }

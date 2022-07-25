@@ -30,6 +30,13 @@ namespace nnlib {
 		std::string name;
 	};
 
+	//you always have to delete all members when deallocating
+	struct deltas { //layer weight / bias / input deltas
+		Matrix * weights;
+		Matrix * biases;
+		Matrix * input;
+	};
+
 	class Dense: public Layer {
 	public:
 
@@ -39,7 +46,12 @@ namespace nnlib {
 		std::string serialize();
 		void deserialize(std::string input);
 
+		//evaluation
 		Matrix eval(const Matrix* input);
+
+		//backpropagation
+		deltas getDeltas(const Matrix * target) const;
+		void applyDeltas(deltas deltas, float speed);
 		Matrix backpropagate(const Matrix * target, float speed);
 
 		Layer* clone();

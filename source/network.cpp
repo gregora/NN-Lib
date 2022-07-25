@@ -45,7 +45,16 @@ namespace nnlib {
 
 	}
 
-	Matrix Dense::backpropagate(const Matrix* target, float speed){
+	deltas Dense::getDeltas(const Matrix * target) const{
+
+		Matrix* weight_deltas = new Matrix(weights -> width, weights -> height);
+		Matrix* bias_deltas = new Matrix(1, biases -> height);
+		Matrix* input_deltas = new Matrix(1, input -> height);
+		deltas deltas;
+		deltas.weights = weight_deltas;
+		deltas.biases = bias_deltas;
+		deltas.input = input_deltas;
+
 
 		Matrix linear_values = dereference(linear_output);
 		Matrix k(1, biases -> height);
@@ -62,8 +71,7 @@ namespace nnlib {
 		for(uint i = 0; i < weights -> width; i++){
 			for(uint j = 0; j < weights -> height; j++){
 				float delta = k.getValue(0, j) * input -> getValue(0, i);
-				float value = weights -> getValue(i, j);
-				weights -> setValue(i, j, value - delta*speed);
+				weight_deltas -> set(i, j, delta);
 			}
 		}
 
@@ -71,11 +79,9 @@ namespace nnlib {
 		//fix biases
 		for(uint j = 0; j < biases -> height; j++){
 			float delta = k.getValue(0, j);
-			float value = biases -> getValue(0, j);
-			biases -> setValue(0, j, value - delta*speed);
+			bias_deltas -> setValue(0, j, delta);
 		}
 
-		Matrix ret(1, input -> height);
 		//calculate new target
 		for(uint j = 0; j < input -> height; j++){
 			float delta = 0;
@@ -84,12 +90,49 @@ namespace nnlib {
 			}
 			delta = delta / target -> height;
 
-			float value = input -> getValue(0, j);
-			ret.setValue(0, j, value - delta*speed);
+			input_deltas -> setValue(0, j, delta);
 		}
 
-		return ret;
+		return deltas;
+	}
 
+	void Dense::applyDeltas(deltas deltas, float speed){
+
+		//apply weights
+		for(uint i = 0; i < weights -> width; i++){
+			for(uint j = 0; j < weights -> height; j++){
+				float delta = deltas.weights -> get(i, j);
+				float value = weights -> get(i, j);
+				weights -> set(i, j, value - speed*delta);
+			}
+		}
+
+		//apply biases
+		for(uint j = 0; j < biases -> height; j++){
+			float delta = deltas.biases -> get(0, j);
+			float value = biases -> get(0, j);
+			biases -> set(0, j, value - speed*delta);
+		}
+
+	}
+
+	Matrix Dense::backpropagate(const Matrix* target, float speed){
+
+		//get deltas and apply them
+		deltas deltas = getDeltas(target);
+		applyDeltas(deltas, speed);
+
+		Matrix ret = dereference(deltas.input);
+
+		for(uint j = 0; j < ret.height; j++){
+			ret.set(0, j, input -> get(0, j) - speed * ret.get(0, j) );
+		}
+
+		delete deltas.weights;
+		delete deltas.biases;
+		delete deltas.input;
+
+		return ret;
 	}
 
 

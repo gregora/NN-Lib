@@ -50,12 +50,15 @@ namespace nnlib {
 	struct fit_settings {
 		//backpropagation settings
 		uint epochs;
+		uint batch_size = 50;
 		float speed;
 
 		//output
 		std::string output = "verbose"; // minimal / verbose
 	};
 
+	//get deltas from neural network
+	void getDeltas(Network * network, const Matrix * input, const Matrix * target, float speed, std::vector<deltas>* arr, float* cost);
 	//fit the neural network using backpropagation
 	void fit(Network * network, std::vector<Matrix*> input, std::vector<Matrix*> target, fit_settings settings);
 

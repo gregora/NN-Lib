@@ -351,11 +351,30 @@ namespace nnlib {
 		return t;
 	}
 
+	void getDeltas(Network * network, const Matrix * input, const Matrix * target, float speed, std::vector<deltas>* arr, float* cost){
+		uint size = network -> getNetworkSize();
 
+		Matrix output = network -> eval(input);
+		*cost = meanSquaredError(&output, target);
+
+		arr -> reserve(size);
+
+
+		Matrix tar = dereference(target);
+
+		for(uint i = size - 1; i >= 0; i--){
+			Dense* layer = (Dense*) network -> getLayer(i);
+
+			arr -> at(i) = layer -> getDeltas(target);
+
+			tar = dereference(layer -> input) - dereference((arr -> at(i)).input)*speed;
+		}
+	}
 
 	void fit(Network * network, std::vector<Matrix*> input, std::vector<Matrix*> target, fit_settings settings){
 
 		uint epochs = settings.epochs;
+		uint batch_size = settings.batch_size;
 		float speed = settings.speed;
 
 		printf("\n\n");
@@ -365,6 +384,7 @@ namespace nnlib {
 			//run backpropagation
 			float cost = 0;
 			for(uint d = 0; d < input.size(); d++){
+
 				Matrix out = network -> eval(input[d]);
 				backpropagate(network, target[d], speed);
 

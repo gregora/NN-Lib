@@ -166,6 +166,7 @@ int train_backpropagation(){
 
 	fit_settings settings = {
 		epochs: 20000,
+		batch_size: 1,
 		speed: 0.001,
 
 		output: "minimal"

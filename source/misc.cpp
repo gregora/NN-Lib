@@ -81,6 +81,17 @@ namespace nnlib {
 	}
 
 
+	float meanSquaredError(const Matrix* predicted, const Matrix* truth){
+		float cost = 0;
+
+		for(uint j = 0; j < predicted -> height; j++){
+			cost += pow(predicted -> get(0, j) - truth -> get(0, j), 2);
+		}
+
+		return cost;
+	}
+
+
 	std::vector<std::string> splitString(std::string string, std::string split_by) {
 
 		std::vector<std::string> ret;

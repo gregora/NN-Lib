@@ -88,8 +88,8 @@ namespace nnlib {
 		Network(std::string name = "network");
 
 		void addLayer(Layer* l);
-		Layer* getLayer(uint index);
-		int getNetworkSize();
+		Layer* getLayer(uint index) const;
+		int getNetworkSize() const;
 
 		Matrix eval(const Matrix* input);
 

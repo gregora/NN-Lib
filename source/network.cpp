@@ -321,11 +321,11 @@ namespace nnlib {
 		layers.push_back(l);
 	}
 
-	Layer* Network::getLayer(uint index){
+	Layer* Network::getLayer(uint index) const{
 		return layers[index];
 	}
 
-	int Network::getNetworkSize(){
+	int Network::getNetworkSize() const{
 		return layers.size();
 	}
 

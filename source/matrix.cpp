@@ -408,4 +408,31 @@ namespace nnlib {
 
 		return ret;
 	}
+
+	void add(Matrix* matrix1, const Matrix* matrix2){
+		if (matrix1 -> width != matrix2 -> width || matrix1 -> height != matrix2 -> height) {
+			std::ostringstream stringStream;
+			stringStream << "Subtracting matrices " << matrix1->getName() << " - " << matrix2->getName();
+			stringStream << " of different dimensions ";
+			stringStream << " (h=" << matrix1->height << " w=" << matrix1->width << ")";
+			stringStream << " and (h=" << matrix2 -> height << " w=" << matrix2 -> width << ")";
+			throw std::invalid_argument(stringStream.str());
+		}
+
+		for(uint i = 0; i < matrix1 -> width; i++){
+			for(uint j = 0; j < matrix1 -> height; j++){
+				matrix1 -> set(i, j, matrix1 -> get(i, j) + matrix2 -> get(i, j));
+			}
+		}
+	}
+
+	void multiply(Matrix* matrix, float n){
+		for(uint i = 0; i < matrix -> width; i++){
+			for(uint j = 0; j < matrix -> height; j++){
+				matrix -> set(i, j, matrix -> get(i, j) * n);
+			}
+		}
+	}
+
+
 }

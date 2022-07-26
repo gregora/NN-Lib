@@ -59,6 +59,9 @@ namespace nnlib {
 
 	Matrix dereference(const Matrix* matrix);
 
+	void add(Matrix* matrix1, const Matrix* matrix2);
+	void multiply(Matrix* matrix, float n);
+
 }
 
 #endif

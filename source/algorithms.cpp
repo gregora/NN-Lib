@@ -357,16 +357,19 @@ namespace nnlib {
 		std::vector<deltas> arr;
 		arr.resize(size);
 
-		Matrix tar = dereference(target);
+		const Matrix* tar = target;
 
 		for(uint i = 0; i < size; i++){
 
 			//printf("%d\n", i);
 			Dense* layer = (Dense*) network -> getLayer(size - i - 1);
 
-			arr.at(size - i - 1) = layer -> getDeltas(&tar);
+			arr[size - i - 1] = layer -> getDeltas(tar);
 
-			tar = dereference(layer -> input) - dereference((arr.at(size - i - 1)).input)*speed;
+			multiply(arr[size - i - 1].input, -speed);
+			add(arr[size - i - 1].input, layer -> input);
+
+			tar = (arr.at(size - i - 1)).input;
 
 		}
 
@@ -382,7 +385,7 @@ namespace nnlib {
 
 		auto start_time = high_resolution_clock::now();
 
-		std::vector<deltas> delt[batch_size];
+		std::vector<deltas>* delt = new std::vector<deltas>[batch_size];
 
 		for(uint i = 1; i <= epochs; i++){
 
@@ -415,18 +418,20 @@ namespace nnlib {
 						delta_biases.fillZero();
 
 						for(uint j = 0; j < batch_index; j++){
-							delta_weights = delta_weights + dereference(delt[j][i].weights)*(1.0f / (batch_index));
-							delta_biases = delta_biases + dereference(delt[j][i].biases)*(1.0f / (batch_index));
+							multiply(delt[j][i].weights, 1.0f / batch_index);
+							multiply(delt[j][i].biases, 1.0f / batch_index);
+
+							add(&delta_weights, delt[j][i].weights);
+							add(&delta_biases, delt[j][i].biases);
 
 							delete delt[j][i].weights;
 							delete delt[j][i].biases;
 							delete delt[j][i].input;
 						}
 
-						deltas d = {
-							weights: &delta_weights,
-							biases: &delta_biases
-						};
+						deltas d;
+						d.weights = &delta_weights;
+						d.biases = &delta_biases;
 
 						layer -> applyDeltas(d, speed);
 					}
@@ -458,6 +463,8 @@ namespace nnlib {
 				printf("\x1B[9A");
 			}
 		}
+
+		delete[] delt;
 
 	}
 }

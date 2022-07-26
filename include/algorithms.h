@@ -58,7 +58,7 @@ namespace nnlib {
 	};
 
 	//get deltas from neural network
-	void getDeltas(Network * network, const Matrix * input, const Matrix * target, float speed, std::vector<deltas>* arr, float* cost);
+	std::vector<deltas> getDeltas(Network * network, const Matrix * target, float speed);
 	//fit the neural network using backpropagation
 	void fit(Network * network, std::vector<Matrix*> input, std::vector<Matrix*> target, fit_settings settings);
 

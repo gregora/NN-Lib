@@ -351,44 +351,87 @@ namespace nnlib {
 		return t;
 	}
 
-	void getDeltas(Network * network, const Matrix * input, const Matrix * target, float speed, std::vector<deltas>* arr, float* cost){
+	std::vector<deltas> getDeltas(Network * network, const Matrix * target, float speed){
 		uint size = network -> getNetworkSize();
 
-		Matrix output = network -> eval(input);
-		*cost = meanSquaredError(&output, target);
-
-		arr -> reserve(size);
-
+		std::vector<deltas> arr;
+		arr.resize(size);
 
 		Matrix tar = dereference(target);
 
-		for(uint i = size - 1; i >= 0; i--){
-			Dense* layer = (Dense*) network -> getLayer(i);
+		for(uint i = 0; i < size; i++){
 
-			arr -> at(i) = layer -> getDeltas(target);
+			//printf("%d\n", i);
+			Dense* layer = (Dense*) network -> getLayer(size - i - 1);
 
-			tar = dereference(layer -> input) - dereference((arr -> at(i)).input)*speed;
+			arr.at(size - i - 1) = layer -> getDeltas(&tar);
+
+			tar = dereference(layer -> input) - dereference((arr.at(size - i - 1)).input)*speed;
+
 		}
+
+		return arr;
 	}
 
 	void fit(Network * network, std::vector<Matrix*> input, std::vector<Matrix*> target, fit_settings settings){
+		printf("\n\n");
 
 		uint epochs = settings.epochs;
 		uint batch_size = settings.batch_size;
 		float speed = settings.speed;
 
-		printf("\n\n");
 		auto start_time = high_resolution_clock::now();
+
+		std::vector<deltas> delt[batch_size];
+
 		for(uint i = 1; i <= epochs; i++){
 
 			//run backpropagation
 			float cost = 0;
+
+			uint batch_index = 0;
+
 			for(uint d = 0; d < input.size(); d++){
 
 				Matrix out = network -> eval(input[d]);
-				backpropagate(network, target[d], speed);
-
 				cost += meanSquaredError(&out, target[d]);
+				//backpropagate(network, target[d], speed);
+
+				delt[batch_index] = getDeltas(network, target[d], speed);
+
+
+				batch_index++;
+
+				if(batch_index % batch_size == 0 || d + 1 == input.size()){
+
+					uint network_size = network -> getNetworkSize();
+					for(uint i = 0; i < network_size; i++){
+						Dense* layer = (Dense*) network -> getLayer(i);
+
+						Matrix delta_weights(layer -> inputSize(), layer -> outputSize());
+						Matrix delta_biases(1, layer -> outputSize());
+
+						delta_weights.fillZero();
+						delta_biases.fillZero();
+
+						for(uint j = 0; j < batch_index; j++){
+							delta_weights = delta_weights + dereference(delt[j][i].weights)*(1.0f / (batch_index));
+							delta_biases = delta_biases + dereference(delt[j][i].biases)*(1.0f / (batch_index));
+
+							delete delt[j][i].weights;
+							delete delt[j][i].biases;
+							delete delt[j][i].input;
+						}
+
+						deltas d = {
+							weights: &delta_weights,
+							biases: &delta_biases
+						};
+
+						layer -> applyDeltas(d, speed);
+					}
+					batch_index = 0;
+				}
 			}
 
 			//output

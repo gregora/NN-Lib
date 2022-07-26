@@ -388,9 +388,7 @@ namespace nnlib {
 				Matrix out = network -> eval(input[d]);
 				backpropagate(network, target[d], speed);
 
-				for(uint o = 0; o < out.height; o++){
-					cost += pow(out.getValue(0, o) - target[d] -> getValue(0, o), 2);
-				}
+				cost += meanSquaredError(&out, target[d]);
 			}
 
 			//output

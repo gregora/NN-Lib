@@ -13,7 +13,7 @@ namespace nnlib {
 		biases -> fillRandom(-1, 1);
 
 		this -> input = new Matrix(1, input);
-		this -> linear_output = new Matrix(1, output);
+		this -> logits = new Matrix(1, output);
 
 		setName(name);
 		weights -> setName(name + "_weights");
@@ -36,7 +36,7 @@ namespace nnlib {
 		//run activation function on output
 		for(uint i = 0; i < output.height; i++){
 			float value = output.getValue(0, i);
-			this -> linear_output -> setValue(0, i, output.getValue(0, i));
+			this -> logits -> setValue(0, i, output.getValue(0, i));
 			output.setValue(0, i, activationFunction(value));
 		}
 
@@ -56,7 +56,7 @@ namespace nnlib {
 		deltas.input = input_deltas;
 
 
-		Matrix linear_values = dereference(linear_output);
+		Matrix linear_values = dereference(logits);
 		Matrix k(1, biases -> height);
 
 		//calculate k
@@ -149,7 +149,7 @@ namespace nnlib {
 
 
 		this -> input = new Matrix(1, weights -> width);
-		this -> linear_output = new Matrix(1, weights -> height);
+		this -> logits = new Matrix(1, weights -> height);
 	}
 
 	Layer* Dense::clone() {

@@ -88,8 +88,6 @@ namespace nnlib {
 			for(uint i = 0; i < target -> height; i++){
 				delta += k.getValue(0, i) * (weights -> getValue(j, i));
 			}
-			delta = delta / target -> height;
-
 			input_deltas -> setValue(0, j, delta);
 		}
 

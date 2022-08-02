@@ -71,6 +71,7 @@ namespace nnlib {
 		Matrix* weights;
 		Matrix* biases;
 		Matrix* input;
+		Matrix* output;
 		Matrix* logits; //linear output values
 
 	private:

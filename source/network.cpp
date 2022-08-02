@@ -14,6 +14,7 @@ namespace nnlib {
 
 		this -> input = new Matrix(1, input);
 		this -> logits = new Matrix(1, output);
+		this -> output = new Matrix(1, output);
 
 		setName(name);
 		weights -> setName(name + "_weights");
@@ -24,27 +25,21 @@ namespace nnlib {
 
 	Matrix Dense::eval(const Matrix* input) {
 
-		Matrix inp = dereference(input);
-
-		//set input values
-		for(uint j = 0; j < inp.height; j++){
-			this -> input -> set(0, j, inp.get(0, j));
-		}
+		Matrix& inp = *(this -> input);
+		inp = dereference(input);
 
 		Matrix& weights = *(this -> weights);
 		Matrix& biases = *(this -> biases);
+		Matrix& logits = *(this -> logits);
+		Matrix& output = *(this -> output);
 
-		Matrix output = weights * inp + biases;
+		Matrix ret = weights * inp + biases;
 
-		//run activation function on output
-		for(uint i = 0; i < output.height; i++){
-			float value = output.get(0, i);
-			this -> logits -> set(0, i, output.get(0, i));
-		}
+		logits = ret;
+		ret = activationFunction(ret);
+		output = ret;
 
-		output = activationFunction(output);
-
-		return output;
+		return ret;
 
 	}
 
@@ -60,7 +55,7 @@ namespace nnlib {
 
 
 		Matrix& linear_values = *logits;
-		Matrix k = activationFunction(linear_values);
+		Matrix& k = *output;
 
 		//calculate k
 		for(uint j = 0; j < k.height; j++){

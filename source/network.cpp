@@ -56,7 +56,7 @@ namespace nnlib {
 		deltas.input = input_deltas;
 
 
-		Matrix linear_values = dereference(logits);
+		Matrix& linear_values = *logits;
 		Matrix k(1, biases -> height);
 
 		//calculate k
@@ -96,21 +96,18 @@ namespace nnlib {
 
 	void Dense::applyDeltas(deltas deltas, float speed){
 
+
+		Matrix& delta_weights = *(deltas.weights);
+		Matrix& weights = *(this -> weights);
+
+		Matrix& delta_biases = *(deltas.biases);
+		Matrix& biases = *(this -> biases);
+
 		//apply weights
-		for(uint i = 0; i < weights -> width; i++){
-			for(uint j = 0; j < weights -> height; j++){
-				float delta = deltas.weights -> get(i, j);
-				float value = weights -> get(i, j);
-				weights -> set(i, j, value - speed*delta);
-			}
-		}
+		weights = weights - delta_weights*speed;
 
 		//apply biases
-		for(uint j = 0; j < biases -> height; j++){
-			float delta = deltas.biases -> get(0, j);
-			float value = biases -> get(0, j);
-			biases -> set(0, j, value - speed*delta);
-		}
+		biases = biases - delta_biases*speed;
 
 	}
 

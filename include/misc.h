@@ -19,20 +19,20 @@ namespace nnlib {
 	int numlen(int x);
 
 
-	// activation functions
+	// activation functions (function evaluated at vector)
 	Matrix linear(const Matrix& x);
 	Matrix sigmoid(const Matrix& x);
 	Matrix fast_sigmoid(const Matrix& x);
 	Matrix relu(const Matrix& x);
 	Matrix atan(const Matrix& x);
 	Matrix tanh(const Matrix& x);
-	//activation function derivatives
-	float dlinear(float x);
-	float dsigmoid(float x);
-	float dfast_sigmoid(float x);
-	float drelu(float x);
-	float datan(float x);
-	float dtanh(float x);
+	//activation function derivatives (Jacobian matrices evaluated at vector)
+	Matrix dlinear(const Matrix& x);
+	Matrix dsigmoid(const Matrix& x);
+	Matrix dfast_sigmoid(const Matrix& x);
+	Matrix drelu(const Matrix& x);
+	Matrix datan(const Matrix& x);
+	Matrix dtanh(const Matrix& x);
 
 	float sparseCategoricalCrossentropy(Matrix* predicted, uint truth);
 	float categoricalCrossentropy(Matrix* predicted, Matrix* truth);

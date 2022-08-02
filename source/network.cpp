@@ -53,40 +53,48 @@ namespace nnlib {
 		deltas.biases = bias_deltas;
 		deltas.input = input_deltas;
 
+		Matrix jacobian = activationFunctionDerivative(*logits);
 
-		Matrix& linear_values = *logits;
-		Matrix& k = *output;
-
-		//calculate k
-		for(uint j = 0; j < k.height; j++){
-			float value = -2*(target -> get(0, j) - k.get(0, j));
-			value*= activationFunctionDerivative(linear_values.get(0, j));
-
-			k.set(0, j, value);
-		}
-
-		//fix weights
+		//calculate delta weights
 		for(uint i = 0; i < weights -> width; i++){
 			for(uint j = 0; j < weights -> height; j++){
-				float delta = k.get(0, j) * input -> get(0, i);
+
+				float delta = 0;
+
+				for(uint j_ = 0; j_ < weights -> height; j_++){
+					delta += -2*(target -> get(0, j_) - output -> get(0, j_)) * jacobian.get(j_, j) * input -> get(0, i);
+				}
+
 				weight_deltas -> set(i, j, delta);
 			}
 		}
 
 
-		//fix biases
+		//calculate delta biases
 		for(uint j = 0; j < biases -> height; j++){
-			float delta = k.get(0, j);
+
+			float delta = 0;
+
+			for(uint j_ = 0; j_ < biases -> height; j_++){
+				delta += -2*(target -> get(0, j_) - output -> get(0, j_)) * jacobian.get(j_, j);
+			}
+
 			bias_deltas -> set(0, j, delta);
 		}
 
-		//calculate new target
-		for(uint j = 0; j < input -> height; j++){
+		//calculate delta target
+		for(uint i = 0; i < input -> height; i++){
 			float delta = 0;
-			for(uint i = 0; i < target -> height; i++){
-				delta += k.get(0, i) * (weights -> get(j, i));
+
+			for(uint j = 0; j < output -> height; j++){
+				for(uint j_ = 0; j_ < output -> height; j_++){
+
+					delta += -2 * (target -> get(0, j) - output -> get(0, j)) * jacobian.get(j_, j) * weights -> get(i, j_);
+
+				}
 			}
-			input_deltas -> set(0, j, delta);
+
+			input_deltas -> set(0, i, delta);
 		}
 
 		return deltas;
@@ -155,23 +163,23 @@ namespace nnlib {
 
 	void Dense::setActivationFunction(std::string name) {
 		if(name == "fast_sigmoid"){
-			activationFunction = &fast_sigmoid;
-			activationFunctionDerivative = &dfast_sigmoid;
+			activationFunction = fast_sigmoid;
+			activationFunctionDerivative = dfast_sigmoid;
 		}else if(name == "sigmoid"){
-			activationFunction = &sigmoid;
-			activationFunctionDerivative = &dsigmoid;
+			activationFunction = sigmoid;
+			activationFunctionDerivative = dsigmoid;
 		}else if(name == "relu"){
-			activationFunction = &relu;
-			activationFunctionDerivative = &drelu;
+			activationFunction = relu;
+			activationFunctionDerivative = drelu;
 		}else if(name == "linear"){
-			activationFunction = &linear;
-			activationFunctionDerivative = &dlinear;
+			activationFunction = linear;
+			activationFunctionDerivative = dlinear;
 		}else if(name == "atan"){
-			activationFunction = &nnlib::atan;
-			activationFunctionDerivative = &datan;
+			activationFunction = nnlib::atan;
+			activationFunctionDerivative = datan;
 		}else if(name == "tanh"){
-			activationFunction = &nnlib::tanh;
-			activationFunctionDerivative = &dtanh;
+			activationFunction = nnlib::tanh;
+			activationFunctionDerivative = dtanh;
 		}else{
 			throw name + " is not a valid function name";
 			return;

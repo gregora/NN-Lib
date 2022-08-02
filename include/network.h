@@ -75,8 +75,8 @@ namespace nnlib {
 		Matrix* logits; //linear output values
 
 	private:
-		Matrix (*activationFunction)(const Matrix&) = &fast_sigmoid;
-		float (*activationFunctionDerivative)(float) = &dfast_sigmoid;
+		Matrix (*activationFunction)(const Matrix&) = fast_sigmoid;
+		Matrix (*activationFunctionDerivative)(const Matrix&) = dfast_sigmoid;
 		std::string activationFunctionName = "fast_sigmoid";
 	};
 

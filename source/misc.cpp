@@ -115,28 +115,127 @@ namespace nnlib {
 	}
 
 
-	float dlinear(float x){
-		return 1;
+
+
+	Matrix dlinear(const Matrix& x){
+		Matrix ret(x.height, x.height);
+
+		for(uint i = 0; i < x.height; i++){
+			for(uint j = 0; j < x.height; j++){
+
+				if(i == j){
+					ret.set(i, j, 1);
+				}else{
+					ret.set(i, j, 0);
+				}
+
+			}
+		}
+
+		return ret;
 	}
 
-	float dsigmoid(float x){
-		return exp(x) / pow((exp(x) + 1), 2);
+	Matrix dsigmoid(const Matrix& x){
+		Matrix ret(x.height, x.height);
+
+		for(uint i = 0; i < x.height; i++){
+			for(uint j = 0; j < x.height; j++){
+
+
+				if(i == j){
+					float value = x.get(0, j);
+					ret.set(i, j, exp(value) / pow((exp(value) + 1), 2));
+				}else{
+					ret.set(i, j, 0);
+				}
+
+			}
+		}
+
+		return ret;
+
 	}
 
-	float dfast_sigmoid(float x){
-		return (x >= 0)*(1 / pow(x + 1, 2)) + (x < 0)*(1 / pow(x - 1, 2));
+	Matrix dfast_sigmoid(const Matrix& x){
+		Matrix ret(x.height, x.height);
+
+		for(uint i = 0; i < x.height; i++){
+			for(uint j = 0; j < x.height; j++){
+
+
+				if(i == j){
+					float value = x.get(0, j);
+					ret.set(i, j, (value >= 0)*(1 / pow(value + 1, 2)) + (value < 0)*(1 / pow(value - 1, 2)));
+				}else{
+					ret.set(i, j, 0);
+				}
+
+			}
+		}
+
+		return ret;
+
 	}
 
-	float drelu(float x){
-		return (x >= 0);
+	Matrix drelu(const Matrix& x){
+		Matrix ret(x.height, x.height);
+
+		for(uint i = 0; i < x.height; i++){
+			for(uint j = 0; j < x.height; j++){
+
+				if(i == j){
+					float value = x.get(0, j);
+					ret.set(i, j, value >= 0);
+				}else{
+					ret.set(i, j, 0);
+				}
+
+			}
+		}
+
+		return ret;
 	}
 
-	float datan(float x){
-		return 1 / (1 + pow(x, 2));
+	Matrix datan(const Matrix& x){
+		Matrix ret(x.height, x.height);
+
+		for(uint i = 0; i < x.height; i++){
+			for(uint j = 0; j < x.height; j++){
+
+
+				if(i == j){
+					float value = x.get(0, j);
+					ret.set(i, j, 1 / (1 + pow(value, 2)));
+				}else{
+					ret.set(i, j, 0);
+				}
+
+			}
+		}
+
+		return ret;
+
 	}
 
-	float dtanh(float x){
-		return 1 - pow(std::tanh(x), 2);
+	Matrix dtanh(const Matrix& x){
+		Matrix ret(x.height, x.height);
+
+		for(uint i = 0; i < x.height; i++){
+			for(uint j = 0; j < x.height; j++){
+
+
+				if(i == j){
+					float value = x.get(0, j);
+					ret.set(i, j, 1 - pow(std::tanh(value), 2));
+				}else{
+					ret.set(i, j, 0);
+				}
+
+			}
+		}
+
+		return ret;
+
 	}
 
 

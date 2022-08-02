@@ -72,8 +72,6 @@ namespace nnlib {
 		}
 
 		return table[x][y];
-
-
 	}
 
 	void Matrix::set(uint x, uint y, float value) {
@@ -83,7 +81,7 @@ namespace nnlib {
 			stringStream << " outside of matrix " << getName();
 			stringStream << " (h=" << height << " w=" << width << ")";
 			throw std::invalid_argument(stringStream.str());
-		};
+		}
 
 		table[x][y] = value;
 	}
@@ -110,7 +108,7 @@ namespace nnlib {
 
 		for(uint i = 0; i < width; i++){
 			for(uint j = 0; j < height; j++){
-				table[i][j] = matrix.getValue(i, j);
+				table[i][j] = matrix.get(i, j);
 			}
 		}
 
@@ -121,7 +119,7 @@ namespace nnlib {
 
 		for (uint i = 0; i < width; i++) {
 			for (uint j = 0; j < height; j++) {
-				ret.setValue(i, j, getValue(i, j) * n);
+				ret.set(i, j, get(i, j) * n);
 			}
 		}
 
@@ -136,7 +134,7 @@ namespace nnlib {
 
 		for (uint i = 0; i < width; i++) {
 			for (uint j = 0; j < height; j++) {
-				ret.setValue(i, j, getValue(i, j) / n);
+				ret.set(i, j, get(i, j) / n);
 			}
 		}
 
@@ -157,7 +155,7 @@ namespace nnlib {
 
 		for (uint i = 0; i < width; i++) {
 			for (uint j = 0; j < height; j++) {
-				ret.setValue(i, j, getValue(i, j) + v.getValue(i, j));
+				ret.set(i, j, get(i, j) + v.get(i, j));
 			}
 		}
 
@@ -179,7 +177,7 @@ namespace nnlib {
 
 		for (uint i = 0; i < width; i++) {
 			for (uint j = 0; j < height; j++) {
-				ret.setValue(i, j, getValue(i, j) - v.getValue(i, j));
+				ret.set(i, j, get(i, j) - v.get(i, j));
 			}
 		}
 
@@ -205,10 +203,10 @@ namespace nnlib {
 				float sum = 0;
 
 				for (uint k = 0; k < width; k++) {
-					sum += getValue(k, j) * v.getValue(i, k);
+					sum += get(k, j) * v.get(i, k);
 				}
 
-				ret.setValue(i, j, sum);
+				ret.set(i, j, sum);
 			}
 		}
 
@@ -220,7 +218,7 @@ namespace nnlib {
 
 		for (uint i = 0; i < width; i++) {
 			for (uint j = 0; j < height; j++) {
-				setValue(i, j, random(min_value, max_value));
+				set(i, j, random(min_value, max_value));
 			}
 		}
 
@@ -230,7 +228,7 @@ namespace nnlib {
 
 		for (uint i = 0; i < width; i++) {
 			for (uint j = 0; j < height; j++) {
-				setValue(i, j, 0);
+				set(i, j, 0);
 			}
 		}
 
@@ -241,7 +239,7 @@ namespace nnlib {
 		fillZero();
 		uint min_dim = width < height? width : height;
 		for (uint i = 0; i < min_dim; i++) {
-			setValue(i, i, 1);
+			set(i, i, 1);
 		}
 
 	}
@@ -261,7 +259,7 @@ namespace nnlib {
 			float max_absolute_entry = 0;
 			char all_entires_positive = 1;
 			for (uint j = 0; j < height; j++) {
-				float val = getValue(i, j);
+				float val = get(i, j);
 				if (val < 0) {
 					all_entires_positive = 0;
 					val = -val;
@@ -311,7 +309,7 @@ namespace nnlib {
 					"%*.*f",
 					col_width[i],
 					float_precision,
-					getValue(i, j)
+					get(i, j)
 				);
 				// spaces between columns, but not on the last column
 				if (i+1 < width) buffer += sprintf(buffer, " ");
@@ -348,7 +346,7 @@ namespace nnlib {
 			for (uint i = 0; i < this->width; i++) {
 				float value;
 				stream >> value;
-				this->setValue(i, j, value);
+				this->set(i, j, value);
 			}
 		}
 	}
@@ -358,7 +356,7 @@ namespace nnlib {
 
 		for (uint i = 0; i < width; i++){
 			for (uint j = 0; j < height; j++){
-				ret -> setValue(i, j, getValue(i, j));
+				ret -> set(i, j, get(i, j));
 			}
 		}
 
@@ -402,7 +400,7 @@ namespace nnlib {
 
 		for(unsigned int i = 0; i < ret.width; i++){
 			for(unsigned int j = 0; j < ret.height; j++){
-				ret.setValue(i, j, matrix -> getValue(i, j));
+				ret.set(i, j, matrix -> get(i, j));
 			}
 		}
 

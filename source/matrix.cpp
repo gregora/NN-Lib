@@ -55,7 +55,14 @@ namespace nnlib {
 	}
 
 	float Matrix::getValue(uint x, uint y) const {
+		return get(x, y);
+	}
 
+	void Matrix::setValue(uint x, uint y, float value) {
+		set(x, y, value);
+	}
+
+	float Matrix::get(uint x, uint y) const {
 		if (x >= width || y >= height || x < 0 || y < 0) {
 			std::ostringstream stringStream;
 			stringStream << "Fetching value (" << x << "," << y << ")";
@@ -65,10 +72,11 @@ namespace nnlib {
 		}
 
 		return table[x][y];
+
+
 	}
 
-	void Matrix::setValue(uint x, uint y, float value) {
-
+	void Matrix::set(uint x, uint y, float value) {
 		if (x >= width || y >= height || x < 0 || y < 0) {
 			std::ostringstream stringStream;
 			stringStream << "Setting value (" << x << "," << y << ")";
@@ -78,14 +86,6 @@ namespace nnlib {
 		};
 
 		table[x][y] = value;
-	}
-
-	float Matrix::get(uint x, uint y) const {
-		return getValue(x, y);
-	}
-
-	void Matrix::set(uint x, uint y, float value) {
-		return setValue(x, y, value);
 	}
 
 	std::string Matrix::getName() const {

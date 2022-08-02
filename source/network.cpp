@@ -62,10 +62,10 @@ namespace nnlib {
 				float delta = 0;
 
 				for(uint j_ = 0; j_ < weights -> height; j_++){
-					delta += -2*(target -> get(0, j_) - output -> get(0, j_)) * jacobian.get(j_, j) * input -> get(0, i);
+					delta += -2*(target -> get(0, j_) - output -> get(0, j_)) * jacobian.get(j_, j);
 				}
 
-				weight_deltas -> set(i, j, delta);
+				weight_deltas -> set(i, j, delta * input -> get(0, i));
 			}
 		}
 

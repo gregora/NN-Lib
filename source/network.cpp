@@ -28,7 +28,7 @@ namespace nnlib {
 
 		//set input values
 		for(uint j = 0; j < inp.height; j++){
-			this -> input -> setValue(0, j, inp.getValue(0, j));
+			this -> input -> set(0, j, inp.get(0, j));
 		}
 
 		Matrix& weights = *(this -> weights);
@@ -38,9 +38,9 @@ namespace nnlib {
 
 		//run activation function on output
 		for(uint i = 0; i < output.height; i++){
-			float value = output.getValue(0, i);
-			this -> logits -> setValue(0, i, output.getValue(0, i));
-			output.setValue(0, i, activationFunction(value));
+			float value = output.get(0, i);
+			this -> logits -> set(0, i, output.get(0, i));
+			output.set(0, i, activationFunction(value));
 		}
 
 
@@ -64,16 +64,16 @@ namespace nnlib {
 
 		//calculate k
 		for(uint j = 0; j < k.height; j++){
-			float value = -2*(target -> getValue(0, j) - activationFunction(linear_values.getValue(0, j)));
-			value*= activationFunctionDerivative(linear_values.getValue(0, j));
+			float value = -2*(target -> get(0, j) - activationFunction(linear_values.get(0, j)));
+			value*= activationFunctionDerivative(linear_values.get(0, j));
 
-			k.setValue(0, j, value);
+			k.set(0, j, value);
 		}
 
 		//fix weights
 		for(uint i = 0; i < weights -> width; i++){
 			for(uint j = 0; j < weights -> height; j++){
-				float delta = k.getValue(0, j) * input -> getValue(0, i);
+				float delta = k.get(0, j) * input -> get(0, i);
 				weight_deltas -> set(i, j, delta);
 			}
 		}
@@ -81,17 +81,17 @@ namespace nnlib {
 
 		//fix biases
 		for(uint j = 0; j < biases -> height; j++){
-			float delta = k.getValue(0, j);
-			bias_deltas -> setValue(0, j, delta);
+			float delta = k.get(0, j);
+			bias_deltas -> set(0, j, delta);
 		}
 
 		//calculate new target
 		for(uint j = 0; j < input -> height; j++){
 			float delta = 0;
 			for(uint i = 0; i < target -> height; i++){
-				delta += k.getValue(0, i) * (weights -> getValue(j, i));
+				delta += k.get(0, i) * (weights -> get(j, i));
 			}
-			input_deltas -> setValue(0, j, delta);
+			input_deltas -> set(0, j, delta);
 		}
 
 		return deltas;
@@ -200,14 +200,14 @@ namespace nnlib {
 			//change random weight
 			int x = randomInt(0, weights->width - 1);
 			int y = randomInt(0, weights->height - 1);
-			float value = weights -> getValue(x, y) + random(-delta, delta);
-			weights -> setValue(x, y, value);
+			float value = weights -> get(x, y) + random(-delta, delta);
+			weights -> set(x, y, value);
 		}else{
 			//change random bias
 			int x = randomInt(0, biases->width - 1);
 			int y = randomInt(0, biases->height - 1);
-			float value = biases -> getValue(x, y) + random(-delta, delta);
-			biases -> setValue(x, y, value);
+			float value = biases -> get(x, y) + random(-delta, delta);
+			biases -> set(x, y, value);
 		}
 	}
 
@@ -227,18 +227,18 @@ namespace nnlib {
 				for(int i = 0; i < inputSize(); i++){
 
 					if(g >= crossover_s && g <= crossover_e){
-						ret -> weights -> setValue(i, j, weights -> getValue(i, j));
+						ret -> weights -> set(i, j, weights -> get(i, j));
 					}else{
-						ret -> weights -> setValue(i, j, b -> weights -> getValue(i, j));
+						ret -> weights -> set(i, j, b -> weights -> get(i, j));
 					}
 
 					g++;
 				}
 
 				if(g >= crossover_s && g <= crossover_e){
-					ret -> biases -> setValue(0, j, biases -> getValue(0, j));
+					ret -> biases -> set(0, j, biases -> get(0, j));
 				}else{
-					ret -> biases -> setValue(0, j, b -> biases -> getValue(0, j));
+					ret -> biases -> set(0, j, b -> biases -> get(0, j));
 				}
 
 				g++;
@@ -259,19 +259,19 @@ namespace nnlib {
 
 			for(int j = 0; j < outputSize(); j++){
 				for(int i = 0; i < inputSize(); i++){
-					float value1 = weights -> getValue(i, j);
-					float value2 = b -> weights -> getValue(i, j);
+					float value1 = weights -> get(i, j);
+					float value2 = b -> weights -> get(i, j);
 
 					float rand = random();
-					ret -> weights -> setValue(i, j, rand*value1 + (1 - rand)*value2);
+					ret -> weights -> set(i, j, rand*value1 + (1 - rand)*value2);
 
 				}
 
-				float value1 = biases -> getValue(0, j);
-				float value2 = b -> biases -> getValue(0, j);
+				float value1 = biases -> get(0, j);
+				float value2 = b -> biases -> get(0, j);
 
 				float rand = random();
-				ret -> weights -> setValue(0, j, rand*value1 + (1 - rand)*value2);
+				ret -> weights -> set(0, j, rand*value1 + (1 - rand)*value2);
 
 			}
 

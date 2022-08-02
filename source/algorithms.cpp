@@ -361,7 +361,6 @@ namespace nnlib {
 
 		for(uint i = 0; i < size; i++){
 
-			//printf("%d\n", i);
 			Dense* layer = (Dense*) network -> getLayer(size - i - 1);
 
 			arr[size - i - 1] = layer -> getDeltas(tar);

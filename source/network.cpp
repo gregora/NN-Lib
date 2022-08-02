@@ -31,7 +31,10 @@ namespace nnlib {
 			this -> input -> setValue(0, j, inp.getValue(0, j));
 		}
 
-		Matrix output = dereference(weights) * inp + dereference(biases);
+		Matrix& weights = *(this -> weights);
+		Matrix& biases = *(this -> biases);
+
+		Matrix output = weights * inp + biases;
 
 		//run activation function on output
 		for(uint i = 0; i < output.height; i++){

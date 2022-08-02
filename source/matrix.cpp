@@ -99,12 +99,15 @@ namespace nnlib {
 
 	void Matrix::operator= (const Matrix& matrix) {
 
-		deallocate2DArray(table, width, height);
+		if(matrix.width != width || matrix.height != height){
+			deallocate2DArray(table, width, height);
 
-		width = matrix.width;
-		height = matrix.height;
+			width = matrix.width;
+			height = matrix.height;
 
-		table = allocate2DArray(width, height);
+			table = allocate2DArray(width, height);
+		}
+
 
 		for(uint i = 0; i < width; i++){
 			for(uint j = 0; j < height; j++){

@@ -20,10 +20,12 @@ namespace nnlib {
 
 
 	// activation functions
-	float linear(float x);
-	float sigmoid(float x);
-	float fast_sigmoid(float x);
-	float relu(float x);
+	Matrix linear(const Matrix& x);
+	Matrix sigmoid(const Matrix& x);
+	Matrix fast_sigmoid(const Matrix& x);
+	Matrix relu(const Matrix& x);
+	Matrix atan(const Matrix& x);
+	Matrix tanh(const Matrix& x);
 	//activation function derivatives
 	float dlinear(float x);
 	float dsigmoid(float x);

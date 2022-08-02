@@ -74,7 +74,7 @@ namespace nnlib {
 		Matrix* logits; //linear output values
 
 	private:
-		float (*activationFunction)(float) = &fast_sigmoid;
+		Matrix (*activationFunction)(const Matrix&) = &fast_sigmoid;
 		float (*activationFunctionDerivative)(float) = &dfast_sigmoid;
 		std::string activationFunctionName = "fast_sigmoid";
 	};
@@ -92,6 +92,7 @@ namespace nnlib {
 		int getNetworkSize() const;
 
 		Matrix eval(const Matrix* input);
+		Matrix eval(const Matrix& input);
 
 		std::string serialize();
 		void deserialize(std::string input);

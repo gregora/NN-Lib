@@ -40,9 +40,9 @@ namespace nnlib {
 		for(uint i = 0; i < output.height; i++){
 			float value = output.get(0, i);
 			this -> logits -> set(0, i, output.get(0, i));
-			output.set(0, i, activationFunction(value));
 		}
 
+		output = activationFunction(output);
 
 		return output;
 
@@ -60,11 +60,11 @@ namespace nnlib {
 
 
 		Matrix& linear_values = *logits;
-		Matrix k(1, biases -> height);
+		Matrix k = activationFunction(linear_values);
 
 		//calculate k
 		for(uint j = 0; j < k.height; j++){
-			float value = -2*(target -> get(0, j) - activationFunction(linear_values.get(0, j)));
+			float value = -2*(target -> get(0, j) - k.get(0, j));
 			value*= activationFunctionDerivative(linear_values.get(0, j));
 
 			k.set(0, j, value);
@@ -172,10 +172,10 @@ namespace nnlib {
 			activationFunction = &linear;
 			activationFunctionDerivative = &dlinear;
 		}else if(name == "atan"){
-			activationFunction = &atan;
+			activationFunction = &nnlib::atan;
 			activationFunctionDerivative = &datan;
 		}else if(name == "tanh"){
-			activationFunction = &tanh;
+			activationFunction = &nnlib::tanh;
 			activationFunctionDerivative = &dtanh;
 		}else{
 			throw name + " is not a valid function name";
@@ -338,6 +338,10 @@ namespace nnlib {
 		}
 
 		return values;
+	}
+
+	Matrix Network::eval(const Matrix& input){
+		return eval(&input);
 	}
 
 	std::string Network::serialize() {

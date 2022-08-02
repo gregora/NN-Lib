@@ -39,20 +39,79 @@ namespace nnlib {
 		return floor(log10(x)) + 1;
 	}
 
-	float linear(float x){
-		return x;
+	Matrix linear(const Matrix& x){
+
+		Matrix ret(1, x.height);
+
+		for(uint j = 0; j < x.height; j++){
+			float value = x.get(0, j);
+			ret.set(0, j, value);
+		}
+
+		return ret;
 	}
 
-	float sigmoid(float x){
-		return 1 / (1 + exp(-x));
+	Matrix sigmoid(const Matrix& x){
+
+		Matrix ret(1, x.height);
+
+		for(uint j = 0; j < x.height; j++){
+			float value = x.get(0, j);
+			ret.set( 0, j, 1 / (1 + exp(value)) );
+		}
+
+		return ret;
+
 	}
 
-	float fast_sigmoid(float x){
-		return x / (1 + abs(x));
+	Matrix fast_sigmoid(const Matrix& x){
+
+		Matrix ret(1, x.height);
+
+		for(uint j = 0; j < x.height; j++){
+			float value = x.get(0, j);
+			ret.set( 0, j, value / (1 + abs(value)) );
+		}
+
+		return ret;
 	}
 
-	float relu(float x){
-		return std::max(0.0f, x);
+	Matrix relu(const Matrix& x){
+
+		Matrix ret(1, x.height);
+
+		for(uint j = 0; j < x.height; j++){
+			float value = x.get(0, j);
+			ret.set( 0, j, std::max(0.0f, value));
+		}
+
+		return ret;
+
+	}
+
+
+	Matrix tanh(const Matrix& x){
+
+		Matrix ret(1, x.height);
+
+		for(uint j = 0; j < x.height; j++){
+			float value = x.get(0, j);
+			ret.set( 0, j, std::tanh(value) );
+		}
+
+		return ret;
+	}
+
+	Matrix atan(const Matrix& x){
+
+		Matrix ret(1, x.height);
+
+		for(uint j = 0; j < x.height; j++){
+			float value = x.get(0, j);
+			ret.set( 0, j, std::atan(value) );
+		}
+
+		return ret;
 	}
 
 
@@ -77,7 +136,7 @@ namespace nnlib {
 	}
 
 	float dtanh(float x){
-		return 1 - pow(tanh(x), 2);
+		return 1 - pow(std::tanh(x), 2);
 	}
 
 

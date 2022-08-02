@@ -108,7 +108,7 @@ namespace nnlib {
 
 		for(uint i = 0; i < width; i++){
 			for(uint j = 0; j < height; j++){
-				table[i][j] = matrix.get(i, j);
+				table[i][j] = matrix.table[i][j];
 			}
 		}
 
@@ -119,7 +119,7 @@ namespace nnlib {
 
 		for (uint i = 0; i < width; i++) {
 			for (uint j = 0; j < height; j++) {
-				ret.set(i, j, get(i, j) * n);
+				ret.table[i][j] = table[i][j] * n;
 			}
 		}
 
@@ -134,7 +134,7 @@ namespace nnlib {
 
 		for (uint i = 0; i < width; i++) {
 			for (uint j = 0; j < height; j++) {
-				ret.set(i, j, get(i, j) / n);
+				ret.table[i][j] = table[i][j] / n;
 			}
 		}
 
@@ -155,7 +155,7 @@ namespace nnlib {
 
 		for (uint i = 0; i < width; i++) {
 			for (uint j = 0; j < height; j++) {
-				ret.set(i, j, get(i, j) + v.get(i, j));
+				ret.table[i][j] = table[i][j] + v.table[i][j];
 			}
 		}
 
@@ -177,7 +177,7 @@ namespace nnlib {
 
 		for (uint i = 0; i < width; i++) {
 			for (uint j = 0; j < height; j++) {
-				ret.set(i, j, get(i, j) - v.get(i, j));
+				ret.table[i][j] = table[i][j] - v.table[i][j];
 			}
 		}
 
@@ -203,10 +203,10 @@ namespace nnlib {
 				float sum = 0;
 
 				for (uint k = 0; k < width; k++) {
-					sum += get(k, j) * v.get(i, k);
+					sum += table[k][j] * v.table[i][k];
 				}
 
-				ret.set(i, j, sum);
+				ret.table[i][j] = sum;
 			}
 		}
 
@@ -400,7 +400,7 @@ namespace nnlib {
 
 		for(unsigned int i = 0; i < ret.width; i++){
 			for(unsigned int j = 0; j < ret.height; j++){
-				ret.set(i, j, matrix -> get(i, j));
+				ret.table[i][j] = matrix -> table[i][j];
 			}
 		}
 

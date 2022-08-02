@@ -154,13 +154,13 @@ int train_backpropagation(){
 	//build network
 	Network n;
 	Dense* layer1 = new Dense(1, 100);
-	Dense* layer4 = new Dense(100, 1);
+	Dense* layer2 = new Dense(100, 1);
 
 	layer1 -> setActivationFunction("relu");
-	layer4 -> setActivationFunction("linear");
+	layer2 -> setActivationFunction("linear");
 
 	n.addLayer(layer1);
-	n.addLayer(layer4);
+	n.addLayer(layer2);
 
 	//fit the model
 

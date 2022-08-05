@@ -413,7 +413,7 @@ namespace nnlib {
 	void add(Matrix* matrix1, const Matrix* matrix2){
 		if (matrix1 -> width != matrix2 -> width || matrix1 -> height != matrix2 -> height) {
 			std::ostringstream stringStream;
-			stringStream << "Subtracting matrices " << matrix1->getName() << " - " << matrix2->getName();
+			stringStream << "Adding matrices " << matrix1->getName() << " - " << matrix2->getName();
 			stringStream << " of different dimensions ";
 			stringStream << " (h=" << matrix1->height << " w=" << matrix1->width << ")";
 			stringStream << " and (h=" << matrix2 -> height << " w=" << matrix2 -> width << ")";

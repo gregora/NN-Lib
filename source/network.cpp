@@ -58,56 +58,44 @@ namespace nnlib {
 
 		//TODO:
 		//precalculate k values
-		Matrix k(output -> height, output -> height);
-		Matrix k_rows(1, output -> height); //for weights and biases
-		Matrix k_columns(output -> height, 1); //for target
+		Matrix k(output -> height, 1); //k is equal to J E * J Act
 
 
 		for(uint j = 0; j < k.width; j++){
-			for(uint j_ = 0; j_ < k.height; j_++){
-				float value = -2*(target -> get(0, j_) - output -> get(0, j_)) * jacobian.get(j_, j);
-				k.set(j, j_, value);
-			}
-		}
 
-		//precalculate values for weights and biases
-		for(uint n = 0; n < k.height; n++){
-			float row = 0;
-			for(uint m = 0; m < k.width; m++){
-				row += k.get(m, n);
-			}
-			k_rows.set(0, n, row);
-		}
+			float value = 0;
 
-		//precalculate values for target
-		for(uint m = 0; m < k.width; m++){
-			float column = 0;
-			for(uint n = 0; n < k.height; n++){
-				column += k.get(m, n);
+			for(uint j_ = 0; j_ < k.width; j_++){
+				value += -2*(target -> get(0, j_) - output -> get(0, j_)) * jacobian.get(j, j_);
 			}
-			k_columns.set(m, 0, column);
+
+			k.set(j, 0, value);
+
 		}
 
 		//calculate delta weights
 		for(uint i = 0; i < weights -> width; i++){
 			for(uint j = 0; j < weights -> height; j++){
 
-				float delta = k_rows.get(0, j) * input -> get(0, i);
+				float delta = k.get(j, 0) * input -> get(0, i);
 
 				weight_deltas -> set(i, j, delta);
 			}
 		}
 
+		for(uint j = 0; j < biases -> height; j++){
 
-		//calculate delta biases
-		(*bias_deltas) = k_rows;
+			float delta = k.get(j, 0);
+
+			bias_deltas -> set(0, j, delta);
+		}
 
 		//calculate delta target
 		for(uint i = 0; i < input -> height; i++){
 			float delta = 0;
 
 			for(uint j = 0; j < output -> height; j++){
-				delta += k_columns.get(j, 0) * (weights -> get(i, j));
+				delta += k.get(j, 0) * (weights -> get(i, j));
 			}
 
 			input_deltas -> set(0, i, delta);

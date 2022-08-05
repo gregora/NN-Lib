@@ -55,11 +55,8 @@ namespace nnlib {
 
 		Matrix jacobian = activationFunctionDerivative(*logits);
 
-
-		//TODO:
 		//precalculate k values
 		Matrix k(output -> height, 1); //k is equal to J E * J Act
-
 
 		for(uint j = 0; j < k.width; j++){
 
@@ -70,7 +67,6 @@ namespace nnlib {
 			}
 
 			k.set(j, 0, value);
-
 		}
 
 		//calculate delta weights
@@ -83,6 +79,7 @@ namespace nnlib {
 			}
 		}
 
+		//calculate delta biases
 		for(uint j = 0; j < biases -> height; j++){
 
 			float delta = k.get(j, 0);

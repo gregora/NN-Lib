@@ -217,6 +217,18 @@ namespace nnlib {
 		return ret;
 	}
 
+	Matrix Matrix::transpose() const {
+		Matrix ret(height, width);
+
+		for(uint i = 0; i < height; i++){
+			for(uint j = 0; j < width; j++){
+				ret.table[i][j] = table[j][i];
+			}
+		}
+
+		return ret;
+	}
+
 	void Matrix::fillRandom(float min_value, float max_value) {
 
 		for (uint i = 0; i < width; i++) {

@@ -45,6 +45,10 @@ namespace nnlib {
 
 	deltas Dense::getDeltas(const Matrix * target) const{
 
+		if(target -> height != output -> height || target -> width != 1){
+			throw std::invalid_argument("Target matrix is of incorrect shape (h=" + std::to_string(target -> height) + " w=" + std::to_string(target -> width) + ")");
+		}
+
 		Matrix* weight_deltas = new Matrix(weights -> width, weights -> height);
 		Matrix* bias_deltas = new Matrix(1, biases -> height);
 		Matrix* input_deltas = new Matrix(1, input -> height);

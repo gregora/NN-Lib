@@ -59,7 +59,6 @@ namespace nnlib {
 		Matrix k(output -> height, 1); //k is equal to J E * J Act
 
 		for(uint j = 0; j < k.width; j++){
-
 			float value = 0;
 
 			for(uint j_ = 0; j_ < k.width; j_++){
@@ -71,32 +70,20 @@ namespace nnlib {
 
 		//calculate delta weights
 		for(uint i = 0; i < weights -> width; i++){
+
+			float x_i = input -> get(0, i);
+
 			for(uint j = 0; j < weights -> height; j++){
-
-				float delta = k.get(j, 0) * input -> get(0, i);
-
+				float delta = k.get(j, 0) * x_i;
 				weight_deltas -> set(i, j, delta);
 			}
 		}
 
 		//calculate delta biases
-		for(uint j = 0; j < biases -> height; j++){
-
-			float delta = k.get(j, 0);
-
-			bias_deltas -> set(0, j, delta);
-		}
+		*bias_deltas = k.transpose();
 
 		//calculate delta target
-		for(uint i = 0; i < input -> height; i++){
-			float delta = 0;
-
-			for(uint j = 0; j < output -> height; j++){
-				delta += k.get(j, 0) * (weights -> get(i, j));
-			}
-
-			input_deltas -> set(0, i, delta);
-		}
+		*input_deltas = (k * (*weights)).transpose();
 
 		return deltas;
 	}

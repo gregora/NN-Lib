@@ -40,6 +40,8 @@ namespace nnlib {
 		Matrix operator- (const Matrix& v) const;
 		Matrix operator* (const Matrix& v) const;
 
+		Matrix transpose() const;
+
 		void fillRandom(float min_value = 0, float max_value = 1);
 		void fillZero();
 		void identity();

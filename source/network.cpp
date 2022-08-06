@@ -168,6 +168,9 @@ namespace nnlib {
 		}else if(name == "tanh"){
 			activationFunction = nnlib::tanh;
 			activationFunctionDerivative = dtanh;
+		}else if(name == "softmax"){
+			activationFunction = softmax;
+			activationFunctionDerivative = dsoftmax;
 		}else{
 			throw name + " is not a valid function name";
 			return;

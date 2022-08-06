@@ -458,7 +458,7 @@ namespace nnlib {
 
 			printf("\n============================\n\n");
 
-			if((settings.output == std::string("minimal")) && i != epochs){
+			if((settings.output == "minimal") && i != epochs){
 				printf("\x1B[9A");
 			}
 		}

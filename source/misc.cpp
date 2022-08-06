@@ -114,6 +114,22 @@ namespace nnlib {
 		return ret;
 	}
 
+	Matrix softmax(const Matrix& x){
+		Matrix ret(1, x.height);
+
+		float sum = 0;
+
+		for(uint j = 0; j < x.height; j++){
+			sum += exp(x.get(0, j));
+		}
+
+		for(uint j = 0; j < x.height; j++){
+			float value = exp(x.get(0, j)) / sum;
+			ret.set( 0, j, std::atan(value) );
+		}
+
+		return ret;
+	}
 
 
 
@@ -237,6 +253,28 @@ namespace nnlib {
 		return ret;
 
 	}
+
+	Matrix dsoftmax(const Matrix& x){
+		Matrix ret(x.height, x.height);
+
+		for(uint i = 0; i < x.height; i++){
+			for(uint j = 0; j < x.height; j++){
+
+
+				if(i == j){
+					float value = x.get(0, j);
+					ret.set(i, j, value * (1 - value));
+				}else{
+					float value = - x.get(0, j) * x.get(0, i);
+					ret.set(i, j, value);
+				}
+
+			}
+		}
+
+		return ret;
+	}
+
 
 
 	float meanSquaredError(const Matrix* predicted, const Matrix* truth){

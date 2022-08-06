@@ -26,6 +26,7 @@ namespace nnlib {
 	Matrix relu(const Matrix& x);
 	Matrix atan(const Matrix& x);
 	Matrix tanh(const Matrix& x);
+	Matrix softmax(const Matrix& x);
 	//activation function derivatives (Jacobian matrices evaluated at vector)
 	Matrix dlinear(const Matrix& x);
 	Matrix dsigmoid(const Matrix& x);
@@ -33,6 +34,7 @@ namespace nnlib {
 	Matrix drelu(const Matrix& x);
 	Matrix datan(const Matrix& x);
 	Matrix dtanh(const Matrix& x);
+	Matrix dsoftmax(const Matrix& x);
 
 	float sparseCategoricalCrossentropy(Matrix* predicted, uint truth);
 	float categoricalCrossentropy(Matrix* predicted, Matrix* truth);

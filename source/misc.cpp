@@ -117,15 +117,26 @@ namespace nnlib {
 	Matrix softmax(const Matrix& x){
 		Matrix ret(1, x.height);
 
-		float sum = 0;
+		double sum = 0;
+
+		float max = x.get(0, 0);
 
 		for(uint j = 0; j < x.height; j++){
-			sum += exp(x.get(0, j));
+
+			float val = x.get(0, j);
+			if(max < val){
+				max = val;
+			}
 		}
 
 		for(uint j = 0; j < x.height; j++){
-			float value = exp(x.get(0, j)) / sum;
-			ret.set( 0, j, std::atan(value) );
+			sum += exp(x.get(0, j) - max);
+		}
+
+		float constant = max + log(sum);
+		for(uint j = 0; j < x.height; j++){
+			float value = exp(x.get(0, j) - constant);
+			ret.set( 0, j, value );
 		}
 
 		return ret;
@@ -160,7 +171,11 @@ namespace nnlib {
 
 				if(i == j){
 					float value = x.get(0, j);
-					ret.set(i, j, exp(value) / pow((exp(value) + 1), 2));
+					if(value >= 10 || value <= -10){
+						ret.set(i, j, 0);
+					}else{
+						ret.set(i, j, exp(value) / pow((exp(value) + 1), 2));
+					}
 				}else{
 					ret.set(i, j, 0);
 				}

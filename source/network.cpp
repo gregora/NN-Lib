@@ -107,6 +107,9 @@ namespace nnlib {
 		//apply biases
 		biases = biases - delta_biases*speed;
 
+		std::cout << delta_weights.serialize() << std::endl;
+		std::cout << delta_biases.serialize() << std::endl;
+
 	}
 
 	Matrix Dense::backpropagate(const Matrix* target, float speed){

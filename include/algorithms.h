@@ -54,7 +54,7 @@ namespace nnlib {
 		float speed;
 
 		//output
-		std::string output = "verbose"; // minimal / verbose
+		std::string output = "verbose"; // none / minimal / verbose
 	};
 
 	//get deltas from neural network

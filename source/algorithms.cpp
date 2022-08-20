@@ -376,7 +376,10 @@ namespace nnlib {
 	}
 
 	void fit(Network * network, std::vector<Matrix*> input, std::vector<Matrix*> target, fit_settings settings){
-		printf("\n\n");
+
+		if(settings.output != "none"){
+			printf("\n\n");
+		}
 
 		uint epochs = settings.epochs;
 		uint batch_size = settings.batch_size;
@@ -438,29 +441,33 @@ namespace nnlib {
 				}
 			}
 
-			//output
-			printf("============================\n\n");
-			printf(" Epoch:   %10d\n", i);
+			if(settings.output != "none"){
 
-			cost = cost / input.size();
-			printf(" Elapsed: %10.2f s\n", passedTime(start_time, high_resolution_clock::now()));
-			printf(" Cost:    %10.5f\n", cost);
+				//output
+				printf("============================\n\n");
+				printf(" Epoch:   %10d\n", i);
 
-			printf(" [");
-			for(float p = 0.1; p <= 2; p += 0.1){
-				if(p/2 <= (float) i / epochs){
-					printf("=");
-				}else{
-					printf(" ");
+				cost = cost / input.size();
+				printf(" Elapsed: %10.2f s\n", passedTime(start_time, high_resolution_clock::now()));
+				printf(" Cost:    %10.5f\n", cost);
+
+				printf(" [");
+				for(float p = 0.1; p <= 2; p += 0.1){
+					if(p/2 <= (float) i / epochs){
+						printf("=");
+					}else{
+						printf(" ");
+					}
+				}
+				printf("] %3d%%\n", (int) ((float) i*100 / epochs));
+
+				printf("\n============================\n\n");
+
+				if((settings.output == "minimal") && i != epochs){
+					printf("\x1B[9A");
 				}
 			}
-			printf("] %3d%%\n", (int) ((float) i*100 / epochs));
 
-			printf("\n============================\n\n");
-
-			if((settings.output == "minimal") && i != epochs){
-				printf("\x1B[9A");
-			}
 		}
 
 		delete[] delt;

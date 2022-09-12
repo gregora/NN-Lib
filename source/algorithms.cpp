@@ -20,7 +20,6 @@ namespace nnlib {
 				Layer* layer = network -> getLayer(i);
 				if(layer -> type == "Dense"){
 					((Dense*) layer) -> mutate(delta);
-					std::cout << "Mutated " << i << std::endl;
 				}else{
 					throw i + 1;
 				}

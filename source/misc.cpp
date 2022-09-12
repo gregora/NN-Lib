@@ -57,7 +57,7 @@ namespace nnlib {
 
 		for(uint j = 0; j < x.height; j++){
 			float value = x.get(0, j);
-			ret.set( 0, j, 1 / (1 + exp(value)) );
+			ret.set( 0, j, 1 / (1 + exp(-value)) );
 		}
 
 		return ret;
@@ -171,11 +171,7 @@ namespace nnlib {
 
 				if(i == j){
 					float value = x.get(0, j);
-					if(value >= 10 || value <= -10){
-						ret.set(i, j, 0);
-					}else{
-						ret.set(i, j, exp(value) / pow((exp(value) + 1), 2));
-					}
+					ret.set(i, j, exp(-value) / pow((exp(-value) + 1), 2));
 				}else{
 					ret.set(i, j, 0);
 				}

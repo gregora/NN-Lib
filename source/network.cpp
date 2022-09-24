@@ -52,12 +52,13 @@ namespace nnlib {
 		Matrix* weight_deltas = new Matrix(weights -> width, weights -> height);
 		Matrix* bias_deltas = new Matrix(1, biases -> height);
 		Matrix* input_deltas = new Matrix(1, input -> height);
+
 		deltas deltas;
 		deltas.weights = weight_deltas;
 		deltas.biases = bias_deltas;
 		deltas.input = input_deltas;
 
-		Matrix jacobian = activationFunctionDerivative(*logits);
+		Matrix jacobian = activationFunctionDerivative(*output);
 
 		//precalculate k values
 		Matrix k(output -> height, 1); //k is equal to J E * J Act
@@ -66,7 +67,10 @@ namespace nnlib {
 			float value = 0;
 
 			for(uint j_ = 0; j_ < k.width; j_++){
-				value += -2*(target -> get(0, j_) - output -> get(0, j_)) * jacobian.get(j, j_);
+				float t = target -> get(0, j_);
+				float o = output -> get(0, j_);
+
+				value += -2*(t - o) * jacobian.get(j, j_);
 			}
 
 			k.set(j, 0, value);

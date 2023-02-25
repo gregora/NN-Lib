@@ -380,6 +380,20 @@ namespace nnlib {
 			printf("\n\n");
 		}
 
+		Dense* last_layer = (Dense*) network -> getLayer(network -> getNetworkSize() - 1);
+		std::string errorFunctionName = last_layer -> getErrorFunction();
+
+		float (*errorFunction)(const Matrix&, const Matrix&) = nullptr;
+
+		if(errorFunctionName == "MSE"){
+			errorFunction = MSE;
+		}else if(errorFunctionName == "categoricalCrossentropy"){
+			errorFunction = categoricalCrossentropy;
+		}else{
+			throw errorFunctionName + " is not a valid function error name. Has it been updated in fit() function?";
+			return;
+		}
+
 		uint epochs = settings.epochs;
 		uint batch_size = settings.batch_size;
 		float speed = settings.speed;
@@ -398,7 +412,8 @@ namespace nnlib {
 			for(uint d = 0; d < input.size(); d++){
 
 				Matrix out = network -> eval(input[d]);
-				cost += meanSquaredError(&out, target[d]);
+
+				cost += errorFunction(out, *target[d]);
 				//backpropagate(network, target[d], speed);
 
 				delt[batch_index] = getDeltas(network, target[d], speed);
@@ -448,7 +463,7 @@ namespace nnlib {
 
 				cost = cost / input.size();
 				printf(" Elapsed: %10.2f s\n", passedTime(start_time, high_resolution_clock::now()));
-				printf(" Cost:    %10.5f\n", cost);
+				printf(" Cost:    %10.5f (%s)\n", cost, errorFunctionName.c_str());
 
 				printf(" [");
 				for(float p = 0.1; p <= 2; p += 0.1){

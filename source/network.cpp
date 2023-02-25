@@ -58,7 +58,8 @@ namespace nnlib {
 		deltas.biases = bias_deltas;
 		deltas.input = input_deltas;
 
-		Matrix jacobian = activationFunctionDerivative(*output);
+		Matrix error_jacobian = errorFunctionDerivative(*output, *target);
+		Matrix activation_jacobian = activationFunctionDerivative(*output);
 
 		//precalculate k values
 		Matrix k(output -> height, 1); //k is equal to J E * J Act
@@ -67,10 +68,7 @@ namespace nnlib {
 			float value = 0;
 
 			for(uint j_ = 0; j_ < k.width; j_++){
-				float t = target -> get(0, j_);
-				float o = output -> get(0, j_);
-
-				value += -2*(t - o) * jacobian.get(j, j_);
+				value += - error_jacobian.get(0, j_) * activation_jacobian.get(j, j_);
 			}
 
 			k.set(j, 0, value);
@@ -185,6 +183,25 @@ namespace nnlib {
 		}
 
 		activationFunctionName = name;
+	}
+
+	void Dense::setErrorFunction(std::string name) {
+		if(name == "MSE"){
+			errorFunction = MSE;
+			errorFunctionDerivative = dMSE;
+		}else if(name == "categoricalCrossentropy"){
+			errorFunction = categoricalCrossentropy;
+			errorFunctionDerivative = dcategoricalCrossentropy;
+		}else{
+			throw name + " is not a valid function name";
+			return;
+		}
+
+		errorFunctionName = name;
+	}
+
+	std::string Dense::getErrorFunction(){
+		return errorFunctionName;
 	}
 
 

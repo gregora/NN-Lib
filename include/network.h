@@ -57,6 +57,9 @@ namespace nnlib {
 		Layer* clone();
 
 		void setActivationFunction(std::string name);
+		void setErrorFunction(std::string name);
+
+		std::string getErrorFunction();
 
 		void randomize(float min, float max);
 		void mutate(float delta);
@@ -77,7 +80,12 @@ namespace nnlib {
 	private:
 		Matrix (*activationFunction)(const Matrix&) = fast_sigmoid;
 		Matrix (*activationFunctionDerivative)(const Matrix&) = dfast_sigmoid;
+
+		float (*errorFunction)(const Matrix&, const Matrix&) = MSE;
+		Matrix (*errorFunctionDerivative)(const Matrix&, const Matrix&) = dMSE;
+
 		std::string activationFunctionName = "fast_sigmoid";
+		std::string errorFunctionName = "MSE";
 	};
 
 

@@ -37,10 +37,12 @@ namespace nnlib {
 	Matrix dsoftmax(const Matrix& x);
 
 	float sparseCategoricalCrossentropy(Matrix* predicted, uint truth);
-	float categoricalCrossentropy(Matrix* predicted, Matrix* truth);
-	float binaryCrossentropy(Matrix* predicted, Matrix* truth);
-	float meanSquaredError(const Matrix* predicted, const Matrix* truth);
+	float categoricalCrossentropy(const Matrix& predicted, const Matrix& truth);
+	float binaryCrossentropy(Matrix& predicted, Matrix& truth);
+	float MSE(const Matrix& predicted, const Matrix& truth);
 
+	Matrix dcategoricalCrossentropy(const Matrix& predicted, const Matrix& truth);
+	Matrix dMSE(const Matrix& predicted, const Matrix& truth);
 
 	std::vector<std::string> splitString(std::string string, std::string split_by);
 

@@ -287,17 +287,59 @@ namespace nnlib {
 	}
 
 
-
-	float meanSquaredError(const Matrix* predicted, const Matrix* truth){
+	float categoricalCrossentropy(const Matrix& predicted, const Matrix& truth){
 		float cost = 0;
 
-		for(uint j = 0; j < predicted -> height; j++){
-			cost += pow(predicted -> get(0, j) - truth -> get(0, j), 2);
+		for(uint j = 0; j < predicted.height; j++){
+			cost -= truth.get(0, j) * log(predicted.get(0, j));
 		}
 
 		return cost;
 	}
 
+
+	float MSE(const Matrix& predicted, const Matrix& truth){
+		float cost = 0;
+
+		for(uint j = 0; j < predicted.height; j++){
+			cost += pow(predicted.get(0, j) - truth.get(0, j), 2);
+		}
+
+		return cost;
+	}
+
+
+	Matrix dcategoricalCrossentropy(const Matrix& predicted, const Matrix& truth){
+
+		uint n = truth.height;
+		Matrix der(1, n);
+
+		float epsilon = 1e-2;
+
+		for(uint i = 0; i < n; i++){
+			float t = truth.get(0, i);
+			float y = predicted.get(0, i) + epsilon;
+
+			if (y == 0) {
+				der.set(0, i, 0);
+			} else {
+				der.set(0, i, -t / y);
+			}
+		}
+
+		return der;
+	}
+
+	Matrix dMSE(const Matrix& predicted, const Matrix& truth){
+		uint n = truth.height;
+		Matrix der(1, n);
+
+		for(uint i = 0; i < n; i++){
+			der.set(0, i, 2*(truth.get(0, i) - predicted.get(0, i)));
+		}
+
+		return der;
+	}
 
 	std::vector<std::string> splitString(std::string string, std::string split_by) {
 

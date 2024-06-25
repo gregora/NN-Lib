@@ -1,5 +1,21 @@
 # NN-Lib
 
+## Features
+* **Matrix** class for matrix operations
+* **Layer** abstract class for creating custom layers in a neural network
+* **Network** class for creating and training neural networks
+
+* Algorithms:
+	* **Backpropagation** - Backpropagation algorithm for training neural networks
+	* **Genetic Algorithm** - Genetic algorithm for training neural networks
+
+## Projects using NN-Lib
+* [Robot Arm AI](https://github.com/gregora/Robot-Arm-AI)
+* [Drone AI](https://github.com/gregora/Drone-AI)
+* [Car AI](https://github.com/gregora/Car-AI)
+
+
+
 ## Contents
 
 All the neccessary header files are in `/include` folder.
